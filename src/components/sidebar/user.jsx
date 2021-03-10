@@ -36,11 +36,9 @@ User.defaultProps = {
 };
 
 User.propTypes = {
-  userData: PropTypes.shape({
+  userData: PropTypes.exact({
     username: PropTypes.string,
     fullName: PropTypes.string,
     photoURL: PropTypes.string,
   }),
 };
-
-// User.whyDidYouRender = true;

@@ -4,12 +4,12 @@ import Suggestions from './suggestions';
 
 export default function Sidebar() {
   const { user } = useFirestoreUser();
-  const { username, fullName, userId, photoURL } = user;
+  const { username, fullName, userId, photoURL, following } = user;
 
   return (
     <div className="p-4">
       <User userData={{ username, fullName, photoURL }} />
-      <Suggestions userId={userId} />
+      <Suggestions userId={userId} userFollowing={following} />
     </div>
   );
 }

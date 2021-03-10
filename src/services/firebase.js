@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { firebase } from '../lib/firebase';
+import { firebase, FieldValue } from '../lib/firebase';
 
 /** Initializing firestore database */
 const _DB = firebase.firestore();
@@ -39,10 +39,73 @@ export async function getUserDataByUserId(userId) {
   return user;
 }
 
-export async function getSuggestedProfilesByUserId(userId) {
-  const result = await _DB.collection('users').limit(10).get();
+/**
+ * Function used to get suggested user profiles for a specific user, queried by `userId`
+ *
+ * @param {string} userId The user id to be queried by
+ * @param {string[]} userFollowing An array containing all the following users of the current user
+ *
+ * @return {Promise<Array<{}>>} A promise of type object array.
+ */
+export async function getSuggestedProfilesByUserId(userId, userFollowing) {
+  const { docs } = await _DB.collection('users').limit(10).get();
 
-  console.log(result);
+  return docs
+    .map((doc) => ({ ...doc.data(), docId: doc.id }))
+    .filter(
+      (profile) =>
+        profile.userId !== userId && !userFollowing.includes(profile.userId),
+    );
+}
 
-  return result;
+/**
+ * Function used to update the user `following field`
+ *
+ * @param {string} suggestedUserId The user id of the suggested profile
+ * @param {string} userId The user id of the current logged in user
+ * @param {boolean} userFollowingStatus The following status of the suggested profile
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function updateUserFollowingField(
+  suggestedUserId,
+  userId,
+  userFollowingStatus = false,
+) {
+  const { docs } = await _DB
+    .collection('users')
+    .where('userId', '==', userId)
+    .get();
+
+  docs.map((doc) =>
+    doc.ref.update({
+      following: userFollowingStatus
+        ? FieldValue.arrayRemove(suggestedUserId)
+        : FieldValue.arrayUnion(suggestedUserId),
+    }),
+  );
+}
+
+/**
+ * Function used to update the user `followers field`
+ *
+ * @param {string} suggestedUserDocId The user document id of the suggested profile
+ * @param {string} userId The user id of the current logged in user
+ * @param {boolean} userFollowingStatus The following status of the suggested profile
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function updateUserFollowersField(
+  suggestedUserDocId,
+  userId,
+  userFollowingStatus = false,
+) {
+  _DB
+    .collection('users')
+    .doc(suggestedUserDocId)
+    .update({
+      followers: userFollowingStatus
+        ? FieldValue.arrayRemove(userId)
+        : FieldValue.arrayUnion(userId),
+    });
 }
