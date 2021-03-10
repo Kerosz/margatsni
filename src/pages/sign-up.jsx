@@ -4,39 +4,67 @@ import { Link, useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import * as ROUTES from '../constants/routes';
 import { useFirebaseContext } from '../context/firebase';
+import { doesUserExist } from '../services/firebase';
 
-const LoginSchema = Yup.object().shape({
+const SignupSchema = Yup.object().shape({
+  username: Yup.string()
+    .min(3, 'Username must be at least 3 characters long!')
+    .max(12, 'Username must be 12 characters at most!')
+    .required('Username is a required field'),
+  fullName: Yup.string()
+    .min(3, 'Full name must be at least 3 characters long!')
+    .max(34, 'Full name must be 34 characters at most!')
+    .required('Full name is a required field'),
   email: Yup.string()
     .email('Email address has a wrong format')
     .required('Email address is a required field'),
   password: Yup.string()
-    .min(6, 'Password must be atleast 6 characters long!')
+    .min(6, 'Password must be at least 6 characters long!')
     .max(24, 'Password must be 24 characters at most!')
     .required('Password is a required field'),
 });
 
-export default function Login() {
+export default function SignUp() {
   const history = useHistory();
   const { firebase } = useFirebaseContext();
 
   const [serverError, setServerError] = useState('');
 
-  const handleFirebaseLogin = async (formValues) => {
-    const { email, password } = formValues;
+  const handleFirebaseSignUp = async (formValues) => {
+    const { email, password, username, fullName } = formValues;
+    const usernameAlreadyExists = await doesUserExist(username);
 
-    try {
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password);
+    if (!usernameAlreadyExists) {
+      try {
+        const createdUserResult = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password);
 
-      history.push(ROUTES.DASHBOARD);
-    } catch (error) {
-      setServerError(error.message);
+        await createdUserResult.user.updateProfile({
+          displayName: username,
+        });
+
+        await firebase.firestore().collection('users').add({
+          userId: createdUserResult.user.uid,
+          username: username.toLowerCase(),
+          fullName,
+          followers: [],
+          following: [],
+          emailAddress: email,
+          dateCreated: Date.now(),
+        });
+
+        history.push(ROUTES.DASHBOARD);
+      } catch (error) {
+        setServerError(error.message);
+      }
+    } else {
+      setServerError('Username already exists, please try another!');
     }
   };
 
   useEffect(() => {
-    document.title = `Login - Instagram`;
+    document.title = `Sign Up - Instagram`;
   }, []);
 
   return (
@@ -60,19 +88,48 @@ export default function Login() {
           )}
 
           <Formik
-            initialValues={{ email: '', password: '' }}
-            validationSchema={LoginSchema}
+            initialValues={{
+              username: '',
+              fullName: '',
+              email: '',
+              password: '',
+            }}
+            validationSchema={SignupSchema}
             onSubmit={async (
               values,
               { resetForm, setSubmitting },
             ) => {
-              await handleFirebaseLogin(values);
+              await handleFirebaseSignUp(values);
               setSubmitting(false);
               resetForm();
             }}
           >
             {({ isSubmitting, isValid, errors, touched }) => (
               <Form className="w-full">
+                <Field
+                  type="text"
+                  name="username"
+                  aria-label="Enter your username"
+                  placeholder="Username"
+                  className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                />
+                {errors.username && touched.username && (
+                  <p className="mb-3 pl-1 text-xs text-red-primary">
+                    {errors.username}
+                  </p>
+                )}
+                <Field
+                  type="text"
+                  name="fullName"
+                  aria-label="Enter your full name"
+                  placeholder="Full Name"
+                  className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                />
+                {errors.fullName && touched.fullName && (
+                  <p className="mb-3 pl-1 text-xs text-red-primary">
+                    {errors.fullName}
+                  </p>
+                )}
                 <Field
                   type="text"
                   name="email"
@@ -105,7 +162,7 @@ export default function Login() {
                     !isValid && 'opacity-50 cursor-not-allowed'
                   }`}
                 >
-                  {isSubmitting ? 'Loading...' : 'Log In'}
+                  {isSubmitting ? 'Loading...' : 'Sign Up'}
                 </button>
               </Form>
             )}
@@ -113,12 +170,12 @@ export default function Login() {
         </div>
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 border border-gray-primary rounded">
           <p className="text-sm">
-            Don't have an account?{` `}
+            Have an account already?{` `}
             <Link
-              to={ROUTES.SIGNUP}
+              to={ROUTES.LOGIN}
               className="font-bold text-blue-medium"
             >
-              Sign Up
+              Login
             </Link>
           </p>
         </div>
