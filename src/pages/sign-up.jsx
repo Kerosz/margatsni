@@ -42,6 +42,8 @@ export default function SignUp() {
 
         await createdUserResult.user.updateProfile({
           displayName: username,
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
         });
 
         await firebase.firestore().collection('users').add({
@@ -51,6 +53,8 @@ export default function SignUp() {
           followers: [],
           following: [],
           emailAddress: email,
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
           dateCreated: Date.now(),
         });
 
@@ -95,10 +99,7 @@ export default function SignUp() {
               password: '',
             }}
             validationSchema={SignupSchema}
-            onSubmit={async (
-              values,
-              { resetForm, setSubmitting },
-            ) => {
+            onSubmit={async (values, { resetForm, setSubmitting }) => {
               await handleFirebaseSignUp(values);
               setSubmitting(false);
               resetForm();
@@ -162,7 +163,7 @@ export default function SignUp() {
                     !isValid && 'opacity-50 cursor-not-allowed'
                   }`}
                 >
-                  {isSubmitting ? 'Loading...' : 'Sign Up'}
+                  {isSubmitting ? 'Signing up...' : 'Sign Up'}
                 </button>
               </Form>
             )}
@@ -171,10 +172,7 @@ export default function SignUp() {
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 border border-gray-primary rounded">
           <p className="text-sm">
             Have an account already?{` `}
-            <Link
-              to={ROUTES.LOGIN}
-              className="font-bold text-blue-medium"
-            >
+            <Link to={ROUTES.LOGIN} className="font-bold text-blue-medium">
               Login
             </Link>
           </p>

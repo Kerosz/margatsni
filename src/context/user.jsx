@@ -15,9 +15,9 @@ const UserProvider = (props) => {
 };
 
 /**
- * A hook for fast access to `user context`
+ * A hook for fast access to the authentificated user context data
  *
- * @returns {object}
+ * @returns {object} A user object
  */
 export const useUserContext = () => useContext(UserContext);
 

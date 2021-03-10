@@ -1,3 +1,4 @@
+import './wdyr';
 import { render } from 'react-dom';
 import FirebaseProvider from './context/firebase';
 import App from './app';

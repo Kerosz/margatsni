@@ -16,6 +16,8 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@welldone-software/why-did-you-render": "^6.1.0",
+    "cloudinary-react": "^1.7.0",
     "date-fns": "^2.18.0",
     "firebase": "^8.2.9",
     "formik": "^2.2.6",

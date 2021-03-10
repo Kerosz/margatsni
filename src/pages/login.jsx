@@ -25,9 +25,7 @@ export default function Login() {
     const { email, password } = formValues;
 
     try {
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password);
+      await firebase.auth().signInWithEmailAndPassword(email, password);
 
       history.push(ROUTES.DASHBOARD);
     } catch (error) {
@@ -62,10 +60,7 @@ export default function Login() {
           <Formik
             initialValues={{ email: '', password: '' }}
             validationSchema={LoginSchema}
-            onSubmit={async (
-              values,
-              { resetForm, setSubmitting },
-            ) => {
+            onSubmit={async (values, { resetForm, setSubmitting }) => {
               await handleFirebaseLogin(values);
               setSubmitting(false);
               resetForm();
@@ -105,7 +100,7 @@ export default function Login() {
                     !isValid && 'opacity-50 cursor-not-allowed'
                   }`}
                 >
-                  {isSubmitting ? 'Loading...' : 'Log In'}
+                  {isSubmitting ? 'Logging in...' : 'Log In'}
                 </button>
               </Form>
             )}
@@ -114,10 +109,7 @@ export default function Login() {
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 border border-gray-primary rounded">
           <p className="text-sm">
             Don't have an account?{` `}
-            <Link
-              to={ROUTES.SIGNUP}
-              className="font-bold text-blue-medium"
-            >
+            <Link to={ROUTES.SIGNUP} className="font-bold text-blue-medium">
               Sign Up
             </Link>
           </p>

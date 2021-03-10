@@ -1,3 +1,3 @@
 export default function Timeline() {
-  return <div />;
+  return <div className="container col-span-2">Timeline</div>;
 }
