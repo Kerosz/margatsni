@@ -8,8 +8,9 @@ export default function useFirestoreUser() {
 
   useEffect(() => {
     async function getUserData() {
-      const [response] = await getUserDataByUserId(user.uid);
+      const response = await getUserDataByUserId(user.uid);
 
+      // check to see if the state object is egual with the new object and return early else set state with returned object
       if (currentUser.userId === response.userId) return;
       setCurrentUser(response);
     }

@@ -9,25 +9,26 @@ export default function User({ userData }) {
   }
 
   return (
-    <Link
-      to={`/p/${userData.username}`}
-      className="grid grid-cols-4 gap-4 mb-6 items-center"
-    >
+    <div className="grid grid-cols-4 gap-4 mb-7 items-center">
       <div className="flex items-center justify-between col-span-1">
-        <Image
-          cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-          publicId={userData.photoURL}
-          alt={`${userData.username} profile`}
-          width="64"
-          crop="scale"
-          className="rounded-full h-16 w-16 flex mr-3"
-        />
+        <Link to={`/p/${userData.username}`}>
+          <Image
+            cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
+            publicId={userData.photoURL}
+            alt={`${userData.username} profile`}
+            width="64"
+            crop="scale"
+            className="rounded-full h-16 w-16 flex mr-3"
+          />
+        </Link>
       </div>
       <div className="col-span-3">
-        <p className="font-bold text-sm">{userData.username}</p>
-        <p className="text-sm">{userData.fullName}</p>
+        <Link to={`/p/${userData.username}`} className="hover:underline">
+          <p className="font-semibold text-base">{userData.username}</p>
+        </Link>
+        <p className="text-sm text-gray-500">{userData.fullName}</p>
       </div>
-    </Link>
+    </div>
   );
 }
 

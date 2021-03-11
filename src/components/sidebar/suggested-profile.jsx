@@ -18,6 +18,10 @@ export default function SuggestedProfile({ suggestedUser, currentUserId }) {
     await updateUserFollowersField(suggestedUser.docId, currentUserId, false);
   }
 
+  const isSuggestedUserFollower = suggestedUser.following.includes(
+    currentUserId,
+  );
+
   if (isUserFollowed) return null;
 
   return (
@@ -28,14 +32,21 @@ export default function SuggestedProfile({ suggestedUser, currentUserId }) {
             cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
             publicId={suggestedUser.photoURL}
             alt={`${suggestedUser.username} profile`}
-            width="32"
+            width="40"
             crop="scale"
-            className="rounded-full h-8 w-8 flex mr-3.5"
+            className="rounded-full h-10 w-10 flex mr-3.5"
           />
         </Link>
-        <Link to={`/p/${suggestedUser.username}`}>
-          <p className="font-bold text-sm">{suggestedUser.username}</p>
-        </Link>
+        <div>
+          <Link to={`/p/${suggestedUser.username}`} className="hover:underline">
+            <p className="font-semibold text-sm mb-0.5">
+              {suggestedUser.username}
+            </p>
+          </Link>
+          <p className="text-xs text-gray-500">
+            {isSuggestedUserFollower ? 'Follows you' : 'Suggested for you'}
+          </p>
+        </div>
       </div>
 
       <button
@@ -60,5 +71,6 @@ SuggestedProfile.propTypes = {
     docId: PropTypes.string,
     userId: PropTypes.string,
     photoURL: PropTypes.string,
+    following: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
 };

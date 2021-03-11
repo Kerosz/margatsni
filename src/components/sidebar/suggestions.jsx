@@ -28,10 +28,12 @@ export default function Suggestions({ userId, userFollowing }) {
 
   return (
     <div className="flex flex-col rounded">
-      <div className="flex items-center align-items justify-between mb-2 text-sm">
-        <p className="font-bold text-gray-base">Suggestions for you</p>
+      <div className="flex items-center align-items justify-between mb-5">
+        <p className="font-semibold text-gray-500 text-sm">
+          Suggestions For You
+        </p>
       </div>
-      <div className="mt-4 grid gap-5">
+      <div className="grid gap-5">
         {profiles.map((profile) => (
           <SuggestedProfile
             key={profile.docId}
@@ -53,5 +55,3 @@ Suggestions.propTypes = {
   userId: PropTypes.string,
   userFollowing: PropTypes.arrayOf(PropTypes.string),
 };
-
-// Suggestions.whyDidYouRender = true;
