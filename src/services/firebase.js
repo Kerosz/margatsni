@@ -20,6 +20,26 @@ export async function doesUserExist(username) {
 }
 
 /**
+ * Function used to query data for a specific user by `username`
+ *
+ * @param {string} username Username to be queried by
+ * @return {Promise<{}>} A promise of type object.
+ */
+export async function getUserDataByUsername(username) {
+  const { docs } = await _DB
+    .collection('users')
+    .where('username', '==', username)
+    .get();
+
+  const [user] = docs.map((doc) => ({
+    ...doc.data(),
+    docId: doc.id,
+  }));
+
+  return user;
+}
+
+/**
  * Function used to query data for a specific user by it's user `ID`
  *
  * @param {string} userId The user id to be queried by
@@ -40,15 +60,20 @@ export async function getUserDataByUserId(userId) {
 }
 
 /**
- * Function used to get suggested user profiles for a specific user, queried by `userId`
+ * Function used to get suggested user profiles for a specific user, queried by `userId`. It limits the queried results to `10` by default
  *
  * @param {string} userId The user id to be queried by
  * @param {string[]} userFollowing An array containing all the following users of the current user
+ * @param {number} [limitQuery=25] The user id to be queried by
  *
  * @return {Promise<Array<{}>>} A promise of type object array.
  */
-export async function getSuggestedProfilesByUserId(userId, userFollowing) {
-  const { docs } = await _DB.collection('users').limit(10).get();
+export async function getSuggestedProfilesByUserId(
+  userId,
+  userFollowing,
+  limitQuery = 10,
+) {
+  const { docs } = await _DB.collection('users').limit(limitQuery).get();
 
   return docs
     .map((doc) => ({ ...doc.data(), docId: doc.id }))
@@ -56,6 +81,26 @@ export async function getSuggestedProfilesByUserId(userId, userFollowing) {
       (profile) =>
         profile.userId !== userId && !userFollowing.includes(profile.userId),
     );
+}
+
+/**
+ * Function used to get user photos by it's user `ID`. It limits the queried results to `25` by default and sorts it by newest first
+ *
+ * @param {string} userId The user id to be queried by
+ * @param {number} [limitQuery=25] The user id to be queried by
+ *
+ * @return {Promise<Array<{}>>} A promise of type object array.
+ */
+export async function getUserPhotosByUserId(userId, limitQuery = 25) {
+  const { docs } = await _DB
+    .collection('photos')
+    .where('userId', '==', userId)
+    .limit(limitQuery)
+    .get();
+
+  return docs
+    .map((doc) => ({ ...doc.data(), docId: doc.id }))
+    .sort((a, b) => b.dateCreated - a.dateCreated);
 }
 
 /**
@@ -101,7 +146,7 @@ export async function getFollowingUserPhotosByUserId(userId, userFollowing) {
  *
  * @param {string} suggestedUserId The user id of the suggested profile
  * @param {string} userId The user id of the current logged in user
- * @param {boolean} userFollowingStatus The following status of the suggested profile
+ * @param {boolean} [userFollowingStatus=false] The following status of the suggested profile
  *
  * @return {Promise<void>} A promise of type void.
  */
@@ -129,7 +174,7 @@ export async function updateUserFollowingField(
  *
  * @param {string} suggestedUserDocId The user document id of the suggested profile
  * @param {string} userId The user id of the current logged in user
- * @param {boolean} userFollowingStatus The following status of the suggested profile
+ * @param {boolean} [userFollowingStatus=false] The following status of the suggested profile
  *
  * @return {Promise<void>} A promise of type void.
  */
@@ -153,7 +198,7 @@ export async function updateUserFollowersField(
  *
  * @param {string} userDocId The user document id of the post user owner
  * @param {string} userId The user id of the current logged in user
- * @param {boolean} userLikedStatus The liked status of the post
+ * @param {boolean} [userLikedStatus=false] The liked status of the post
  *
  * @return {Promise<void>} A promise of type void.
  */

@@ -57,5 +57,3 @@ Post.propTypes = {
     }).isRequired,
   }).isRequired,
 };
-
-Post.whyDidYouRender = true;
