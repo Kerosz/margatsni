@@ -7,7 +7,7 @@ export default function Sidebar() {
   const { username, fullName, userId, photoURL, following } = user;
 
   return (
-    <div className="p-4">
+    <div className="p-4 pt-0">
       <User userData={{ username, fullName, photoURL }} />
       <Suggestions userId={userId} userFollowing={following} />
     </div>

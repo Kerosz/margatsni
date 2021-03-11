@@ -1,12 +1,16 @@
 import PropTypes from 'prop-types';
 import { Image } from 'cloudinary-react';
+import { useRef } from 'react';
 import Header from './header';
 import Actions from './actions';
 import Footer from './footer';
+import Comments from './comments';
 
 export default function Post({ data }) {
+  const commentInputRef = useRef(null);
+
   function handleCommentInputFocus() {
-    return 0;
+    commentInputRef.current.focus();
   }
 
   return (
@@ -24,6 +28,12 @@ export default function Post({ data }) {
         handleCommentFocus={handleCommentInputFocus}
       />
       <Footer username={data.user.username} caption={data.caption} />
+      <Comments
+        docId={data.docId}
+        postComments={data.comments}
+        datePosted={data.dateCreated}
+        commentInputRef={commentInputRef}
+      />
     </div>
   );
 }
@@ -31,7 +41,7 @@ export default function Post({ data }) {
 Post.propTypes = {
   data: PropTypes.exact({
     caption: PropTypes.string.isRequired,
-    comments: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
+    comments: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     dateCreated: PropTypes.number.isRequired,
     docId: PropTypes.string.isRequired,
     imageSrc: PropTypes.string.isRequired,
@@ -47,3 +57,5 @@ Post.propTypes = {
     }).isRequired,
   }).isRequired,
 };
+
+Post.whyDidYouRender = true;

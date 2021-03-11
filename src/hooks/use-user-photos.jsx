@@ -27,14 +27,12 @@ export default function useUserPhotos() {
         followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
 
         if (userPhotos) {
-          // if photos are not null check if the photo object in state is the same with the new photo object, if it's the same return early else add the new photo obj to state
           followedUserPhotos.forEach((photo, idx) => {
             if (photo.photoId === userPhotos[idx].photoId) return;
 
             setUserPhotos((oldPhotos) => [...oldPhotos, photo]);
           });
         } else {
-          // if photos are null set the state with the returned photos
           setUserPhotos(followedUserPhotos);
         }
       } else {

@@ -30,5 +30,3 @@ export default function Timeline() {
     </div>
   );
 }
-
-// Timeline.whyDidYouRender = true;

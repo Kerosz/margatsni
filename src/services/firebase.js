@@ -59,6 +59,44 @@ export async function getSuggestedProfilesByUserId(userId, userFollowing) {
 }
 
 /**
+ * Function used to get all the photos of a user by it's id
+ *
+ * @param {string} userId The user id of the current logged in user
+ * @param {string[]} userFollowing An array containing all the following users of the current user
+ *
+ * @return {Promise<Array<{}>>} A promise of type object array.
+ */
+export async function getFollowingUserPhotosByUserId(userId, userFollowing) {
+  const { docs } = await _DB
+    .collection('photos')
+    .where('userId', 'in', userFollowing)
+    .get();
+
+  const userFollowedPhotos = docs.map((doc) => ({
+    ...doc.data(),
+    docId: doc.id,
+  }));
+
+  const photosWithUserData = await Promise.all(
+    userFollowedPhotos.map(async (photo) => {
+      let userLikedPhoto = false;
+
+      if (photo.likes.includes(userId)) {
+        userLikedPhoto = true;
+      }
+
+      const { username, photoURL } = await getUserDataByUserId(photo.userId);
+
+      const user = { username, photoURL };
+
+      return { user, ...photo, userLikedPhoto };
+    }),
+  );
+
+  return photosWithUserData;
+}
+
+/**
  * Function used to update the user `following field`
  *
  * @param {string} suggestedUserId The user id of the suggested profile
@@ -113,7 +151,7 @@ export async function updateUserFollowersField(
 /**
  * Function used to update the post `likes field`
  *
- * @param {string} userDocId The user document id of the post owner user
+ * @param {string} userDocId The user document id of the post user owner
  * @param {string} userId The user id of the current logged in user
  * @param {boolean} userLikedStatus The liked status of the post
  *
@@ -135,39 +173,18 @@ export async function updatePostLikesField(
 }
 
 /**
- * Function used to get all the photos of a user by it's id
+ * Function used to add a comment to a given post
  *
- * @param {string} userId The user id of the current logged in user
- * @param {string[]} userFollowing An array containing all the following users of the current user
+ * @param {string} postDocId The post document id to be updated
+ * @param {string} newPostComment The comment to be added
  *
- * @return {Promise<Array<{}>>} A promise of type object array.
+ * @return {Promise<void>} A promise of type void.
  */
-export async function getFollowingUserPhotosByUserId(userId, userFollowing) {
-  const { docs } = await _DB
+export async function addPostComments(postDocId, newPostComment) {
+  _DB
     .collection('photos')
-    .where('userId', 'in', userFollowing)
-    .get();
-
-  const userFollowedPhotos = docs.map((doc) => ({
-    ...doc.data(),
-    docId: doc.id,
-  }));
-
-  const photosWithUserData = await Promise.all(
-    userFollowedPhotos.map(async (photo) => {
-      let userLikedPhoto = false;
-
-      if (photo.likes.includes(userId)) {
-        userLikedPhoto = true;
-      }
-
-      const { username, photoURL } = await getUserDataByUserId(photo.userId);
-
-      const user = { username, photoURL };
-
-      return { user, ...photo, userLikedPhoto };
-    }),
-  );
-
-  return photosWithUserData;
+    .doc(postDocId)
+    .update({
+      comments: FieldValue.arrayUnion(newPostComment),
+    });
 }
