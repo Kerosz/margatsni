@@ -96,7 +96,7 @@ export default function Comments({
         </p>
       </div>
 
-      <div className="border-t border-gray-primary">
+      <div className="border-t border-gray-200">
         <form
           className="flex justify-between pl-0 px-5"
           method="POST"

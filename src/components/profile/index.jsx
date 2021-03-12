@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Details from './details';
@@ -7,30 +6,22 @@ import { getUserPhotosByUserId } from '../../services/firebase';
 
 export default function UserProfile({ data }) {
   const [photos, setPhotos] = useState(null);
+  const [photoCount, setPhotoCount] = useState(0);
 
   useEffect(() => {
     async function getProfileData() {
       const userPhotos = await getUserPhotosByUserId(data.userId);
 
-      // Performance check to avoid re-renders
-      if (photos) {
-        userPhotos.forEach((photo, idx) => {
-          if (photo.photoId === photos[idx].photoId) return;
-
-          setPhotos((oldPhotos) => [...oldPhotos, photo]);
-        });
-      } else {
-        setPhotos(userPhotos);
-      }
+      setPhotos(userPhotos);
+      setPhotoCount(userPhotos.length);
     }
 
     getProfileData();
-  }, []);
+  }, [data.userId]);
 
   return (
     <>
-      <div>{data.userId} user profile</div>
-      <Details />
+      <Details profileData={data} postCount={photoCount} />
       <PhotoCollection data={photos} />
     </>
   );
@@ -48,5 +39,3 @@ UserProfile.propTypes = {
     username: PropTypes.string.isRequired,
   }).isRequired,
 };
-
-// UserProfile.whyDidYouRender = true;

@@ -9,7 +9,6 @@ export default function Profile() {
   const history = useHistory();
   const { username } = useParams();
 
-  const [userExists, setUserExists] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -18,7 +17,6 @@ export default function Profile() {
 
       if (userData) {
         setUser(userData);
-        setUserExists(true);
       } else {
         history.push(ROUTES.NOT_FOUND);
       }
@@ -29,12 +27,12 @@ export default function Profile() {
 
   useEffect(() => {
     if (user) {
-      document.title = `${user.fullName} - Instagram profile`;
+      document.title = `${user.fullName} (@${user.username}) - Instagram profile`;
     }
   }, [user]);
 
-  if (!userExists) {
-    return <div>Loading</div>;
+  if (!user) {
+    return <Header />;
   }
 
   return (

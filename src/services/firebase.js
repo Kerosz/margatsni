@@ -104,7 +104,7 @@ export async function getUserPhotosByUserId(userId, limitQuery = 25) {
 }
 
 /**
- * Function used to get all the photos of a user by it's id
+ * Function used to get all the photos of a user that is followed by current logged in user by it's `ID`
  *
  * @param {string} userId The user id of the current logged in user
  * @param {string[]} userFollowing An array containing all the following users of the current user

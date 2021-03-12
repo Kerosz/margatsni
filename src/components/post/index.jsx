@@ -14,7 +14,7 @@ export default function Post({ data }) {
   }
 
   return (
-    <div className="rounded col-span-4 bg-white border-gray-primary mb-12">
+    <div className="rounded col-span-4 bg-white border border-gray-primary mb-12">
       <Header user={data.user} />
       <Image
         cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}

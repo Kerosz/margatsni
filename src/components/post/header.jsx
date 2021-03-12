@@ -4,7 +4,7 @@ import { Image } from 'cloudinary-react';
 
 export default function Header({ user }) {
   return (
-    <div className="flex border-b border-gray-primary h-4 p-4 py-8">
+    <div className="flex border-b h-4 p-4 py-8 border-gray-200">
       <Link
         to={`/p/${user.username}`}
         className="flex items-center hover:underline"
