@@ -27,16 +27,17 @@ export default function Header() {
               </Link>
             </h1>
           </div>
-          <div className="text-gray-700 text-center align-items items-center flex">
+          <nav className="text-gray-700 text-center align-items items-center flex">
             {user ? (
               <>
-                <Link
-                  to={ROUTES.DASHBOARD}
-                  title="Dashboard"
-                  aria-label="Dashboard"
+                <button
+                  type="button"
+                  title="Add Post"
+                  aria-label="Add Post"
+                  className="mr-4"
                 >
                   <svg
-                    className="w-8 mr-6 text-black-light cursor-pointer"
+                    className="w-8 text-black-light cursor-pointer"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -45,7 +46,28 @@ export default function Header() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth="1"
+                      d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </button>
+                <Link
+                  to={ROUTES.DASHBOARD}
+                  title="Dashboard"
+                  aria-label="Dashboard"
+                  className="mr-4"
+                >
+                  <svg
+                    className="w-8 text-black-light cursor-pointer"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
                       d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                     />
                   </svg>
@@ -54,13 +76,14 @@ export default function Header() {
                   type="button"
                   title="Sign Out"
                   aria-label="SignOut"
+                  className="mr-6"
                   onClick={() => firebase.auth().signOut()}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') firebase.auth().signOut();
                   }}
                 >
                   <svg
-                    className="w-8 mr-6 text-black-light cursor-pointer"
+                    className="w-8 text-black-light cursor-pointer"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -69,7 +92,7 @@ export default function Header() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={1}
                       d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                     />
                   </svg>
@@ -111,7 +134,7 @@ export default function Header() {
                 </Link>
               </>
             )}
-          </div>
+          </nav>
         </div>
       </div>
     </header>
