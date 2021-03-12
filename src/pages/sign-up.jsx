@@ -56,6 +56,8 @@ export default function SignUp() {
           photoURL:
             'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
           dateCreated: Date.now(),
+          verifiedUser: false,
+          privateProfile: false,
         });
 
         history.push(ROUTES.DASHBOARD);

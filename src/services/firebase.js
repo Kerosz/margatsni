@@ -233,3 +233,16 @@ export async function addPostComments(postDocId, newPostComment) {
       comments: FieldValue.arrayUnion(newPostComment),
     });
 }
+
+/**
+ * Function used to create a new post data
+ *
+ * @param {object} postObject The post data to be added to the collection
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function createPost(postObject) {
+  const result = await _DB.collection('photos').add(postObject);
+
+  return result;
+}

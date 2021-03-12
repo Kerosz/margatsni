@@ -1,12 +1,17 @@
 import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
+import { useRef, useState } from 'react';
 import { useFirebaseContext } from '../context/firebase';
 import { useUserContext } from '../context/user';
+import AddPost from './post/add-post';
 import * as ROUTES from '../constants/routes';
 
 export default function Header() {
   const { firebase } = useFirebaseContext();
   const { user } = useUserContext();
+
+  const postButtonRef = useRef(null);
+  const [postModalStatus, setPostModalStatus] = useState(false);
 
   return (
     <header className="h-16 bg-white border-b border-gray-primary mb-8">
@@ -27,7 +32,10 @@ export default function Header() {
               </Link>
             </h1>
           </div>
-          <nav className="text-gray-700 text-center align-items items-center flex">
+          <nav
+            aria-label="Main"
+            className="text-gray-700 text-center align-items items-center flex"
+          >
             {user ? (
               <>
                 <button
@@ -35,6 +43,12 @@ export default function Header() {
                   title="Add Post"
                   aria-label="Add Post"
                   className="mr-4"
+                  ref={postButtonRef}
+                  onClick={() => setPostModalStatus((prev) => !prev)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter')
+                      setPostModalStatus((prev) => !prev);
+                  }}
                 >
                   <svg
                     className="w-8 text-black-light cursor-pointer"
@@ -46,11 +60,17 @@ export default function Header() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth="1"
+                      strokeWidth={1}
                       d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     />
                   </svg>
                 </button>
+                <AddPost
+                  userData={user}
+                  postButtonRef={postButtonRef}
+                  displayModal={postModalStatus}
+                  setDisplayStatus={setPostModalStatus}
+                />
                 <Link
                   to={ROUTES.DASHBOARD}
                   title="Dashboard"
@@ -75,7 +95,7 @@ export default function Header() {
                 <button
                   type="button"
                   title="Sign Out"
-                  aria-label="SignOut"
+                  aria-label="Sign Out"
                   className="mr-6"
                   onClick={() => firebase.auth().signOut()}
                   onKeyDown={(event) => {
@@ -99,8 +119,8 @@ export default function Header() {
                 </button>
                 <div
                   className="flex items-center cursor-pointer"
-                  title={`${user.displayName} profile picture`}
-                  aria-label={`${user.displayName} profile picture`}
+                  title={`${user.displayName}'s profile`}
+                  aria-label={`${user.displayName}'s profile`}
                 >
                   <Link to={`/p/${user.displayName}`}>
                     <Image
@@ -116,7 +136,7 @@ export default function Header() {
               </>
             ) : (
               <>
-                <Link to={ROUTES.LOGIN}>
+                <Link to={ROUTES.LOGIN} aria-label="Login">
                   <button
                     type="button"
                     className="bg-blue-medium font-bold text-sm text-white rounded w-20 h-8"
@@ -124,7 +144,7 @@ export default function Header() {
                     Log In
                   </button>
                 </Link>
-                <Link to={ROUTES.SIGNUP} className="ml-2">
+                <Link to={ROUTES.SIGNUP} className="ml-2" aria-label="Sign Up">
                   <button
                     type="button"
                     className="font-bold text-sm text-blue-medium rounded w-20 h-8"

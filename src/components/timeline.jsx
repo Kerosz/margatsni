@@ -8,25 +8,25 @@ export default function Timeline() {
 
   if (!photos) {
     return (
-      <div className="container col-span-2" role="main">
+      <main className="container col-span-2">
         <Skeleton className="mb-4" count={4} height={450} />
-      </div>
+      </main>
     );
   }
 
   if (photos.length < 1) {
     return (
-      <div className="container col-span-2" role="main">
+      <main className="container col-span-2">
         <p className="text-center text-2xl">Follow people to see photos!</p>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="container col-span-2" role="main">
+    <main className="container col-span-2">
       {photos.map((photo) => (
         <Post key={photo.photoId} data={photo} />
       ))}
-    </div>
+    </main>
   );
 }
