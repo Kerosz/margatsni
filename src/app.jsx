@@ -10,6 +10,7 @@ const LoginPage = lazy(() => import('./pages/login'));
 const SignUpPage = lazy(() => import('./pages/sign-up'));
 const NotFoundPage = lazy(() => import('./pages/not-found'));
 const ProfilePage = lazy(() => import('./pages/profile'));
+const AccountPage = lazy(() => import('./pages/account'));
 
 export default function App() {
   const { user } = useUserContext();
@@ -20,6 +21,9 @@ export default function App() {
         <Switch>
           <ProtectedRoute user={user} path={ROUTES.DASHBOARD} exact>
             <DashboardPage />
+          </ProtectedRoute>
+          <ProtectedRoute user={user} path={ROUTES.ACCOUNT} exact>
+            <AccountPage />
           </ProtectedRoute>
           <UserRedirectRoute
             user={user}

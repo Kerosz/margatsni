@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import PropTypes from 'prop-types';
 import { formatDistance } from 'date-fns';
 import { useState } from 'react';
@@ -30,7 +29,7 @@ export default function Comments({
     if (newCommentValue.length >= 1) {
       const newComment = {
         id: uuid(),
-        author: user.uid,
+        userId: user.uid,
         comment: newCommentValue,
         displayName: user.displayName,
         dateCreated: Date.now(),
@@ -81,8 +80,8 @@ export default function Comments({
               : `View all ${comments.length} comments`}
           </button>
         )}
-        {comments.slice(0, displayCommentCount).map((comment, idx) => (
-          <p key={`${idx}_${comment.displayName}`} className="mb-1">
+        {comments.slice(0, displayCommentCount).map((comment) => (
+          <p key={comment.id} className="mb-1">
             <Link to={`/p/${comment.displayName}`} className="hover:underline">
               <span className="mr-1.5 font-semibold">
                 {comment.displayName}
@@ -135,7 +134,15 @@ Comments.defaultProps = {
 
 Comments.propTypes = {
   docId: PropTypes.string.isRequired,
-  postComments: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
+  postComments: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      userId: PropTypes.string.isRequired,
+      comment: PropTypes.string.isRequired,
+      displayName: PropTypes.string.isRequired,
+      dateCreated: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
   datePosted: PropTypes.number.isRequired,
   commentInputRef: PropTypes.objectOf(PropTypes.any).isRequired,
   defaultCommentDisplayCount: PropTypes.number,

@@ -46,19 +46,29 @@ export default function SignUp() {
             'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
         });
 
-        await firebase.firestore().collection('users').add({
-          userId: createdUserResult.user.uid,
-          username: username.toLowerCase(),
-          fullName,
-          followers: [],
-          following: [],
-          emailAddress: email,
-          photoURL:
-            'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
-          dateCreated: Date.now(),
-          verifiedUser: false,
-          privateProfile: false,
-        });
+        await firebase
+          .firestore()
+          .collection('users')
+          .add({
+            userId: createdUserResult.user.uid,
+            username: username.toLowerCase(),
+            userInfo: {
+              fullName,
+              website: '',
+              bio: '',
+              phoneNumber: '',
+            },
+            followers: [],
+            following: [],
+            emailAddress: email,
+            photoURL:
+              'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
+            dateCreated: Date.now(),
+            verifiedUser: false,
+            privateProfile: false,
+            savedPosts: [],
+            allowSuggestions: true,
+          });
 
         history.push(ROUTES.DASHBOARD);
       } catch (error) {

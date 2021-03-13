@@ -1,12 +1,14 @@
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
-import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
 import useFirestoreUser from '../../hooks/use-firestore-user';
 import {
   updateUserFollowersField,
   updateUserFollowingField,
 } from '../../services/firebase';
+import * as ROUTES from '../../constants/routes';
 
 export default function Details({ profileData, postCount }) {
   const { user } = useFirestoreUser();
@@ -72,15 +74,23 @@ export default function Details({ profileData, postCount }) {
           <p className="mr-6 text-3xl text-gray-800 font-light">
             {profileData.username}
           </p>
-          {showFollowButton && (
+          {showFollowButton ? (
             <button
               type="button"
-              aria-label="a"
+              aria-label={isFollowingProfile ? 'Unfollow' : 'Follow'}
               onClick={handleToggleFollowUser}
               className="bg-blue-medium font-bold text-sm text-white rounded w-20 h-8"
             >
               {isFollowingProfile ? 'Unfollow' : 'Follow'}
             </button>
+          ) : (
+            <Link
+              to={ROUTES.ACCOUNT}
+              aria-label="Edit profile"
+              className="bg-gray-background text-black-light rounded border border-gray-primary text-sm font-semibold py-1.5 px-2"
+            >
+              Edit Profile
+            </Link>
           )}
         </div>
         <div className="container flex mt-5">
@@ -111,7 +121,7 @@ export default function Details({ profileData, postCount }) {
         </div>
         <div className="container flex mt-6">
           <p className="font-semibold text-lg text-gray-900">
-            {profileData.fullName}
+            {profileData.userInfo.fullName}
           </p>
         </div>
       </div>
@@ -125,7 +135,12 @@ Details.propTypes = {
     docId: PropTypes.string.isRequired,
     followers: PropTypes.arrayOf(PropTypes.string).isRequired,
     following: PropTypes.arrayOf(PropTypes.string).isRequired,
-    fullName: PropTypes.string.isRequired,
+    userInfo: PropTypes.shape({
+      bio: PropTypes.string.isRequired,
+      fullName: PropTypes.string.isRequired,
+      phoneNumber: PropTypes.string.isRequired,
+      website: PropTypes.string.isRequired,
+    }).isRequired,
     photoURL: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,

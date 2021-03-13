@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
-import { useRef, useState } from 'react';
 import { useFirebaseContext } from '../context/firebase';
 import { useUserContext } from '../context/user';
 import AddPost from './post/add-post';
@@ -10,7 +10,6 @@ export default function Header() {
   const { firebase } = useFirebaseContext();
   const { user } = useUserContext();
 
-  const postButtonRef = useRef(null);
   const [postModalStatus, setPostModalStatus] = useState(false);
 
   return (
@@ -43,7 +42,6 @@ export default function Header() {
                   title="Add Post"
                   aria-label="Add Post"
                   className="mr-4"
-                  ref={postButtonRef}
                   onClick={() => setPostModalStatus((prev) => !prev)}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter')
@@ -67,7 +65,6 @@ export default function Header() {
                 </button>
                 <AddPost
                   userData={user}
-                  postButtonRef={postButtonRef}
                   displayModal={postModalStatus}
                   setDisplayStatus={setPostModalStatus}
                 />

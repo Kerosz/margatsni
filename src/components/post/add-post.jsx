@@ -6,12 +6,8 @@ import { v4 as uuid } from 'uuid';
 import { uploadUnsignedImage } from '../../services/cloudinary';
 import { createPost } from '../../services/firebase';
 
-export default function AddPost({
-  userData,
-  postButtonRef,
-  displayModal,
-  setDisplayStatus,
-}) {
+export default function AddPost({ userData, displayModal, setDisplayStatus }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [postMessage, setPostMessage] = useState('');
@@ -24,6 +20,7 @@ export default function AddPost({
 
     reader.readAsDataURL(file);
     reader.onload = () => {
+      // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readyState
       if (reader.readyState === 2) {
         setPreviewImage(reader.result);
       }
@@ -39,6 +36,7 @@ export default function AddPost({
 
   async function handleNewPostSubmit(event) {
     event.preventDefault();
+    setIsSubmitting(true);
 
     const cloudinaryResponse = await uploadUnsignedImage(
       uploadedImage,
@@ -59,6 +57,7 @@ export default function AddPost({
 
     await createPost(postDataObject);
 
+    setIsSubmitting(false);
     handleModalClose();
   }
 
@@ -74,7 +73,7 @@ export default function AddPost({
         onClick={handleModalClose}
       />
       <div
-        className="absolute z-40 bg-white max-w-screen-sm w-full flex flex-col"
+        className="absolute z-40 bg-white max-w-screen-sm w-full flex flex-col border border-gray-primary shadow-lg"
         role="dialog"
         aria-modal="true"
         aria-label="Add post modal"
@@ -124,7 +123,7 @@ export default function AddPost({
             />
             {previewImage && (
               <img
-                className="rounded-2xl mb-2 min-w-full max-h-80 object-contain"
+                className="rounded-2xl mb-2 min-w-full max-h-80 object-contain bg-gray-100 shadow-sm"
                 src={previewImage}
                 alt="Uploaded"
               />
@@ -151,20 +150,25 @@ export default function AddPost({
                 <input
                   id="file-upload"
                   name="file-upload"
+                  accept="image/jpeg,image/png"
                   type="file"
                   className="sr-only"
                   onChange={handleImageUpload}
                 />
               </label>
+
               <button
                 type="submit"
                 className={`font-bold text-blue-medium ${
-                  postMessage.length < 1 && 'opacity-25 cursor-default'
+                  (postMessage.length < 1 || isSubmitting || !uploadedImage) &&
+                  'opacity-25 cursor-default'
                 } mr-1`}
-                disabled={postMessage.length < 1}
+                disabled={
+                  postMessage.length < 1 || isSubmitting || !uploadedImage
+                }
                 onClick={handleNewPostSubmit}
               >
-                Post
+                {isSubmitting ? 'Uploading post...' : 'Post'}
               </button>
             </div>
           </form>
@@ -176,7 +180,6 @@ export default function AddPost({
 
 AddPost.propTypes = {
   userData: PropTypes.objectOf(PropTypes.any).isRequired,
-  postButtonRef: PropTypes.objectOf(PropTypes.any).isRequired,
   displayModal: PropTypes.bool.isRequired,
   setDisplayStatus: PropTypes.func.isRequired,
 };

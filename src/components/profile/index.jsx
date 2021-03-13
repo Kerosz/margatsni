@@ -33,7 +33,12 @@ UserProfile.propTypes = {
     docId: PropTypes.string.isRequired,
     followers: PropTypes.arrayOf(PropTypes.string).isRequired,
     following: PropTypes.arrayOf(PropTypes.string).isRequired,
-    fullName: PropTypes.string.isRequired,
+    userInfo: PropTypes.shape({
+      bio: PropTypes.string.isRequired,
+      fullName: PropTypes.string.isRequired,
+      phoneNumber: PropTypes.string.isRequired,
+      website: PropTypes.string.isRequired,
+    }).isRequired,
     photoURL: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,

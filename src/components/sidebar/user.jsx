@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
 
 export default function User({ userData }) {
-  if (!userData.username || !userData.fullName || !userData.photoURL) {
+  if (!userData.username || !userData.userInfo.fullName || !userData.photoURL) {
     return <Skeleton count={1} height={61} />;
   }
 
@@ -26,7 +26,7 @@ export default function User({ userData }) {
         <Link to={`/p/${userData.username}`} className="hover:underline">
           <p className="font-semibold text-base">{userData.username}</p>
         </Link>
-        <p className="text-sm text-gray-500">{userData.fullName}</p>
+        <p className="text-sm text-gray-500">{userData.userInfo.fullName}</p>
       </div>
     </div>
   );
@@ -39,7 +39,12 @@ User.defaultProps = {
 User.propTypes = {
   userData: PropTypes.exact({
     username: PropTypes.string,
-    fullName: PropTypes.string,
+    userInfo: PropTypes.shape({
+      bio: PropTypes.string.isRequired,
+      fullName: PropTypes.string.isRequired,
+      phoneNumber: PropTypes.string.isRequired,
+      website: PropTypes.string.isRequired,
+    }),
     photoURL: PropTypes.string,
   }),
 };

@@ -19,6 +19,8 @@ export default function Post({ data }) {
       <Image
         cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
         publicId={data.imageSrc}
+        width="680"
+        crop="scale"
         alt={data.caption}
       />
       <Actions
@@ -45,12 +47,12 @@ Post.propTypes = {
     dateCreated: PropTypes.number.isRequired,
     docId: PropTypes.string.isRequired,
     imageSrc: PropTypes.string.isRequired,
+    sourceURL: PropTypes.string.isRequired,
     likes: PropTypes.arrayOf(PropTypes.string),
-    photoId: PropTypes.number.isRequired,
+    saved: PropTypes.arrayOf(PropTypes.string),
+    photoId: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
-    userLatitude: PropTypes.string.isRequired,
     userLikedPhoto: PropTypes.bool.isRequired,
-    userLongitude: PropTypes.string.isRequired,
     user: PropTypes.shape({
       username: PropTypes.string.isRequired,
       photoURL: PropTypes.string.isRequired,
