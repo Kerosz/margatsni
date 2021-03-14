@@ -3,16 +3,13 @@ import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
-import useFirestoreUser from '../../hooks/use-firestore-user';
 import {
   updateUserFollowersField,
   updateUserFollowingField,
 } from '../../services/firebase';
 import * as ROUTES from '../../constants/routes';
 
-export default function Details({ profileData, postCount }) {
-  const { user } = useFirestoreUser();
-
+export default function Details({ profileData, postCount, userData }) {
   const [showFollowButton, setShowFollowButton] = useState(false);
   const [isFollowingProfile, setIsFollowingProfile] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
@@ -25,37 +22,26 @@ export default function Details({ profileData, postCount }) {
 
     updateUserFollowersField(
       profileData.docId,
-      user.userId,
+      userData.userId,
       isFollowingProfile,
     );
     updateUserFollowingField(
       profileData.userId,
-      user.userId,
+      userData.userId,
       isFollowingProfile,
     );
   }
 
   useEffect(() => {
-    if (user.username) {
-      const isFollowing = profileData.followers.includes(user.userId);
-      const showButton = user.username !== profileData.username;
+    if (userData.username) {
+      const isFollowing = profileData.followers.includes(userData.userId);
+      const showButton = userData.username !== profileData.username;
 
       setIsFollowingProfile(!!isFollowing);
       setShowFollowButton(!!showButton);
       setFollowerCount(profileData.followers.length);
     }
-  }, [user, profileData]);
-
-  if (!user.username) {
-    return (
-      <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
-        <div className="container flex justify-center">
-          <Skeleton circle height={160} width={160} className="mr-3" />
-        </div>
-        <Skeleton height={180} width={400} className="col-span-2" />
-      </div>
-    );
-  }
+  }, [userData, profileData]);
 
   return (
     <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
@@ -183,4 +169,20 @@ Details.propTypes = {
     verifiedUser: PropTypes.bool.isRequired,
   }).isRequired,
   postCount: PropTypes.number.isRequired,
+  userData: PropTypes.shape({
+    dateCreated: PropTypes.number.isRequired,
+    docId: PropTypes.string.isRequired,
+    followers: PropTypes.arrayOf(PropTypes.string).isRequired,
+    following: PropTypes.arrayOf(PropTypes.string).isRequired,
+    userInfo: PropTypes.shape({
+      bio: PropTypes.string.isRequired,
+      fullName: PropTypes.string.isRequired,
+      phoneNumber: PropTypes.string.isRequired,
+      website: PropTypes.string.isRequired,
+    }).isRequired,
+    photoURL: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    verifiedUser: PropTypes.bool.isRequired,
+  }).isRequired,
 };

@@ -1,3 +1,4 @@
+import app from 'firebase/app';
 import { firebase, FieldValue } from '../lib/firebase';
 
 /** Initializing firestore database */
@@ -78,7 +79,9 @@ export async function getSuggestedProfilesByUserId(
     .map((doc) => ({ ...doc.data(), docId: doc.id }))
     .filter(
       (profile) =>
-        profile.userId !== userId && !userFollowing.includes(profile.userId),
+        profile.userId !== userId &&
+        !userFollowing.includes(profile.userId) &&
+        profile.allowSuggestions,
     );
 }
 
@@ -312,4 +315,72 @@ export async function addPostComments(postDocId, newPostComment) {
  */
 export async function createPost(postObject) {
   _DB.collection('photos').add(postObject);
+}
+
+/**
+ * Function used to re-authentificate a user
+ *
+ * @param {string} userPassword The password of the current logged in user
+ *
+ * @return {Promise<{}>} A promise of type void.
+ */
+export async function reauthentificateUserWithPassword(userPassword) {
+  const user = firebase.auth().currentUser;
+
+  if (!user) throw Error('No logged in user found!');
+
+  const credential = app.auth.EmailAuthProvider.credential(
+    user.email,
+    userPassword,
+  );
+
+  await user.reauthenticateWithCredential(credential);
+}
+
+/**
+ * Function used to update user password. It uses `reauthentificateUserWithPassword` function.
+ *
+ * @param {string} currentPassword The password of the current logged in user
+ * @param {string} newPassword The new password to be updated
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function updateUserPassword(currentPassword, newPassword) {
+  try {
+    await reauthentificateUserWithPassword(currentPassword);
+
+    try {
+      const user = firebase.auth().currentUser;
+
+      await user.updatePassword(newPassword);
+    } catch (error) {
+      throw Error(error);
+    }
+  } catch (error) {
+    throw Error(error);
+  }
+}
+
+/**
+ * Function used to update user email address. It uses `reauthentificateUserWithPassword` function.
+ *
+ * @param {string} currentPassword The password of the current logged in user
+ * @param {string} newEmail The email address to be updated
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function updateUserEmailAddress(currentPassword, newEmail) {
+  try {
+    await reauthentificateUserWithPassword(currentPassword);
+
+    try {
+      const user = firebase.auth().currentUser;
+
+      await user.updateEmail(newEmail);
+    } catch (error) {
+      throw Error(error);
+    }
+  } catch (error) {
+    throw Error(error);
+  }
 }

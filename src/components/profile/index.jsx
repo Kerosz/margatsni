@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import Skeleton from 'react-loading-skeleton';
 import Details from './details';
 import PhotoCollection from './photo-collection';
 import { getUserPhotosByUserId } from '../../services/firebase';
+import useFirestoreUser from '../../hooks/use-firestore-user';
 
 export default function UserProfile({ data }) {
+  const { user } = useFirestoreUser();
+
   const [photos, setPhotos] = useState(null);
   const [photoCount, setPhotoCount] = useState(0);
 
@@ -19,11 +23,26 @@ export default function UserProfile({ data }) {
     getProfileData();
   }, [data.userId]);
 
+  if (!user.userId) {
+    return (
+      <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
+        <div className="container flex justify-center">
+          <Skeleton circle height={160} width={160} className="mr-3" />
+        </div>
+        <Skeleton height={180} width={400} className="col-span-2" />
+      </div>
+    );
+  }
+
   return (
     <>
-      <Details profileData={data} postCount={photoCount} />
+      <Details profileData={data} postCount={photoCount} userData={user} />
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
-        <PhotoCollection data={photos} />
+        {data.privateProfile && !user.following.includes(data.userId) ? (
+          'Private profile'
+        ) : (
+          <PhotoCollection data={photos} />
+        )}
       </div>
     </>
   );
@@ -44,5 +63,7 @@ UserProfile.propTypes = {
     photoURL: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
+    allowSuggestions: PropTypes.bool.isRequired,
+    privateProfile: PropTypes.bool.isRequired,
   }).isRequired,
 };

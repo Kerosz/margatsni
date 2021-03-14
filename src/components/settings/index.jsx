@@ -13,6 +13,8 @@ export default function Settings({ user }) {
     return null;
   }
 
+  console.log(user);
+
   return (
     <div className="bg-white border border-gray-primary grid grid-cols-4 gap-0 rounded">
       <div className="border-r border-gray-primary">
@@ -23,7 +25,12 @@ export default function Settings({ user }) {
         {currentPanel === 'change-password' && (
           <ChangePassword username={user.username} photo={user.photoURL} />
         )}
-        {currentPanel === 'security' && <PrivacyAndSecurity />}
+        {currentPanel === 'security' && (
+          <PrivacyAndSecurity
+            privateStatus={user.privateProfile}
+            suggestedProfile={user.allowSuggestions}
+          />
+        )}
       </div>
     </div>
   );
@@ -44,5 +51,7 @@ Settings.propTypes = {
     photoURL: PropTypes.string,
     userId: PropTypes.string,
     username: PropTypes.string,
+    allowSuggestions: PropTypes.bool,
+    privateProfile: PropTypes.bool,
   }).isRequired,
 };

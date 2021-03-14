@@ -4,7 +4,10 @@ import { Image } from 'cloudinary-react';
 import { Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { uploadUnsignedImage } from '../../services/cloudinary';
-import { updateUserDataByUserId } from '../../services/firebase';
+import {
+  updateUserDataByUserId,
+  updateUserEmailAddress,
+} from '../../services/firebase';
 import { useFirebaseContext } from '../../context/firebase';
 
 const ProfileSchema = Yup.object().shape({
@@ -36,6 +39,7 @@ export default function EditProfile({ data }) {
 
   const [uploadedImage, setUploadedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [serverError, setServerError] = useState(null);
 
   async function handleEditProfileFormData(values) {
     if (values.username) {
@@ -51,26 +55,31 @@ export default function EditProfile({ data }) {
       }
 
       const profileDataObject = {
-        username: values.username,
         userInfo: {
           fullName: values.fullName,
           website: values.website,
           bio: values.bio,
           phoneNumber: values.phone,
         },
-        emailAddress: values.email,
       };
 
       if (values.username !== user.displayName) {
+        profileDataObject.username = values.username;
+
         user.updateProfile({
           displayName: values.username,
         });
       }
 
+      // TODO: Have a popup to show an `enteer password again` to re-autentificate the user before changing the email
       if (values.email !== user.email) {
-        user.updateProfile({
-          email: values.username,
-        });
+        try {
+          await updateUserEmailAddress(values.email);
+
+          profileDataObject.emailAddress = values.email;
+        } catch (error) {
+          setServerError(error.message);
+        }
       }
 
       if (cloudinaryResponse) {
@@ -336,6 +345,11 @@ export default function EditProfile({ data }) {
                 {errors.phone && touched.phone && (
                   <p className="mb-0.5 mt-1 pl-1 text-xs text-red-primary">
                     {errors.phone}
+                  </p>
+                )}
+                {serverError && (
+                  <p className="mt-3 pl-1 text-xs text-red-primary">
+                    {serverError}
                   </p>
                 )}
               </div>
