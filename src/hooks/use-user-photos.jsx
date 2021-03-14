@@ -12,7 +12,7 @@ export default function useUserPhotos() {
 
   useEffect(() => {
     async function getTimelinePhotos() {
-      const { following = [] } = await getUserDataByUserId(user.uid);
+      const { following } = await getUserDataByUserId(user.uid);
 
       let followedUserPhotos = [];
       if (following.length > 0) {
@@ -45,7 +45,7 @@ export default function useUserPhotos() {
     if (user?.uid) {
       getTimelinePhotos();
     }
-  }, []);
+  }, [user.uid]);
 
   return { photos: userPhotos };
 }

@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import EditProfile from './edit-profile';
 import ChangePassword from './change-password';
 import PrivacyAndSecurity from './privacy-and-security';
@@ -12,8 +11,6 @@ export default function Settings({ user }) {
   if (!user.userId) {
     return null;
   }
-
-  console.log(user);
 
   return (
     <div className="bg-white border border-gray-primary grid grid-cols-4 gap-0 rounded">

@@ -114,6 +114,7 @@ export default function Header() {
                     />
                   </svg>
                 </button>
+
                 <div
                   className="flex items-center cursor-pointer"
                   title={`${user.displayName}'s profile`}

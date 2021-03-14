@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import * as ROUTES from '../constants/routes';
 import { useFirebaseContext } from '../context/firebase';
-import { doesUserExist } from '../services/firebase';
+import { createFirestoreUser, doesUserExist } from '../services/firebase';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -35,22 +35,20 @@ export default function SignUp() {
     const usernameAlreadyExists = await doesUserExist(username);
 
     if (!usernameAlreadyExists) {
-      try {
-        const createdUserResult = await firebase
-          .auth()
-          .createUserWithEmailAndPassword(email, password);
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const { user } = userCredential;
 
-        await createdUserResult.user.updateProfile({
-          displayName: username,
-          photoURL:
-            'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
-        });
+          user.updateProfile({
+            displayName: username.toLowerCase(),
+            photoURL:
+              'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
+          });
 
-        await firebase
-          .firestore()
-          .collection('users')
-          .add({
-            userId: createdUserResult.user.uid,
+          createFirestoreUser({
+            userId: user.uid,
             username: username.toLowerCase(),
             userInfo: {
               fullName,
@@ -68,12 +66,14 @@ export default function SignUp() {
             privateProfile: false,
             savedPosts: [],
             allowSuggestions: true,
-          });
+          }).then(() => {
+            history.push(ROUTES.DASHBOARD);
 
-        history.push(ROUTES.DASHBOARD);
-      } catch (error) {
-        setServerError(error.message);
-      }
+            // TODO: Find a way to make the header component update with the right data without having to force reload the page after routing
+            window.location.reload();
+          });
+        })
+        .catch((error) => setServerError(error.message));
     } else {
       setServerError('Username already exists, please try another!');
     }
@@ -172,7 +172,8 @@ export default function SignUp() {
                   aria-label="Login to your account"
                   disabled={!isValid}
                   className={`bg-blue-medium text-white w-full rounded h-8 mt-1 font-bold ${
-                    !isValid && 'opacity-50 cursor-not-allowed'
+                    (!isValid || isSubmitting) &&
+                    'opacity-50 cursor-not-allowed'
                   }`}
                 >
                   {isSubmitting ? 'Signing up...' : 'Sign Up'}
