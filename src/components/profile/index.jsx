@@ -22,7 +22,9 @@ export default function UserProfile({ data }) {
   return (
     <>
       <Details profileData={data} postCount={photoCount} />
-      <PhotoCollection data={photos} />
+      <div className="h-16 border-t border-gray-primary mt-12 pt-4">
+        <PhotoCollection data={photos} />
+      </div>
     </>
   );
 }

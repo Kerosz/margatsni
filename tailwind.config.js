@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       fill: (theme) => ({
         red: theme('colors.red.primary'),
+        black: theme('colors.black.light'),
       }),
       colors: {
         white: '#ffffff',

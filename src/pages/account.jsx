@@ -1,9 +1,14 @@
+import { useEffect } from 'react';
 import Header from '../components/header';
 import Settings from '../components/settings';
 import useFirestoreUser from '../hooks/use-firestore-user';
 
 export default function Account() {
   const { user } = useFirestoreUser();
+
+  useEffect(() => {
+    document.title = `Account - Instagram`;
+  }, []);
 
   return (
     <div className="bg-gray-background">

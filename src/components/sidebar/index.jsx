@@ -4,11 +4,18 @@ import Suggestions from './suggestions';
 
 export default function Sidebar() {
   const { user } = useFirestoreUser();
-  const { username, userInfo, userId, photoURL, following } = user;
+  const {
+    username,
+    userInfo,
+    userId,
+    photoURL,
+    following,
+    verifiedUser,
+  } = user;
 
   return (
     <aside className="p-4 pt-0" aria-label="Profile information">
-      <User userData={{ username, userInfo, photoURL }} />
+      <User userData={{ username, userInfo, photoURL, verifiedUser }} />
       <Suggestions userId={userId} userFollowing={following} />
     </aside>
   );

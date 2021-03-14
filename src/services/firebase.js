@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { firebase, FieldValue } from '../lib/firebase';
 
 /** Initializing firestore database */
@@ -125,16 +124,26 @@ export async function getFollowingUserPhotosByUserId(userId, userFollowing) {
   const photosWithUserData = await Promise.all(
     userFollowedPhotos.map(async (photo) => {
       let userLikedPhoto = false;
+      let userSavedPhoto = false;
 
       if (photo.likes.includes(userId)) {
         userLikedPhoto = true;
       }
 
-      const { username, photoURL } = await getUserDataByUserId(photo.userId);
+      if (photo.saved.includes(userId)) {
+        userSavedPhoto = true;
+      }
 
-      const user = { username, photoURL };
+      const {
+        username,
+        photoURL,
+        verifiedUser,
+        docId,
+      } = await getUserDataByUserId(photo.userId);
 
-      return { user, ...photo, userLikedPhoto };
+      const user = { username, photoURL, verifiedUser, docId };
+
+      return { user, ...photo, userLikedPhoto, userSavedPhoto };
     }),
   );
 
@@ -194,27 +203,87 @@ export async function updateUserFollowersField(
 }
 
 /**
+ * Function used to update the user `savedPosts field`
+ *
+ * @param {string} userDocId The user document id
+ * @param {string} postId The post id of post to be added to saved
+ * @param {boolean} [userSavedStatus=false] The saved status of the current post
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function updateUserSavedPostsField(
+  userDocId,
+  postId,
+  userSavedStatus = false,
+) {
+  _DB
+    .collection('users')
+    .doc(userDocId)
+    .update({
+      savedPosts: userSavedStatus
+        ? FieldValue.arrayRemove(postId)
+        : FieldValue.arrayUnion(postId),
+    });
+}
+
+/**
  * Function used to update the post `likes field`
  *
- * @param {string} userDocId The user document id of the post user owner
+ * @param {string} postDocId The post document id
  * @param {string} userId The user id of the current logged in user
  * @param {boolean} [userLikedStatus=false] The liked status of the post
  *
  * @return {Promise<void>} A promise of type void.
  */
 export async function updatePostLikesField(
-  userDocId,
+  postDocId,
   userId,
   userLikedStatus = false,
 ) {
   _DB
     .collection('photos')
-    .doc(userDocId)
+    .doc(postDocId)
     .update({
       likes: userLikedStatus
         ? FieldValue.arrayRemove(userId)
         : FieldValue.arrayUnion(userId),
     });
+}
+
+/**
+ * Function used to update the post `saved field`
+ *
+ * @param {string} userDocId The user document id of the post user owner
+ * @param {string} userId The user id of the current logged in user
+ * @param {boolean} [userSavedStatus=false] The saved status of the post
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function updatePostSavedField(
+  userDocId,
+  userId,
+  userSavedStatus = false,
+) {
+  _DB
+    .collection('photos')
+    .doc(userDocId)
+    .update({
+      saved: userSavedStatus
+        ? FieldValue.arrayRemove(userId)
+        : FieldValue.arrayUnion(userId),
+    });
+}
+
+/**
+ * Function used to add a comment to a given post
+ *
+ * @param {string} userDocId The user document ID to be updated
+ * @param {object} objectData The data object to be updated with
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function updateUserDataByUserId(userDocId, objectData) {
+  _DB.collection('users').doc(userDocId).update(objectData);
 }
 
 /**
@@ -242,7 +311,5 @@ export async function addPostComments(postDocId, newPostComment) {
  * @return {Promise<void>} A promise of type void.
  */
 export async function createPost(postObject) {
-  const result = await _DB.collection('photos').add(postObject);
-
-  return result;
+  _DB.collection('photos').add(postObject);
 }

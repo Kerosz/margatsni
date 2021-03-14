@@ -1,26 +1,30 @@
-/* eslint-disable no-unused-vars */
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'cloudinary-react';
 import { Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { uploadUnsignedImage } from '../../services/cloudinary';
+import { updateUserDataByUserId } from '../../services/firebase';
+import { useFirebaseContext } from '../../context/firebase';
 
 const ProfileSchema = Yup.object().shape({
   username: Yup.string()
     .min(3, 'Username must be at least 3 characters long!')
     .max(12, 'Username must be 12 characters at most!')
-    .required('Username is a required field'),
+    .lowercase('Username must be lowercase only!')
+    .required('Username is a required field!')
+    .strict(),
   fullName: Yup.string()
     .min(3, 'Full name must be at least 3 characters long!')
     .max(34, 'Full name must be 34 characters at most!')
-    .required('Full name is a required field'),
+    .required('Full name is a required field!'),
   email: Yup.string()
-    .email('Email address has a wrong format')
-    .required('Email address is a required field'),
-  website: Yup.string().url('Website has a wrong format'),
+    .email('Email address has a wrong format!')
+    .required('Email address is a required field!'),
+  website: Yup.string().url('Website link has a wrong format!'),
   phone: Yup.string().matches(
     /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
-    'Invalid phone number',
+    'Phone number has a wrong format!',
   ),
   bio: Yup.string()
     .min(2, 'Bio must be at least 2 characters long!')
@@ -28,13 +32,75 @@ const ProfileSchema = Yup.object().shape({
 });
 
 export default function EditProfile({ data }) {
+  const { firebase } = useFirebaseContext();
+
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
   async function handleEditProfileFormData(values) {
-    console.log(values);
-    console.log(uploadedImage);
+    if (values.username) {
+      const user = firebase.auth().currentUser;
 
-    return 0;
+      let cloudinaryResponse;
+      if (uploadedImage) {
+        cloudinaryResponse = await uploadUnsignedImage(
+          uploadedImage,
+          data.username,
+          'avatar',
+        );
+      }
+
+      const profileDataObject = {
+        username: values.username,
+        userInfo: {
+          fullName: values.fullName,
+          website: values.website,
+          bio: values.bio,
+          phoneNumber: values.phone,
+        },
+        emailAddress: values.email,
+      };
+
+      if (values.username !== user.displayName) {
+        user.updateProfile({
+          displayName: values.username,
+        });
+      }
+
+      if (values.email !== user.email) {
+        user.updateProfile({
+          email: values.username,
+        });
+      }
+
+      if (cloudinaryResponse) {
+        profileDataObject.photoURL = cloudinaryResponse.public_id;
+
+        user.updateProfile({
+          photoURL: cloudinaryResponse.public_id,
+        });
+      }
+
+      updateUserDataByUserId(data.docId, profileDataObject);
+
+      setPreviewImage(null);
+      setUploadedImage(null);
+    }
+  }
+
+  function handleImageUpload(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    setUploadedImage(file);
+
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readyState
+      if (reader.readyState === 2) {
+        setPreviewImage(reader.result);
+      }
+    };
   }
 
   return (
@@ -49,12 +115,10 @@ export default function EditProfile({ data }) {
           phone: data.userInfo.phoneNumber,
         }}
         validationSchema={ProfileSchema}
-        onSubmit={async (values, { resetForm, setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           await handleEditProfileFormData(values);
 
           setSubmitting(false);
-          resetForm();
-          setUploadedImage(null);
         }}
       >
         {({ isSubmitting, isValid, errors, touched }) => (
@@ -62,24 +126,25 @@ export default function EditProfile({ data }) {
             <div className="grid gap-8 grid-cols-4">
               <aside className="flex justify-end text-right">
                 <label htmlFor="fileUpload" className="relative cursor-pointer">
-                  <Image
-                    cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-                    publicId={data.photoURL}
-                    alt={`${data.username} profile`}
-                    width="64"
-                    crop="scale"
-                    className="rounded-full h-11 w-11 mt-1.5"
-                  />
-                  <input
-                    id="fileUpload"
-                    name="fileUpload"
-                    accept="image/jpeg,image/png"
-                    type="file"
-                    className="sr-only"
-                    onChange={({ target }) => setUploadedImage(target.files[0])}
-                  />
+                  {previewImage ? (
+                    <img
+                      src={previewImage}
+                      alt="Uploaded preview"
+                      className="rounded-full h-11 w-11 mt-1.5"
+                    />
+                  ) : (
+                    <Image
+                      cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
+                      publicId={data.photoURL}
+                      alt={`${data.username} profile`}
+                      width="64"
+                      crop="scale"
+                      className="rounded-full h-11 w-11 mt-1.5"
+                    />
+                  )}
                 </label>
               </aside>
+
               <div className="col-span-3 flex flex-col pl-1">
                 <span className="font-medium text-xl">{data.username}</span>
 
@@ -94,9 +159,14 @@ export default function EditProfile({ data }) {
                     accept="image/jpeg,image/png"
                     type="file"
                     className="sr-only"
-                    onChange={({ target }) => setUploadedImage(target.files[0])}
+                    onChange={handleImageUpload}
                   />
                 </label>
+                {previewImage && (
+                  <span className="text-sm text-gray-base">
+                    Preview mode, submit to save
+                  </span>
+                )}
               </div>
             </div>
             <div className="grid gap-8 grid-cols-4 mt-4">
@@ -277,9 +347,10 @@ export default function EditProfile({ data }) {
                 <button
                   type="submit"
                   aria-label="Edit profile details"
-                  disabled={!isValid}
+                  disabled={!isValid || isSubmitting}
                   className={`bg-blue-medium text-white max-w-max px-4 rounded h-8 mt-1 font-semibold ${
-                    !isValid && 'opacity-50 cursor-not-allowed'
+                    (!isValid || isSubmitting) &&
+                    'opacity-50 cursor-not-allowed'
                   }`}
                   onClick={handleEditProfileFormData}
                 >

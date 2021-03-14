@@ -6,6 +6,8 @@ import Actions from './actions';
 import Footer from './footer';
 import Comments from './comments';
 
+// import { useUserContext } from '../../context/user';
+
 export default function Post({ data }) {
   const commentInputRef = useRef(null);
 
@@ -24,9 +26,11 @@ export default function Post({ data }) {
         alt={data.caption}
       />
       <Actions
-        docId={data.docId}
+        postDocId={data.docId}
+        postId={data.photoId}
         totalLikes={data.likes.length}
         likedPost={data.userLikedPhoto}
+        savedPost={data.userSavedPhoto}
         handleCommentFocus={handleCommentInputFocus}
       />
       <Footer username={data.user.username} caption={data.caption} />
@@ -53,9 +57,11 @@ Post.propTypes = {
     photoId: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
     userLikedPhoto: PropTypes.bool.isRequired,
+    userSavedPhoto: PropTypes.bool.isRequired,
     user: PropTypes.shape({
       username: PropTypes.string.isRequired,
       photoURL: PropTypes.string.isRequired,
+      verifiedUser: PropTypes.bool.isRequired,
     }).isRequired,
   }).isRequired,
 };

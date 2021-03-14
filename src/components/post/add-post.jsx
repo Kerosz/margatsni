@@ -41,6 +41,7 @@ export default function AddPost({ userData, displayModal, setDisplayStatus }) {
     const cloudinaryResponse = await uploadUnsignedImage(
       uploadedImage,
       userData.displayName,
+      'post',
     );
 
     const postDataObject = {
@@ -125,7 +126,7 @@ export default function AddPost({ userData, displayModal, setDisplayStatus }) {
               <img
                 className="rounded-2xl mb-2 min-w-full max-h-80 object-contain bg-gray-100 shadow-sm"
                 src={previewImage}
-                alt="Uploaded"
+                alt="Uploaded preview"
               />
             )}
             <div className="pt-2 flex justify-between items-center w-full border-t border-gray-primary">

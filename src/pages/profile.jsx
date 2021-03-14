@@ -27,7 +27,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (user) {
-      document.title = `${user.fullName} (@${user.username}) - Instagram profile`;
+      document.title = `${user.userInfo.fullName} (@${user.username}) - Instagram profile`;
     }
   }, [user]);
 
