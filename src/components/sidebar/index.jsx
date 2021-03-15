@@ -14,7 +14,10 @@ export default function Sidebar() {
   } = user;
 
   return (
-    <aside className="p-4 pt-0" aria-label="Profile information">
+    <aside
+      className="p-4 pt-0 sticky top-24 h-fit"
+      aria-label="Profile information"
+    >
       <User userData={{ username, userInfo, photoURL, verifiedUser }} />
       <Suggestions userId={userId} userFollowing={following} />
     </aside>

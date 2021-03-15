@@ -25,7 +25,8 @@ export default function Settings({ user }) {
         {currentPanel === 'security' && (
           <PrivacyAndSecurity
             privateStatus={user.privateProfile}
-            suggestedProfile={user.allowSuggestions}
+            suggestedStatus={user.allowSuggestions}
+            userDocId={user.docId}
           />
         )}
       </div>

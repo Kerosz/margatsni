@@ -2,8 +2,12 @@ import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
 import { Image } from 'cloudinary-react';
 
-export default function PhotoCollection({ data }) {
-  if (!data) {
+export default function PhotoCollection({
+  photos,
+  profileUsername,
+  loggedInUsername,
+}) {
+  if (!photos) {
     return (
       <div className="grid grid-cols-3 gap-8 mt-4 pb-12">
         {Array(12)
@@ -16,7 +20,24 @@ export default function PhotoCollection({ data }) {
     );
   }
 
-  if (data.length === 0) {
+  if (photos.length === 0 && profileUsername === loggedInUsername) {
+    return (
+      <div className="md:grid md:grid-cols-5 md:gap-0 flex flex-col-reverse mx-auto text-center">
+        <img src="/images/no-post.jpg" alt="img" className="col-span-2" />
+
+        <div className="h-32 flex flex-col justify-center items-center col-span-3 min-h-full bg-white">
+          <p className="font-semibold md:text-lg">
+            Start capturing and sharing your moments.
+          </p>
+          <p className="mt-0.5 md:text-base text-sm">
+            Add a post and start your journey
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (photos.length === 0) {
     return (
       <div className="flex flex-col items-center mt-8">
         <svg
@@ -47,14 +68,14 @@ export default function PhotoCollection({ data }) {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-8 mt-4 pb-12">
-      {data.map((photo) => (
+    <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 md:gap-6 sm:gap-4 mt-4 pb-12">
+      {photos.map((photo) => (
         <div key={photo.docId} className="relative group">
           <Image
             cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
             publicId={photo.imageSrc}
             alt={photo.caption}
-            width="330"
+            width="620"
             crop="scale"
           />
 
@@ -98,9 +119,11 @@ export default function PhotoCollection({ data }) {
 }
 
 PhotoCollection.defaultProps = {
-  data: null,
+  photos: null,
 };
 
 PhotoCollection.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
+  photos: PropTypes.arrayOf(PropTypes.object),
+  profileUsername: PropTypes.string.isRequired,
+  loggedInUsername: PropTypes.string.isRequired,
 };

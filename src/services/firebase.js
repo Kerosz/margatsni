@@ -213,7 +213,7 @@ export async function updateUserFollowersField(
   userId,
   userFollowingStatus = false,
 ) {
-  _DB
+  return _DB
     .collection('users')
     .doc(suggestedUserDocId)
     .update({
@@ -237,7 +237,7 @@ export async function updateUserSavedPostsField(
   postId,
   userSavedStatus = false,
 ) {
-  _DB
+  return _DB
     .collection('users')
     .doc(userDocId)
     .update({
@@ -245,6 +245,18 @@ export async function updateUserSavedPostsField(
         ? FieldValue.arrayRemove(postId)
         : FieldValue.arrayUnion(postId),
     });
+}
+
+/**
+ * Function used to update the user `field`s with a custom fields object. `WARNING` - use with caution
+ *
+ * @param {string} userDocId The user document id
+ * @param {object} fieldValues New valeus object to be updated with
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function updateUserFieldValueByDocId(userDocId, fieldValues) {
+  return _DB.collection('users').doc(userDocId).update(fieldValues);
 }
 
 /**
@@ -261,7 +273,7 @@ export async function updatePostLikesField(
   userId,
   userLikedStatus = false,
 ) {
-  _DB
+  return _DB
     .collection('photos')
     .doc(postDocId)
     .update({
@@ -285,7 +297,7 @@ export async function updatePostSavedField(
   userId,
   userSavedStatus = false,
 ) {
-  _DB
+  return _DB
     .collection('photos')
     .doc(userDocId)
     .update({
@@ -304,7 +316,7 @@ export async function updatePostSavedField(
  * @return {Promise<void>} A promise of type void.
  */
 export async function updateUserDataByUserId(userDocId, objectData) {
-  _DB.collection('users').doc(userDocId).update(objectData);
+  return _DB.collection('users').doc(userDocId).update(objectData);
 }
 
 /**
@@ -316,7 +328,7 @@ export async function updateUserDataByUserId(userDocId, objectData) {
  * @return {Promise<void>} A promise of type void.
  */
 export async function addPostComments(postDocId, newPostComment) {
-  _DB
+  return _DB
     .collection('photos')
     .doc(postDocId)
     .update({
@@ -332,7 +344,7 @@ export async function addPostComments(postDocId, newPostComment) {
  * @return {Promise<void>} A promise of type void.
  */
 export async function createPost(postObject) {
-  _DB.collection('photos').add(postObject);
+  return _DB.collection('photos').add(postObject);
 }
 
 /**

@@ -5,11 +5,11 @@ import { Image } from 'cloudinary-react';
 
 export default function User({ userData }) {
   if (!userData.username || !userData.userInfo.fullName || !userData.photoURL) {
-    return <Skeleton count={1} height={61} />;
+    return <Skeleton count={1} height={80} />;
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4 mb-7 items-center">
+    <div className="grid grid-cols-4 gap-4 mb-7 items-center pt-3">
       <div className="flex items-center justify-between col-span-1">
         <Link to={`/p/${userData.username}`}>
           <Image
@@ -18,7 +18,7 @@ export default function User({ userData }) {
             alt={`${userData.username} profile`}
             width="64"
             crop="scale"
-            className="rounded-full h-16 w-16 flex mr-3"
+            className="rounded-full h-16 w-16 flex"
           />
         </Link>
       </div>

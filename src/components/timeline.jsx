@@ -13,7 +13,7 @@ export default function Timeline() {
             There was a server error, please try again later!
           </p>
         )}
-        <Skeleton className="mb-4" count={4} height={450} />
+        <Skeleton className="mb-4" count={4} height={550} />
       </main>
     );
   }

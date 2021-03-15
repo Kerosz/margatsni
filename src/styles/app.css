@@ -12091,6 +12091,11 @@ video {
   height: 100vh;
 }
 
+.h-fit {
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
@@ -26129,11 +26134,6 @@ video {
 
 .w-max {
   width: max-content;
-}
-
-.w-fit {
-  width: -moz-fit-content;
-  width: fit-content;
 }
 
 .z-0 {
@@ -41692,6 +41692,11 @@ video {
     height: 100vh;
   }
 
+  .sm\:h-fit {
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+
   .sm\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -55717,11 +55722,6 @@ video {
 
   .sm\:w-max {
     width: max-content;
-  }
-
-  .sm\:w-fit {
-    width: -moz-fit-content;
-    width: fit-content;
   }
 
   .sm\:z-0 {
@@ -71250,6 +71250,11 @@ video {
     height: 100vh;
   }
 
+  .md\:h-fit {
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+
   .md\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -85275,11 +85280,6 @@ video {
 
   .md\:w-max {
     width: max-content;
-  }
-
-  .md\:w-fit {
-    width: -moz-fit-content;
-    width: fit-content;
   }
 
   .md\:z-0 {
@@ -100808,6 +100808,11 @@ video {
     height: 100vh;
   }
 
+  .lg\:h-fit {
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+
   .lg\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -114833,11 +114838,6 @@ video {
 
   .lg\:w-max {
     width: max-content;
-  }
-
-  .lg\:w-fit {
-    width: -moz-fit-content;
-    width: fit-content;
   }
 
   .lg\:z-0 {
@@ -130366,6 +130366,11 @@ video {
     height: 100vh;
   }
 
+  .xl\:h-fit {
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+
   .xl\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -144391,11 +144396,6 @@ video {
 
   .xl\:w-max {
     width: max-content;
-  }
-
-  .xl\:w-fit {
-    width: -moz-fit-content;
-    width: fit-content;
   }
 
   .xl\:z-0 {
@@ -159924,6 +159924,11 @@ video {
     height: 100vh;
   }
 
+  .\32xl\:h-fit {
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+
   .\32xl\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -173949,11 +173954,6 @@ video {
 
   .\32xl\:w-max {
     width: max-content;
-  }
-
-  .\32xl\:w-fit {
-    width: -moz-fit-content;
-    width: fit-content;
   }
 
   .\32xl\:z-0 {

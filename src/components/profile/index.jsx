@@ -39,7 +39,7 @@ export default function UserProfile({ data }) {
   }
 
   return (
-    <>
+    <div className="px-3">
       <Details profileData={data} postCount={photoCount} userData={user} />
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
         {data.privateProfile && !user.following.includes(data.userId) ? (
@@ -127,16 +127,26 @@ export default function UserProfile({ data }) {
                 Saved
               </button>
             </div>
-            {openTab === 1 && <PhotoCollection data={photos} />}
+            {openTab === 1 && (
+              <PhotoCollection
+                photos={photos}
+                profileUsername={data.username}
+                loggedInUsername={user.username}
+              />
+            )}
             {openTab === 2 && (
               <SavedCollection userSavedPosts={user.savedPosts} />
             )}
           </>
         ) : (
-          <PhotoCollection data={photos} />
+          <PhotoCollection
+            photos={photos}
+            profileUsername={data.username}
+            loggedInUsername={user.username}
+          />
         )}
       </div>
-    </>
+    </div>
   );
 }
 

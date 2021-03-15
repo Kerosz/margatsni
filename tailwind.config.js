@@ -28,7 +28,7 @@ module.exports = {
           primary: '#ed4956',
         },
       },
-      width: {
+      height: {
         fit: 'fit-content',
       },
     },

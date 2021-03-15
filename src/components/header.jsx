@@ -13,7 +13,7 @@ export default function Header() {
   const [postModalStatus, setPostModalStatus] = useState(false);
 
   return (
-    <header className="h-16 bg-white border-b border-gray-primary mb-8">
+    <header className="h-16 bg-white border-b border-gray-primary mb-8 sticky top-0 z-10">
       <div className="container px-2.5 mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
