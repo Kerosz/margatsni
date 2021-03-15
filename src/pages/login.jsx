@@ -1,19 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Formik, Field, Form } from 'formik';
 import { Link, useHistory } from 'react-router-dom';
-import * as Yup from 'yup';
-import * as ROUTES from '../constants/routes';
 import { useFirebaseContext } from '../context/firebase';
-
-const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Email address has a wrong format')
-    .required('Email address is a required field'),
-  password: Yup.string()
-    .min(6, 'Password must be atleast 6 characters long!')
-    .max(24, 'Password must be 24 characters at most!')
-    .required('Password is a required field'),
-});
+import { UserLoginSchema } from '../helpers/validations';
+import * as ROUTES from '../constants/routes';
 
 export default function Login() {
   const history = useHistory();
@@ -59,7 +49,7 @@ export default function Login() {
 
           <Formik
             initialValues={{ email: '', password: '' }}
-            validationSchema={LoginSchema}
+            validationSchema={UserLoginSchema}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
               await handleFirebaseLogin(values);
               setSubmitting(false);
@@ -97,7 +87,8 @@ export default function Login() {
                   aria-label="Login to your account"
                   disabled={!isValid}
                   className={`bg-blue-medium text-white w-full rounded h-8 mt-1 font-bold ${
-                    !isValid && 'opacity-50 cursor-not-allowed'
+                    (!isValid || isSubmitting) &&
+                    'opacity-50 cursor-not-allowed'
                   }`}
                 >
                   {isSubmitting ? 'Logging in...' : 'Log In'}

@@ -1,23 +1,9 @@
 import PropTypes from 'prop-types';
 import { Image } from 'cloudinary-react';
 import { Field, Formik, Form } from 'formik';
-import * as Yup from 'yup';
 import { useState } from 'react';
 import { updateUserPassword } from '../../services/firebase';
-
-const PasswordSchema = Yup.object().shape({
-  oldPassword: Yup.string()
-    .min(6, 'Password must be at least 6 characters long!')
-    .max(24, 'Password must be 24 characters at most!')
-    .required('Password is a required field!'),
-  password: Yup.string()
-    .min(6, 'Password must be at least 6 characters long!')
-    .max(24, 'Password must be 24 characters at most!')
-    .required('Password is a required field!'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords do not match!')
-    .required('Confirm password is a required field!'),
-});
+import { ChangePasswordSchema } from '../../helpers/validations';
 
 export default function ChangePassword({ username, photo }) {
   const [serverError, setServerError] = useState(null);
@@ -51,7 +37,7 @@ export default function ChangePassword({ username, photo }) {
           password: '',
           confirmPassword: '',
         }}
-        validationSchema={PasswordSchema}
+        validationSchema={ChangePasswordSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           await handleChangePasswordFormData(values);
 

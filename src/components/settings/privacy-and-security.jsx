@@ -1,9 +1,6 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 import { Form, Formik, Field } from 'formik';
-import * as Yup from 'yup';
-
-const PrivacySchema = Yup.object();
+import { PrivacyAndSecuritySchema } from '../../helpers/validations';
 
 export default function PrivacyAndSecurity({
   privateStatus,
@@ -25,7 +22,7 @@ export default function PrivacyAndSecurity({
           private: privateStatus,
           suggestion: suggestedProfile,
         }}
-        validationSchema={PrivacySchema}
+        validationSchema={PrivacyAndSecuritySchema}
         onSubmit={async (values, { setSubmitting }) => {
           await handlePrivacyFormData(values);
 

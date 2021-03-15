@@ -2,37 +2,13 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'cloudinary-react';
 import { Form, Formik, Field } from 'formik';
-import * as Yup from 'yup';
 import { uploadUnsignedImage } from '../../services/cloudinary';
 import {
   updateUserDataByUserId,
   updateUserEmailAddress,
 } from '../../services/firebase';
 import { useFirebaseContext } from '../../context/firebase';
-
-const ProfileSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(3, 'Username must be at least 3 characters long!')
-    .max(12, 'Username must be 12 characters at most!')
-    .lowercase('Username must be lowercase only!')
-    .required('Username is a required field!')
-    .strict(),
-  fullName: Yup.string()
-    .min(3, 'Full name must be at least 3 characters long!')
-    .max(34, 'Full name must be 34 characters at most!')
-    .required('Full name is a required field!'),
-  email: Yup.string()
-    .email('Email address has a wrong format!')
-    .required('Email address is a required field!'),
-  website: Yup.string().url('Website link has a wrong format!'),
-  phone: Yup.string().matches(
-    /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
-    'Phone number has a wrong format!',
-  ),
-  bio: Yup.string()
-    .min(2, 'Bio must be at least 2 characters long!')
-    .max(128, 'Bio must be 256 characters at most!'),
-});
+import { EditProfileSchema } from '../../helpers/validations';
 
 export default function EditProfile({ data }) {
   const { firebase } = useFirebaseContext();
@@ -123,7 +99,7 @@ export default function EditProfile({ data }) {
           bio: data.userInfo.bio,
           phone: data.userInfo.phoneNumber,
         }}
-        validationSchema={ProfileSchema}
+        validationSchema={EditProfileSchema}
         onSubmit={async (values, { setSubmitting }) => {
           await handleEditProfileFormData(values);
 

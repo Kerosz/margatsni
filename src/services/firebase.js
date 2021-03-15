@@ -64,7 +64,7 @@ export async function getUserDataByUserId(userId) {
  *
  * @param {string} userId The user id to be queried by
  * @param {string[]} userFollowing An array containing all the following users of the current user
- * @param {number} [limitQuery=10] The user id to be queried by
+ * @param {number} [limitQuery=10] Limit the suggested profiles query.
  *
  * @return {Promise<Array<{}>>} A promise of type object array.
  */
@@ -89,7 +89,7 @@ export async function getSuggestedProfilesByUserId(
  * Function used to get user photos by it's user `ID`. It limits the queried results to `25` by default and sorts it by newest first
  *
  * @param {string} userId The user id to be queried by
- * @param {number} [limitQuery=25] The user id to be queried by
+ * @param {number} [limitQuery=25] Limit the user photos query.
  *
  * @return {Promise<Array<{}>>} A promise of type object array.
  */

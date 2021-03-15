@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-// NOTE: replace 'NKym2IrgjPeTsn81uTc9FwCeePf1' with your Firebase auth user id (can be taken from Firebase)
+// NOTE: replace 'NKym2IrgjPeTsn81uTc9FwCeePf1' (it's used in 3 places) with your Firebase auth user id (can be taken from Firebase)
 export function seedDatabase(firebase) {
   const users = [
     {
@@ -11,13 +11,9 @@ export function seedDatabase(firebase) {
         bio: 'dev by day, sudo dev by night',
         phoneNumber: '',
       },
-      emailAddress: 'ch.andrei18@gmail.com',
+      emailAddress: 'andrei@chirila.dev',
       following: ['b0ec726b-b416-41b5-b05a-0f3178f55088'],
-      followers: [
-        'b0ec726b-b416-41b5-b05a-0f3178f55088',
-        '6cea0fdc-b8f7-4ebd-b03a-060e47fadcee',
-        '4298d7ff-1b81-4e2f-a9e4-66c34812d75e',
-      ],
+      followers: ['6cea0fdc-b8f7-4ebd-b03a-060e47fadcee'],
       photoURL:
         'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
       verifiedUser: true,
@@ -56,8 +52,8 @@ export function seedDatabase(firebase) {
         phoneNumber: '',
       },
       emailAddress: 'salvador@dali.com',
-      following: [],
-      followers: ['NKym2IrgjPeTsn81uTc9FwCeePf1'],
+      following: ['NKym2IrgjPeTsn81uTc9FwCeePf1'],
+      followers: [],
       photoURL:
         'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
       verifiedUser: true,
@@ -77,7 +73,7 @@ export function seedDatabase(firebase) {
       },
       emailAddress: 'george@orwell.com',
       following: [],
-      followers: ['NKym2IrgjPeTsn81uTc9FwCeePf1'],
+      followers: [],
       photoURL:
         'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
       verifiedUser: false,
