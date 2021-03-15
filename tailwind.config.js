@@ -28,6 +28,9 @@ module.exports = {
           primary: '#ed4956',
         },
       },
+      width: {
+        fit: 'fit-content',
+      },
     },
   },
   variants: {

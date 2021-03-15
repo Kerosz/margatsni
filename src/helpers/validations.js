@@ -26,9 +26,7 @@ export const EditProfileSchema = Yup.object().shape({
 
 export const ChangePasswordSchema = Yup.object().shape({
   oldPassword: Yup.string()
-    .min(6, 'Password must be at least 6 characters long!')
-    .max(24, 'Password must be 24 characters at most!')
-    .required('Password is a required field!'),
+  .required('Old password is a required field!'),
   password: Yup.string()
     .min(6, 'Password must be at least 6 characters long!')
     .max(24, 'Password must be 24 characters at most!')

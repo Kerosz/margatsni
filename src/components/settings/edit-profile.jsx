@@ -18,6 +18,10 @@ export default function EditProfile({ data }) {
   const [serverError, setServerError] = useState(null);
 
   async function handleEditProfileFormData(values) {
+    /**
+     * Check to see if any of the values are truthy.
+     * Formik sends an object with it's methods as values first render, and the actual values the second render, so it calls `handleEditProfileFormData` twice otherwise
+     */
     if (values.username) {
       const user = firebase.auth().currentUser;
 
@@ -25,7 +29,7 @@ export default function EditProfile({ data }) {
       if (uploadedImage) {
         cloudinaryResponse = await uploadUnsignedImage(
           uploadedImage,
-          data.username,
+          values.username,
           'avatar',
         );
       }
@@ -38,6 +42,14 @@ export default function EditProfile({ data }) {
           phoneNumber: values.phone,
         },
       };
+
+      if (cloudinaryResponse) {
+        profileDataObject.photoURL = cloudinaryResponse.public_id;
+
+        user.updateProfile({
+          photoURL: cloudinaryResponse.public_id,
+        });
+      }
 
       if (values.username !== user.displayName) {
         profileDataObject.username = values.username;
@@ -56,14 +68,6 @@ export default function EditProfile({ data }) {
         } catch (error) {
           setServerError(error.message);
         }
-      }
-
-      if (cloudinaryResponse) {
-        profileDataObject.photoURL = cloudinaryResponse.public_id;
-
-        user.updateProfile({
-          photoURL: cloudinaryResponse.public_id,
-        });
       }
 
       updateUserDataByUserId(data.docId, profileDataObject);
