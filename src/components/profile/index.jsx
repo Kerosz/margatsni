@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
@@ -5,12 +7,14 @@ import Details from './details';
 import PhotoCollection from './photo-collection';
 import { getUserPhotosByUserId } from '../../services/firebase';
 import useFirestoreUser from '../../hooks/use-firestore-user';
+import SavedCollection from './saved-collection';
 
 export default function UserProfile({ data }) {
   const { user } = useFirestoreUser();
 
   const [photos, setPhotos] = useState(null);
   const [photoCount, setPhotoCount] = useState(0);
+  const [openTab, setOpenTab] = useState(1);
 
   useEffect(() => {
     async function getProfileData() {
@@ -40,15 +44,12 @@ export default function UserProfile({ data }) {
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
         {data.privateProfile && !user.following.includes(data.userId) ? (
           <div className="flex flex-col items-center">
-            <p className="text-black-light font-semibold mt-7">
-              This Account is Private
-            </p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              className="w-14 text-black-light border border-black-light rounded-full p-2 mt-3"
+              className="w-16 text-black-light border-2 border-black-light rounded-full p-3 mt-10"
             >
               <path
                 strokeLinecap="round"
@@ -57,10 +58,80 @@ export default function UserProfile({ data }) {
                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
               />
             </svg>
-            <p className="text-gray-base text-sm mt-3">
+            <p className="text-black-light font-semibold mt-6">
+              This Account is Private
+            </p>
+            <p className="text-gray-base text-sm">
               Follow to see their photos and videos.
             </p>
           </div>
+        ) : data.username === user.username ? (
+          <>
+            <div className="flex space-x-12 transform -translate-y-4 justify-center">
+              <button
+                type="button"
+                aria-label="Show your posts"
+                className={`flex uppercase items-center font-bold text-xs tracking-wider border-t py-4 focus:outline-none ${
+                  openTab === 1
+                    ? 'text-black-light border-black-light'
+                    : 'border-transparent text-gray-400'
+                }`}
+                onClick={() => setOpenTab(1)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') setOpenTab(1);
+                }}
+              >
+                <svg
+                  className="w-4 mr-1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                  />
+                </svg>
+                Posts
+              </button>
+              <button
+                type="button"
+                aria-label="Show saved posts"
+                className={`flex uppercase items-center font-bold text-xs tracking-wider border-t py-4 focus:outline-none ${
+                  openTab === 2
+                    ? 'text-black-light border-black-light'
+                    : 'border-transparent text-gray-400'
+                }`}
+                onClick={() => setOpenTab(2)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') setOpenTab(1);
+                }}
+              >
+                <svg
+                  className="w-4 mr-0.5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                  />
+                </svg>
+                Saved
+              </button>
+            </div>
+            {openTab === 1 && <PhotoCollection data={photos} />}
+            {openTab === 2 && (
+              <SavedCollection userSavedPosts={user.savedPosts} />
+            )}
+          </>
         ) : (
           <PhotoCollection data={photos} />
         )}

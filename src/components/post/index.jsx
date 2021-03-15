@@ -6,8 +6,6 @@ import Actions from './actions';
 import Footer from './footer';
 import Comments from './comments';
 
-// import { useUserContext } from '../../context/user';
-
 export default function Post({ data }) {
   const commentInputRef = useRef(null);
 

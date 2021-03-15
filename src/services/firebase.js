@@ -154,6 +154,24 @@ export async function getFollowingUserPhotosByUserId(userId, userFollowing) {
 }
 
 /**
+ * Function used to get all the photos that are added in the current logged in user `savedPosts` field
+ *
+ * @param {string[]} userSavedPosts An array containing all the saved posts of the current user
+ *
+ * @return {Promise<Array<{}>>} A promise of type object array.
+ */
+export async function getSavedPosts(userSavedPosts) {
+  const { docs } = await _DB
+    .collection('photos')
+    .where('photoId', 'in', userSavedPosts)
+    .get();
+
+  return docs
+    .map((doc) => ({ ...doc.data(), docId: doc.id }))
+    .sort((a, b) => b.dateCreated - a.dateCreated);
+}
+
+/**
  * Function used to update the user `following field`
  *
  * @param {string} suggestedUserId The user id of the suggested profile

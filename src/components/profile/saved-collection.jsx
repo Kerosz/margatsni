@@ -1,9 +1,56 @@
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
 import { Image } from 'cloudinary-react';
+import { getSavedPosts } from '../../services/firebase';
 
-export default function PhotoCollection({ data }) {
-  if (!data) {
+export default function SavedCollection({ userSavedPosts }) {
+  const [savedPhotos, setSavedPhotos] = useState(null);
+
+  useEffect(() => {
+    async function getUserSavedPosts() {
+      const savedUserPhotos = await getSavedPosts(userSavedPosts);
+
+      setSavedPhotos(savedUserPhotos);
+    }
+
+    if (userSavedPosts.length > 0) {
+      getUserSavedPosts();
+    }
+  }, [userSavedPosts]);
+
+  if (userSavedPosts.length === 0) {
+    return (
+      <div className="flex flex-col items-center">
+        <p className="text-gray-base text-xs self-start">
+          Only you can see what you've saved
+        </p>
+        <div className="mt-10 text-center w-full flex flex-col items-center">
+          <svg
+            className="w-16 text-black-light border-2 border-black-light rounded-full p-3 mt-3"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1}
+              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+            />
+          </svg>
+          <p className="text-3xl text-black-light mt-5 font-light">Save</p>
+          <p className="text-black-light text-sm md:max-w-sm mt-3">
+            Save photos and videos that you want to see again. No one is
+            notified, and only you can see what you've saved.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!savedPhotos) {
     return (
       <div className="grid grid-cols-3 gap-8 mt-4 pb-12">
         {Array(12)
@@ -16,39 +63,9 @@ export default function PhotoCollection({ data }) {
     );
   }
 
-  if (data.length === 0) {
-    return (
-      <div className="flex flex-col items-center mt-8">
-        <svg
-          className="w-16 text-black-light border-2 border-black-light rounded-full p-3 mt-3"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1}
-            d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1}
-            d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-        </svg>
-        <p className="text-black-light mt-7 font-light text-3xl">
-          No Posts Yet
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="grid grid-cols-3 gap-8 mt-4 pb-12">
-      {data.map((photo) => (
+      {savedPhotos.map((photo) => (
         <div key={photo.docId} className="relative group">
           <Image
             cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
@@ -97,10 +114,6 @@ export default function PhotoCollection({ data }) {
   );
 }
 
-PhotoCollection.defaultProps = {
-  data: null,
-};
-
-PhotoCollection.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
+SavedCollection.propTypes = {
+  userSavedPosts: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
