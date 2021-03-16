@@ -1,7 +1,8 @@
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Skeleton from 'react-loading-skeleton';
 import { Image } from 'cloudinary-react';
 import { Field, Formik, Form } from 'formik';
-import { useState } from 'react';
 import { updateUserPassword } from '../../services/firebase';
 import { ChangePasswordSchema } from '../../helpers/validations';
 
@@ -9,6 +10,15 @@ export default function ChangePassword({ username, photo }) {
   const [serverError, setServerError] = useState(null);
   // TODO: Implement a toast or an alert for when sucessfully changed instead of a state
   const [sucessMessage, setSucessMessage] = useState(null);
+
+  useEffect(() => {
+    let timeout;
+    if (sucessMessage) {
+      timeout = setTimeout(() => setSucessMessage(null), 3500);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [sucessMessage]);
 
   async function handleChangePasswordFormData(values) {
     // need to reset the server error in case of user alerady recieved an error
@@ -23,10 +33,18 @@ export default function ChangePassword({ username, photo }) {
         } catch (error) {
           setServerError(error.message);
         }
+      } else {
+        setServerError('Old password and new password are the same!');
       }
-
-      setServerError('Old password and new password are the same!');
     }
+  }
+
+  if (!username || !photo) {
+    return (
+      <article className="py-8 px-16">
+        <Skeleton count={1} height={250} />
+      </article>
+    );
   }
 
   return (
@@ -138,9 +156,25 @@ export default function ChangePassword({ username, photo }) {
                   </p>
                 )}
                 {sucessMessage && (
-                  <p className="mt-3 pl-1 text-xs text-black-light">
-                    {sucessMessage}
-                  </p>
+                  <div className="mt-5 flex" aria-label="Success message">
+                    <svg
+                      className="w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <p className="text-xs ml-2 text-black-light font-semibold tracking-wide">
+                      {sucessMessage}
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
@@ -169,7 +203,12 @@ export default function ChangePassword({ username, photo }) {
   );
 }
 
+ChangePassword.defaultProps = {
+  photo: undefined,
+  username: undefined,
+};
+
 ChangePassword.propTypes = {
-  photo: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
+  photo: PropTypes.string,
+  username: PropTypes.string,
 };

@@ -1,52 +1,54 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import * as ROUTES from '../../constants/routes';
 
-export default function Sidebar({ setActivePanel, activePanel }) {
+export default function Sidebar({ activePanel }) {
   const activeClass = 'border-black-light font-semibold';
   const hoverClass = 'hover:bg-gray-50 hover:border-gray-300';
 
+  function getCurrentPath(path) {
+    return activePanel.includes(path);
+  }
+
   return (
     <div className="flex flex-col items-start">
-      <button
-        type="button"
-        name="edit-profile"
+      <Link
+        to={ROUTES.EDIT_PROFILE}
+        aria-label="Edit profile page"
         className={`pl-8 py-4 text-black-light border-l-2 border-transparent ${
-          activePanel === 'edit-profile' && activeClass
+          getCurrentPath('edit') && activeClass
         } w-full text-left outline-none focus-within:outline-none ${
-          activePanel !== 'edit-profile' && hoverClass
+          !getCurrentPath('edit') && hoverClass
         }`}
-        onClick={({ target }) => setActivePanel(target.name)}
       >
         Edit Profile
-      </button>
-      <button
-        type="button"
-        name="change-password"
+      </Link>
+      <Link
+        to={ROUTES.CHANGE_PASSWORD}
+        aria-label="Change password page"
         className={`pl-8 py-4 text-black-light border-l-2 border-transparent ${
-          activePanel === 'change-password' && activeClass
+          getCurrentPath('change') && activeClass
         } w-full text-left outline-none focus-within:outline-none ${
-          activePanel !== 'change-password' && hoverClass
+          !getCurrentPath('change') && hoverClass
         }`}
-        onClick={({ target }) => setActivePanel(target.name)}
       >
         Change Password
-      </button>
-      <button
-        type="button"
-        name="security"
+      </Link>
+      <Link
+        to={ROUTES.PRIVACY_AND_SECURITY}
+        aria-label="Privacy and security page"
         className={`pl-8 py-4 text-black-light border-l-2 border-transparent ${
-          activePanel === 'security' && activeClass
+          getCurrentPath('privacy-and-security') && activeClass
         } w-full text-left outline-none focus-within:outline-none ${
-          activePanel !== 'security' && hoverClass
+          !getCurrentPath('privacy-and-security') && hoverClass
         }`}
-        onClick={({ target }) => setActivePanel(target.name)}
       >
         Privacy and Security
-      </button>
+      </Link>
     </div>
   );
 }
 
 Sidebar.propTypes = {
-  setActivePanel: PropTypes.func.isRequired,
   activePanel: PropTypes.string.isRequired,
 };

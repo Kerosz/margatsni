@@ -1,42 +1,91 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
+import Skeleton from 'react-loading-skeleton';
 import { useEffect, useState } from 'react';
 import { updateUserFieldValueByDocId } from '../../services/firebase';
+import useUpdateEffect from '../../hooks/use-update-effect';
 
 export default function PrivacyAndSecurity({
   privateStatus,
   suggestedStatus,
   userDocId,
 }) {
+  // Extra states needed for the firebase status in order to check against the updated state to be able to live update the page without reload
+  const [firebasePrivate, setFirebasePrivate] = useState(privateStatus);
+  const [firebaseSuggested, setFirebaseSuggested] = useState(suggestedStatus);
+
   const [privateCheckbox, setPrivateCheckbox] = useState(privateStatus);
   const [suggestionCheckbox, setSuggestionCheckbox] = useState(suggestedStatus);
+  const [sucessMessage, setSucessMessage] = useState(null);
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     async function changePrivateProfileValue() {
       await updateUserFieldValueByDocId(userDocId, {
         privateProfile: privateCheckbox,
       });
+
+      setSucessMessage(
+        `Profile page was set to ${privateCheckbox ? 'private' : 'public'}!`,
+      );
+
+      setFirebasePrivate((prevState) => !prevState);
     }
 
-    if (privateCheckbox !== privateStatus) {
+    if (privateCheckbox !== firebasePrivate) {
       changePrivateProfileValue();
     }
   }, [privateCheckbox]);
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     async function changeAllowSuggestionsValue() {
       await updateUserFieldValueByDocId(userDocId, {
         allowSuggestions: suggestionCheckbox,
       });
+
+      setSucessMessage(
+        `Profile suggestions are now ${
+          suggestionCheckbox ? 'enabled' : 'disabled'
+        }`,
+      );
+
+      setFirebaseSuggested((prevState) => !prevState);
     }
 
-    if (suggestedStatus !== suggestionCheckbox) {
+    if (suggestionCheckbox !== firebaseSuggested) {
       changeAllowSuggestionsValue();
     }
   }, [suggestionCheckbox]);
 
+  useUpdateEffect(() => {
+    setPrivateCheckbox(privateStatus);
+    setFirebasePrivate(privateStatus);
+  }, [privateStatus]);
+
+  useUpdateEffect(() => {
+    setSuggestionCheckbox(suggestedStatus);
+    setFirebaseSuggested(suggestedStatus);
+  }, [suggestedStatus]);
+
+  useEffect(() => {
+    let timeout;
+    if (sucessMessage) {
+      timeout = setTimeout(() => setSucessMessage(null), 3500);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [sucessMessage]);
+
   // TODO: Implement account deletion
   // Button temporarly disabled until the functionality is added
   const tempDisabled = true;
+
+  if (!userDocId) {
+    return (
+      <article className="py-8 px-16">
+        <Skeleton count={1} height={350} />
+      </article>
+    );
+  }
 
   return (
     <article className="py-8 px-14">
@@ -45,6 +94,27 @@ export default function PrivacyAndSecurity({
           <legend className="font-medium text-black-light text-2xl">
             Account Privacy
           </legend>
+          {sucessMessage && (
+            <div className="mt-2 mb-1 flex bg-gray-100 w-full p-2 px-4 rounded justify-center text-center border border-gray-200">
+              <svg
+                className="w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p className="text-xs ml-2 text-black-light font-semibold tracking-wide">
+                {sucessMessage}
+              </p>
+            </div>
+          )}
           <div className="mt-6">
             <div className="flex items-start">
               <div className="flex items-center h-5">
@@ -54,9 +124,7 @@ export default function PrivacyAndSecurity({
                   type="checkbox"
                   value={privateCheckbox}
                   defaultChecked={privateCheckbox}
-                  onChange={() =>
-                    setPrivateCheckbox((prevPrivate) => !prevPrivate)
-                  }
+                  onClick={({ target }) => setPrivateCheckbox(target.checked)}
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -84,8 +152,8 @@ export default function PrivacyAndSecurity({
                   type="checkbox"
                   value={suggestionCheckbox}
                   defaultChecked={suggestionCheckbox}
-                  onChange={() =>
-                    setSuggestionCheckbox((prevSuggestion) => !prevSuggestion)
+                  onClick={({ target }) =>
+                    setSuggestionCheckbox(target.checked)
                   }
                 />
               </div>
@@ -133,8 +201,14 @@ export default function PrivacyAndSecurity({
   );
 }
 
+PrivacyAndSecurity.defaultProps = {
+  privateStatus: undefined,
+  suggestedStatus: undefined,
+  userDocId: undefined,
+};
+
 PrivacyAndSecurity.propTypes = {
-  privateStatus: PropTypes.bool.isRequired,
-  suggestedStatus: PropTypes.bool.isRequired,
-  userDocId: PropTypes.string.isRequired,
+  privateStatus: PropTypes.bool,
+  suggestedStatus: PropTypes.bool,
+  userDocId: PropTypes.string,
 };
