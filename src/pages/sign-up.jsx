@@ -66,12 +66,12 @@ export default function SignUp() {
   }, []);
 
   return (
-    <div className="container flex mx-auto max-w-screen-md items-center h-screen">
-      <div className="flex w-3/5">
+    <div className="container flex mx-auto max-w-screen-md items-center justify-center h-screen">
+      <div className="md:flex md:w-3/5 hidden">
         <img src="/images/iphone-with-profile.jpg" alt="iPhone" />
       </div>
-      <div className="flex flex-col w-2/5">
-        <div className="flex flex-col items-center bg-white p-4 border border-gray-primary mb-4 rounded">
+      <div className="flex flex-col md:w-2/5 w-full max-w-sm">
+        <div className="flex flex-col items-center bg-white px-5 py-9 border border-gray-primary mb-3 rounded">
           <h1 className="flex justify-center w-full">
             <img
               className="mt-2 w-6/12 mb-4"
@@ -79,6 +79,10 @@ export default function SignUp() {
               alt="Instagram branding"
             />
           </h1>
+          <p className="text-gray-400 text-center font-semibold mb-5">
+            Sign up to see photos and videos from your friends.
+          </p>
+
           {serverError && (
             <p className="mb-5 pl-1 text-xs text-center text-red-primary">
               {serverError}
@@ -153,21 +157,27 @@ export default function SignUp() {
                   type="submit"
                   aria-label="Login to your account"
                   disabled={!isValid}
-                  className={`bg-blue-medium text-white w-full rounded h-8 mt-1 font-bold ${
+                  className={`bg-blue-medium text-white w-full rounded h-8 mt-1 font-semibold ${
                     (!isValid || isSubmitting) &&
                     'opacity-50 cursor-not-allowed'
                   }`}
                 >
                   {isSubmitting ? 'Signing up...' : 'Sign Up'}
                 </button>
+
+                <p className="text-gray-400 text-xs mt-5 text-center">
+                  By signing up, you agree to our Terms . Learn how we collect,
+                  use and share your data in our Data Policy and how we use
+                  cookies and similar technology in our Cookies Policy .
+                </p>
               </Form>
             )}
           </Formik>
         </div>
-        <div className="flex justify-center items-center flex-col w-full bg-white p-4 border border-gray-primary rounded">
+        <div className="flex justify-center items-center flex-col w-full bg-white px-4 py-5 border border-gray-primary rounded">
           <p className="text-sm">
-            Have an account already?{` `}
-            <Link to={ROUTES.LOGIN} className="font-bold text-blue-medium">
+            Have an account?{` `}
+            <Link to={ROUTES.LOGIN} className="font-semibold text-blue-medium">
               Login
             </Link>
           </p>

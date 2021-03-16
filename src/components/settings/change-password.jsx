@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
 import { Image } from 'cloudinary-react';
 import { Field, Formik, Form } from 'formik';
+import { Link } from 'react-router-dom';
 import { updateUserPassword } from '../../services/firebase';
 import { ChangePasswordSchema } from '../../helpers/validations';
+import { RESET_PASSWORD } from '../../constants/routes';
 
 export default function ChangePassword({ username, photo }) {
   const [serverError, setServerError] = useState(null);
@@ -186,7 +188,7 @@ export default function ChangePassword({ username, photo }) {
                   type="submit"
                   aria-label="Login to your account"
                   disabled={!isValid || isSubmitting}
-                  className={`bg-blue-medium text-white max-w-max px-4 rounded h-8 mt-1 font-semibold ${
+                  className={`bg-blue-medium text-white text-sm max-w-max px-4 rounded h-8 mt-1 font-semibold ${
                     (!isValid || isSubmitting) &&
                     'opacity-50 cursor-not-allowed'
                   }`}
@@ -194,6 +196,13 @@ export default function ChangePassword({ username, photo }) {
                 >
                   {isSubmitting ? 'Processing...' : 'Change Password'}
                 </button>
+
+                <Link
+                  to={RESET_PASSWORD}
+                  className="mt-7 text-sm text-blue-medium font-semibold"
+                >
+                  Forgot password ?
+                </Link>
               </div>
             </div>
           </Form>

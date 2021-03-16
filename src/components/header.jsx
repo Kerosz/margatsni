@@ -1,5 +1,6 @@
+/* eslint-disable no-nested-ternary */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
 import { useFirebaseContext } from '../context/firebase';
 import { useUserContext } from '../context/user';
@@ -9,6 +10,7 @@ import * as ROUTES from '../constants/routes';
 export default function Header() {
   const { firebase } = useFirebaseContext();
   const { user } = useUserContext();
+  const { pathname } = useLocation();
 
   const [postModalStatus, setPostModalStatus] = useState(false);
 
@@ -132,7 +134,7 @@ export default function Header() {
                   </Link>
                 </div>
               </>
-            ) : (
+            ) : pathname.includes('reset') ? null : (
               <>
                 <Link to={ROUTES.LOGIN} aria-label="Login">
                   <button

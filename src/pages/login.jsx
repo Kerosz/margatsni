@@ -28,13 +28,13 @@ export default function Login() {
   }, []);
 
   return (
-    <div className="container flex mx-auto max-w-screen-md items-center h-screen">
-      <div className="flex w-3/5">
+    <div className="container flex mx-auto max-w-screen-md items-center justify-center h-screen">
+      <div className="md:flex md:w-3/5 hidden">
         <img src="/images/iphone-with-profile.jpg" alt="iPhone" />
       </div>
-      <div className="flex flex-col w-2/5">
-        <div className="flex flex-col items-center bg-white p-4 border border-gray-primary mb-4 rounded">
-          <h1 className="flex justify-center w-full">
+      <div className="flex flex-col md:w-2/5 w-full max-w-sm">
+        <div className="flex flex-col items-center bg-white px-5 py-6 border border-gray-primary mb-3 rounded">
+          <h1 className="flex justify-center w-full mb-4">
             <img
               className="mt-2 w-6/12 mb-4"
               src="/images/logo.png"
@@ -86,7 +86,7 @@ export default function Login() {
                   type="submit"
                   aria-label="Login to your account"
                   disabled={!isValid}
-                  className={`bg-blue-medium text-white w-full rounded h-8 mt-1 font-bold ${
+                  className={`bg-blue-medium text-white w-full rounded h-8 mt-1 font-semibold ${
                     (!isValid || isSubmitting) &&
                     'opacity-50 cursor-not-allowed'
                   }`}
@@ -96,11 +96,24 @@ export default function Login() {
               </Form>
             )}
           </Formik>
+
+          <div className="border-b border-gray-primary w-full flex justify-center mt-3">
+            <p className="transform translate-y-2 uppercase bg-white max-w-max px-5 text-xs text-gray-400 font-semibold select-none">
+              or
+            </p>
+          </div>
+
+          <Link
+            to={ROUTES.RESET_PASSWORD}
+            className="text-sm text-blue-medium mt-6"
+          >
+            Forgot password?
+          </Link>
         </div>
-        <div className="flex justify-center items-center flex-col w-full bg-white p-4 border border-gray-primary rounded">
+        <div className="flex justify-center items-center flex-col w-full bg-white px-4 py-5 border border-gray-primary rounded">
           <p className="text-sm">
             Don't have an account?{` `}
-            <Link to={ROUTES.SIGNUP} className="font-bold text-blue-medium">
+            <Link to={ROUTES.SIGNUP} className="font-semibold text-blue-medium">
               Sign Up
             </Link>
           </p>

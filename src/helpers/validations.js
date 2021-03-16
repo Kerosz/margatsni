@@ -25,8 +25,7 @@ export const EditProfileSchema = Yup.object().shape({
 });
 
 export const ChangePasswordSchema = Yup.object().shape({
-  oldPassword: Yup.string()
-  .required('Old password is a required field!'),
+  oldPassword: Yup.string().required('Old password is a required field!'),
   password: Yup.string()
     .min(6, 'Password must be at least 6 characters long!')
     .max(24, 'Password must be 24 characters at most!')
@@ -64,4 +63,10 @@ export const UserLoginSchema = Yup.object().shape({
     .min(6, 'Password must be atleast 6 characters long!')
     .max(24, 'Password must be 24 characters at most!')
     .required('Password is a required field'),
+});
+
+export const ResetPasswordSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Email address has a wrong format')
+    .required('Email address is a required field'),
 });

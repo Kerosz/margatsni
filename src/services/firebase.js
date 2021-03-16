@@ -20,6 +20,21 @@ export async function doesUserExist(username) {
 }
 
 /**
+ * Function used to check if an email address exists in database. Returns `1 | 0`
+ *
+ * @param {string} emailAddress Email address to be checked
+ * @return {Promise<number>} A promise of type number.
+ */
+export async function doesEmailAddressExist(emailAddress) {
+  const { docs } = await _DB
+    .collection('users')
+    .where('emailAddress', '==', emailAddress)
+    .get();
+
+  return docs.map((doc) => doc.data()).length;
+}
+
+/**
  * Function used to query data for a specific user by `username`
  *
  * @param {string} username Username to be queried by
@@ -426,6 +441,14 @@ export async function updateUserEmailAddress(currentPassword, newEmail) {
   }
 }
 
+/**
+ * Function used to delete a user. It uses `reauthentificateUserWithPassword` function.
+ *
+ * @param {string} currentPassword The password of the current logged in user
+ * @param {string} userDocId The user document ID to be deleted
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
 export async function deleteUserAccount(currentPassword, userDocId) {
   try {
     await reauthentificateUserWithPassword(currentPassword);
@@ -440,5 +463,33 @@ export async function deleteUserAccount(currentPassword, userDocId) {
     }
   } catch (error) {
     throw Error(error);
+  }
+}
+
+/**
+ * Function used to send a passowrd reset email
+ *
+ * @param {string} emailAddress The email address of the user account
+ * @param {string} userAuthState The authentification state of the user, `logged in` or `not logged in`
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function passwordResetByEmail(
+  emailAddress,
+  userAuthState = false,
+) {
+  let emailExists;
+
+  if (!userAuthState) {
+    emailExists = await doesEmailAddressExist(emailAddress);
+  } else {
+    emailExists = 1;
+  }
+
+  if (emailExists) {
+    await firebase.auth().sendPasswordResetEmail(emailAddress);
+  } else {
+    // eslint-disable-next-line no-throw-literal
+    throw { message: 'Email address entered does not exist!' };
   }
 }
