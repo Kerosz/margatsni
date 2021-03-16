@@ -22,7 +22,7 @@ export default function EditProfile({ data }) {
   useEffect(() => {
     let timeout;
     if (sucessMessage) {
-      timeout = setTimeout(() => setSucessMessage(null), 3500);
+      timeout = setTimeout(() => setSucessMessage(null), 3000);
     }
 
     return () => clearTimeout(timeout);
@@ -314,8 +314,9 @@ export default function EditProfile({ data }) {
                   type="email"
                   id="email"
                   name="email"
+                  disabled
                   placeholder="Email address"
-                  className="rounded border border-gray-primary px-2.5 py-1 focus:border-gray-400"
+                  className="rounded border border-gray-primary px-2.5 py-1 focus:border-gray-400 text-gray-500 cursor-not-allowed"
                 />
                 {errors.email && touched.email && (
                   <p className="mb-0.5 mt-1 pl-1 text-xs text-red-primary">

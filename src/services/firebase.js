@@ -425,3 +425,20 @@ export async function updateUserEmailAddress(currentPassword, newEmail) {
     throw Error(error);
   }
 }
+
+export async function deleteUserAccount(currentPassword, userDocId) {
+  try {
+    await reauthentificateUserWithPassword(currentPassword);
+
+    try {
+      const user = firebase.auth().currentUser;
+
+      await _DB.collection('users').doc(userDocId).delete();
+      await user.delete();
+    } catch (error) {
+      throw Error(error);
+    }
+  } catch (error) {
+    throw Error(error);
+  }
+}

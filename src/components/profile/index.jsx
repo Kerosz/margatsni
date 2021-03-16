@@ -1,5 +1,4 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
@@ -9,7 +8,7 @@ import { getUserPhotosByUserId } from '../../services/firebase';
 import useFirestoreUser from '../../hooks/use-firestore-user';
 import SavedCollection from './saved-collection';
 
-export default function UserProfile({ data }) {
+export default function UserProfile({ profile }) {
   const { user } = useFirestoreUser();
 
   const [photos, setPhotos] = useState(null);
@@ -18,14 +17,14 @@ export default function UserProfile({ data }) {
 
   useEffect(() => {
     async function getProfileData() {
-      const userPhotos = await getUserPhotosByUserId(data.userId);
+      const userPhotos = await getUserPhotosByUserId(profile.userId);
 
       setPhotos(userPhotos);
       setPhotoCount(userPhotos.length);
     }
 
     getProfileData();
-  }, [data.userId]);
+  }, [profile.userId]);
 
   if (!user.userId) {
     return (
@@ -40,9 +39,11 @@ export default function UserProfile({ data }) {
 
   return (
     <div className="px-3">
-      <Details profileData={data} postCount={photoCount} userData={user} />
+      <Details profileData={profile} postCount={photoCount} userData={user} />
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
-        {data.privateProfile && !user.following.includes(data.userId) ? (
+        {profile.privateProfile &&
+        !user.following.includes(profile.userId) &&
+        user.userId !== profile.userId ? (
           <div className="flex flex-col items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +66,7 @@ export default function UserProfile({ data }) {
               Follow to see their photos and videos.
             </p>
           </div>
-        ) : data.username === user.username ? (
+        ) : profile.username === user.username ? (
           <>
             <div className="flex space-x-12 transform -translate-y-4 justify-center">
               <button
@@ -130,7 +131,7 @@ export default function UserProfile({ data }) {
             {openTab === 1 && (
               <PhotoCollection
                 photos={photos}
-                profileUsername={data.username}
+                profileUsername={profile.username}
                 loggedInUsername={user.username}
               />
             )}
@@ -141,7 +142,7 @@ export default function UserProfile({ data }) {
         ) : (
           <PhotoCollection
             photos={photos}
-            profileUsername={data.username}
+            profileUsername={profile.username}
             loggedInUsername={user.username}
           />
         )}
@@ -151,7 +152,7 @@ export default function UserProfile({ data }) {
 }
 
 UserProfile.propTypes = {
-  data: PropTypes.shape({
+  profile: PropTypes.shape({
     dateCreated: PropTypes.number.isRequired,
     docId: PropTypes.string.isRequired,
     followers: PropTypes.arrayOf(PropTypes.string).isRequired,

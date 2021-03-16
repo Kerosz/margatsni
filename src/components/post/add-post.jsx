@@ -66,7 +66,9 @@ export default function AddPost({ userData, displayModal, setDisplayStatus }) {
     <div
       className={`${
         displayModal ? 'absolute' : 'hidden'
-      } flex justify-center items-center inset-0`}
+      } flex justify-center items-center inset-0 ${
+        previewImage ? 'top-72' : 'top-64'
+      }`}
     >
       <div
         aria-hidden

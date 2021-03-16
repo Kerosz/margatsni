@@ -39,10 +39,8 @@ export default function Profile() {
     <div className="bg-gray-background">
       <Header />
       <div className="container mx-auto max-w-screen-lg">
-        <UserProfile data={user} />
+        <UserProfile profile={user} />
       </div>
     </div>
   );
 }
-
-// Profile.whyDidYouRender = true;

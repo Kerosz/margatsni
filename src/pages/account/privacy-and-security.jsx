@@ -26,6 +26,7 @@ export default function PrivacyAndSecurityPage() {
               privateStatus={user.privateProfile}
               suggestedStatus={user.allowSuggestions}
               userDocId={user.docId}
+              userEmail={user.emailAddress}
             />
           </div>
         </div>
