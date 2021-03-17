@@ -4,7 +4,7 @@ import { Image } from 'cloudinary-react';
 
 export default function Comments({ postUser, caption, postComments }) {
   return (
-    <ul className="p-5 space-y-3 overflow-y-auto flex-auto border-b border-gray-primary">
+    <ul className="p-5 space-y-3 overflow-y-auto flex-auto border-b border-gray-primary hidden md:block">
       <li className="flex items-center space-x-2 sm:pr-4 pr-2">
         <Link
           to={`/u/${postUser.username}`}

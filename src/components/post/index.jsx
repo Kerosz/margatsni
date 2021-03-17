@@ -29,24 +29,18 @@ export default function Post({ postData }) {
 
   return (
     <>
-      <div
-        className="bg-white border border-gray-primary rounded grid grid-cols-8 mb-14"
-        style={{ maxHeight: '781px' }}
-      >
-        <div className="bg-gray-100 col-span-5 flex items-center">
+      <div className="bg-white border border-gray-primary rounded md:grid lg:grid-cols-8 grid-cols-9 mb-14 flex flex-col">
+        <div className="bg-gray-100 col-span-5 lg:col-span-5 flex items-center">
           <Image
             cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
             publicId={imageSrc}
-            width="680"
+            width="740"
             crop="scale"
             alt={caption}
             className="object-contain"
           />
         </div>
-        <div
-          className="col-span-3 flex flex-col"
-          style={{ maxHeight: '780px' }}
-        >
+        <div className="col-span-4 lg:col-span-3 flex flex-col lg:max-h-img-base max-h-img-lg">
           <Header postUser={postData.user} />
           <Comments
             caption={caption}
@@ -61,7 +55,7 @@ export default function Post({ postData }) {
             savedPost={postData.userSavedPhoto}
             handleCommentFocus={handleCommentInputFocus}
           />
-          <p className="text-gray-base uppercase text-xs my-2 px-4">
+          <p className="text-gray-base uppercase text-xs mt-2 px-4 hidden md:block">
             {formatDistance(dateCreated, new Date())} ago
           </p>
           <AddComment

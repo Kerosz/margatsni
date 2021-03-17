@@ -9,6 +9,7 @@ export default function Comments({
   postComments,
   datePosted,
   defaultCommentDisplayCount,
+  showAddPost,
 }) {
   const [comments, setComments] = useState(postComments);
 
@@ -68,13 +69,16 @@ export default function Comments({
         </p>
       </div>
 
-      <AddComment postDocId={docId} setPostComments={setComments} />
+      {showAddPost && (
+        <AddComment postDocId={docId} setPostComments={setComments} />
+      )}
     </>
   );
 }
 
 Comments.defaultProps = {
   defaultCommentDisplayCount: 3,
+  showAddPost: true,
 };
 
 Comments.propTypes = {
@@ -89,5 +93,6 @@ Comments.propTypes = {
     }),
   ).isRequired,
   datePosted: PropTypes.number.isRequired,
+  showAddPost: PropTypes.bool,
   defaultCommentDisplayCount: PropTypes.number,
 };

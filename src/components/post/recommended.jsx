@@ -51,7 +51,7 @@ export default function Recommended({ userId, username, postId }) {
         {recommendedPostState.map((post) => (
           <div
             key={post.docId}
-            className="relative group flex items-center bg-gray-100"
+            className="relative group flex items-center bg-gray-100 mb-3 md:mb-0"
           >
             <Image
               cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}

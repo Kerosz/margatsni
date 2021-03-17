@@ -31,6 +31,10 @@ module.exports = {
       height: {
         fit: 'fit-content',
       },
+      maxHeight: {
+        'img-base': '781px',
+        'img-lg': '665px',
+      },
     },
   },
   variants: {

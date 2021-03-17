@@ -34,7 +34,7 @@ export default function AddComment({
   }
 
   return (
-    <div className="border-t border-gray-200">
+    <div className="border-t border-gray-200 mt-2">
       <form
         className="flex justify-between pl-0 px-5"
         method="POST"
