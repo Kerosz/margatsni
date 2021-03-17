@@ -11,3 +11,5 @@ export const RESET_PASSWORD = '/accounts/password/reset';
 export const CHANGE_PASSWORD = '/accounts/password/change';
 export const PRIVACY_AND_SECURITY = '/accounts/privacy-and-security';
 export const POST = '/p/:postId';
+export const INBOX = '/direct/inbox';
+export const CHAT = '/direct/t/:chatId';

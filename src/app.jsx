@@ -24,6 +24,7 @@ const PrivacyAndSecurityPage = lazy(() =>
   import('./pages/account/privacy-and-security'),
 );
 const PostPage = lazy(() => import('./pages/post'));
+const InboxPage = lazy(() => import('./pages/inbox'));
 
 export default function App() {
   const { user } = useUserContext();
@@ -50,6 +51,10 @@ export default function App() {
 
           <ProtectedRoute user={user} path={ROUTES.CHANGE_PASSWORD} exact>
             <ChangePasswordPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute user={user} path={ROUTES.INBOX} exact>
+            <InboxPage />
           </ProtectedRoute>
 
           <Route

@@ -7,6 +7,7 @@ import Comments from './comments';
 import Actions from './actions';
 import AddComment from './add-comment';
 import Recommended from './recommended';
+import useUpdateEffect from '../../hooks/use-update-effect';
 
 export default function Post({ postData }) {
   const {
@@ -27,6 +28,10 @@ export default function Post({ postData }) {
     commentInputRef.current.focus();
   }
 
+  useUpdateEffect(() => {
+    setPostComments(comments);
+  }, [comments]);
+
   return (
     <>
       <div className="bg-white border border-gray-primary rounded md:grid lg:grid-cols-8 grid-cols-9 mb-14 flex flex-col">
@@ -41,7 +46,7 @@ export default function Post({ postData }) {
           />
         </div>
         <div className="col-span-4 lg:col-span-3 flex flex-col lg:max-h-img-base max-h-img-lg">
-          <Header postUser={postData.user} />
+          <Header postUser={postData.user} postDocId={docId} />
           <Comments
             caption={caption}
             postUser={postData.user}

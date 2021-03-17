@@ -500,6 +500,16 @@ export async function deleteUserAccount(currentPassword, userDocId) {
 }
 
 /**
+ * Function used to delete a post by it's document id
+ *
+ * @param {string} postDocId Document id of the post that is to be deleted
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function deletePostByDocId(postDocId) {
+  return _DB.collection('photos').doc(postDocId).delete();
+}
+
+/**
  * Function used to send a passowrd reset email
  *
  * @param {string} emailAddress The email address of the user account

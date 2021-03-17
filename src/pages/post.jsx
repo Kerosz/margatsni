@@ -12,8 +12,6 @@ export default function PostPage() {
 
   const [postState, setPost] = useState(null);
 
-  console.log(postId);
-
   useEffect(() => {
     async function getPostData() {
       const post = await getPostWithMetaByPostId(postId, user.uid);
@@ -26,7 +24,6 @@ export default function PostPage() {
     }
 
     if (postId) {
-      console.log('=======================1');
       getPostData();
     }
   }, [postId]);

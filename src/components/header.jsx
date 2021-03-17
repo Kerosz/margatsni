@@ -28,7 +28,7 @@ export default function Header() {
                 <img
                   src="/images/logo.png"
                   alt="Instagram branding"
-                  className="mt-2 w-6/12"
+                  className="mt-2 w-28"
                 />
               </Link>
             </h1>
@@ -88,6 +88,28 @@ export default function Header() {
                       strokeLinejoin="round"
                       strokeWidth={1}
                       d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                    />
+                  </svg>
+                </Link>
+                <Link
+                  to={ROUTES.INBOX}
+                  title="Inbox"
+                  aria-label="Inbox"
+                  className="mr-4"
+                >
+                  <svg
+                    className="w-8 text-black-light cursor-pointer"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    transform="rotate(58 5 0)"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                     />
                   </svg>
                 </Link>
