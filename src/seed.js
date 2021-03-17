@@ -1,9 +1,9 @@
 /* eslint-disable no-plusplus */
-// NOTE: replace 'NKym2IrgjPeTsn81uTc9FwCeePf1' (it's used in 3 places) with your Firebase auth user id (can be taken from Firebase)
+// NOTE: replace '8R0tk6J0H4OQ84CQncU4IqksxNE2' (it's used in 3 places) with your Firebase auth user id (can be taken from Firebase)
 export function seedDatabase(firebase) {
   const users = [
     {
-      userId: 'NKym2IrgjPeTsn81uTc9FwCeePf1',
+      userId: '8R0tk6J0H4OQ84CQncU4IqksxNE2',
       username: 'kerosz',
       userInfo: {
         fullName: 'Chirila Andrei',
@@ -33,9 +33,9 @@ export function seedDatabase(firebase) {
       },
       emailAddress: 'raphael@sanzio.com',
       following: [],
-      followers: ['NKym2IrgjPeTsn81uTc9FwCeePf1'],
+      followers: ['8R0tk6J0H4OQ84CQncU4IqksxNE2'],
       photoURL:
-        'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
+        'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/raphael_cfskar.jpg',
       verifiedUser: false,
       privateProfile: false,
       savedPosts: [],
@@ -52,10 +52,10 @@ export function seedDatabase(firebase) {
         phoneNumber: '',
       },
       emailAddress: 'salvador@dali.com',
-      following: ['NKym2IrgjPeTsn81uTc9FwCeePf1'],
+      following: ['8R0tk6J0H4OQ84CQncU4IqksxNE2'],
       followers: [],
       photoURL:
-        'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
+        'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/dali_pezrzv.jpg',
       verifiedUser: true,
       privateProfile: false,
       savedPosts: [],
@@ -75,7 +75,7 @@ export function seedDatabase(firebase) {
       following: [],
       followers: [],
       photoURL:
-        'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
+        'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/orwell_vfvt5n.jpg',
       verifiedUser: false,
       privateProfile: false,
       savedPosts: [],
@@ -89,17 +89,21 @@ export function seedDatabase(firebase) {
       caption: 'Night Walking Dreams',
       comments: [
         {
-          id: 'b1ee18a0-af59-472c-946c-cc9ed538a831',
+          commentId: 'b1ee18a0-af59-472c-946c-cc9ed538a831',
           userId: '4298d7ff-1b81-4e2f-a9e4-66c34812d75e',
           comment: 'Would you mind if I used this picture?',
-          displayName: 'orwell',
+          username: 'orwell',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/orwell_vfvt5n.jpg',
           dateCreated: Date.now(),
         },
         {
-          id: '20307aaa-7e49-42a9-b104-ec5d057b08b4',
+          commentId: '20307aaa-7e49-42a9-b104-ec5d057b08b4',
           userId: '6cea0fdc-b8f7-4ebd-b03a-060e47fadcee',
           comment: 'Love this place, looks like my animal farm!',
-          displayName: 'dali',
+          username: 'dali',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/dali_pezrzv.jpg',
           dateCreated: Date.now(),
         },
       ],
@@ -117,17 +121,21 @@ export function seedDatabase(firebase) {
       caption: 'Saint George and the Dragon',
       comments: [
         {
-          id: '1ea20bf4-d11e-454a-b224-064fb0d4fb7c',
+          commentId: '1ea20bf4-d11e-454a-b224-064fb0d4fb7c',
           userId: '4298d7ff-1b81-4e2f-a9e4-66c34812d75e',
           comment: 'Would you mind if I used this picture?',
-          displayName: 'orwell',
+          username: 'orwell',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/orwell_vfvt5n.jpg',
           dateCreated: Date.now(),
         },
         {
-          id: '32c51a7d-a7ff-46f0-9a67-42601e290ded',
+          commentId: '32c51a7d-a7ff-46f0-9a67-42601e290ded',
           userId: '6cea0fdc-b8f7-4ebd-b03a-060e47fadcee',
           comment: 'Love this place, looks like my animal farm!',
-          displayName: 'dali',
+          username: 'dali',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/dali_pezrzv.jpg',
           dateCreated: Date.now(),
         },
       ],
@@ -145,17 +153,21 @@ export function seedDatabase(firebase) {
       caption: 'It’s my time to step into the spotlight. I’ve earned it.',
       comments: [
         {
-          id: '41460959-ce97-4402-8c8a-2b207da794a2',
+          commentId: '41460959-ce97-4402-8c8a-2b207da794a2',
           userId: '4298d7ff-1b81-4e2f-a9e4-66c34812d75e',
           comment: 'Currently saying yes to new adventures',
-          displayName: 'orwell',
+          username: 'orwell',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/orwell_vfvt5n.jpg',
           dateCreated: Date.now(),
         },
         {
-          id: '3f1937c2-7dad-4478-a81b-96b2f0a14756',
+          commentId: '3f1937c2-7dad-4478-a81b-96b2f0a14756',
           userId: '6cea0fdc-b8f7-4ebd-b03a-060e47fadcee',
           comment: 'Happiness never goes out of style',
-          displayName: 'dali',
+          username: 'dali',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/dali_pezrzv.jpg',
           dateCreated: Date.now(),
         },
       ],
@@ -173,17 +185,21 @@ export function seedDatabase(firebase) {
       caption: 'Not like the rest of them',
       comments: [
         {
-          id: '9152247f-8655-48b8-bb78-e772e611b6d6',
+          commentId: '9152247f-8655-48b8-bb78-e772e611b6d6',
           userId: '4298d7ff-1b81-4e2f-a9e4-66c34812d75e',
           comment: 'Too glam to give a damn',
-          displayName: 'orwell',
+          username: 'orwell',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/orwell_vfvt5n.jpg',
           dateCreated: Date.now(),
         },
         {
-          id: '6f856422-27a4-44f0-af6a-4bf7515738eb',
+          commentId: '6f856422-27a4-44f0-af6a-4bf7515738eb',
           userId: '6cea0fdc-b8f7-4ebd-b03a-060e47fadcee',
           comment: 'Together we could be unstoppable',
-          displayName: 'dali',
+          username: 'dali',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/dali_pezrzv.jpg',
           dateCreated: Date.now(),
         },
       ],
@@ -201,17 +217,21 @@ export function seedDatabase(firebase) {
       caption: 'No one’s life is as perfect as their Instagram feed',
       comments: [
         {
-          id: '8731c84f-ca3f-4ff3-8385-3c7482e2a436',
+          commentId: '8731c84f-ca3f-4ff3-8385-3c7482e2a436',
           userId: '4298d7ff-1b81-4e2f-a9e4-66c34812d75e',
           comment: 'When you feel like giving up, keep going',
-          displayName: 'orwell',
+          username: 'orwell',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/orwell_vfvt5n.jpg',
           dateCreated: Date.now(),
         },
         {
-          id: '7cefd855-97ff-4aff-ae6c-fdce137005ba',
+          commentId: '7cefd855-97ff-4aff-ae6c-fdce137005ba',
           userId: '6cea0fdc-b8f7-4ebd-b03a-060e47fadcee',
           comment: 'Sharing my happy thoughts',
-          displayName: 'dali',
+          username: 'dali',
+          photoURL:
+            'https://res.cloudinary.com/kerosz/image/upload/v1615445057/instagram/avatars/dali_pezrzv.jpg',
           dateCreated: Date.now(),
         },
       ],

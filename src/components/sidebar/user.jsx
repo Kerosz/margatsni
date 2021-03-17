@@ -11,7 +11,7 @@ export default function User({ userData }) {
   return (
     <div className="grid grid-cols-4 gap-4 mb-7 items-center pt-3">
       <div className="flex items-center justify-between col-span-1">
-        <Link to={`/p/${userData.username}`}>
+        <Link to={`/u/${userData.username}`}>
           <Image
             cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
             publicId={userData.photoURL}
@@ -24,7 +24,7 @@ export default function User({ userData }) {
       </div>
       <div className="col-span-3">
         <Link
-          to={`/p/${userData.username}`}
+          to={`/u/${userData.username}`}
           className="hover:underline flex items-center"
         >
           <p className="font-semibold text-base">{userData.username}</p>

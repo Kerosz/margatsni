@@ -15,7 +15,7 @@ export default function Header() {
   const [postModalStatus, setPostModalStatus] = useState(false);
 
   return (
-    <header className="h-16 bg-white border-b border-gray-primary mb-8 sticky top-0 z-10">
+    <header className="h-16 bg-white border-b border-gray-primary mb-8 sticky top-0 z-20">
       <div className="container px-2.5 mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
@@ -122,7 +122,7 @@ export default function Header() {
                   title={`${user.displayName}'s profile`}
                   aria-label={`${user.displayName}'s profile`}
                 >
-                  <Link to={`/p/${user.displayName}`}>
+                  <Link to={`/u/${user.displayName}`}>
                     <Image
                       cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
                       publicId={user.photoURL}

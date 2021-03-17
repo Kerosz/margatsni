@@ -14,18 +14,18 @@ export default function Details({ profileData, postCount, userData }) {
   const [isFollowingProfile, setIsFollowingProfile] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
 
-  function handleToggleFollowUser() {
+  async function handleToggleFollowUser() {
     setIsFollowingProfile((prevFollowingState) => !prevFollowingState);
     setFollowerCount((prevFollowerCount) =>
       isFollowingProfile ? prevFollowerCount - 1 : prevFollowerCount + 1,
     );
 
-    updateUserFollowersField(
+    await updateUserFollowersField(
       profileData.docId,
       userData.userId,
       isFollowingProfile,
     );
-    updateUserFollowingField(
+    await updateUserFollowingField(
       profileData.userId,
       userData.userId,
       isFollowingProfile,

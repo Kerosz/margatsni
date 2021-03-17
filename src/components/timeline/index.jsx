@@ -1,5 +1,5 @@
 import Skeleton from 'react-loading-skeleton';
-import useUserPhotos from '../hooks/use-user-photos';
+import useUserPhotos from '../../hooks/use-user-photos';
 import Post from './post';
 
 export default function Timeline() {
@@ -29,7 +29,7 @@ export default function Timeline() {
   return (
     <main className="container col-span-2">
       {photos.map((photo) => (
-        <Post key={photo.photoId} data={photo} />
+        <Post key={photo.photoId} postData={photo} />
       ))}
     </main>
   );

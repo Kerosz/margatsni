@@ -15,6 +15,8 @@ export default function PrivacyAndSecurity({
   userDocId,
   userEmail,
 }) {
+  const { isOpen, onClose, onOpen } = useModal();
+
   // Extra states needed for the firebase status in order to check against the updated state to be able to live update the page without reload
   const [firebasePrivate, setFirebasePrivate] = useState(privateStatus);
   const [firebaseSuggested, setFirebaseSuggested] = useState(suggestedStatus);
@@ -22,7 +24,6 @@ export default function PrivacyAndSecurity({
   const [privateCheckbox, setPrivateCheckbox] = useState(privateStatus);
   const [suggestionCheckbox, setSuggestionCheckbox] = useState(suggestedStatus);
   const [sucessMessage, setSucessMessage] = useState(null);
-  const { isOpen, onClose, onOpen } = useModal();
 
   /** Handle submit for private account checkbox on input change */
   useUpdateEffect(() => {

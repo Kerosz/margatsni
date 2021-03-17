@@ -26,7 +26,7 @@ export default function SuggestedProfile({ suggestedUser, currentUserId }) {
   return (
     <div className="flex flex-row items-center justify-between">
       <div className="flex items-center justify-between">
-        <Link to={`/p/${suggestedUser.username}`}>
+        <Link to={`/u/${suggestedUser.username}`}>
           <Image
             cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
             publicId={suggestedUser.photoURL}
@@ -38,7 +38,7 @@ export default function SuggestedProfile({ suggestedUser, currentUserId }) {
         </Link>
         <div>
           <Link
-            to={`/p/${suggestedUser.username}`}
+            to={`/u/${suggestedUser.username}`}
             className="hover:underline flex"
           >
             <p className="font-semibold text-sm mb-0.5 max-w-max">

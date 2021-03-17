@@ -1,24 +1,44 @@
+/* eslint-disable no-unused-vars */
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
+import {
+  updateUserFollowersField,
+  updateUserFollowingField,
+} from '../../services/firebase';
+import { useUserContext } from '../../context/user';
 
-export default function Header({ user }) {
+export default function Header({ postUser }) {
+  const { user } = useUserContext();
+
+  const defaultFollowState = postUser.followers.includes(user.uid);
+
+  const [isFollowingState, setIsFollowing] = useState(defaultFollowState);
+
+  async function handleToggleFollowUser() {
+    setIsFollowing((prevFollowingState) => !prevFollowingState);
+
+    await updateUserFollowersField(postUser.docId, user.uid, isFollowingState);
+    await updateUserFollowingField(postUser.userId, user.uid, isFollowingState);
+  }
+
   return (
-    <div className="flex border-b h-4 p-4 py-8 border-gray-200">
+    <header className="p-5 border-b border-red-100 flex items-center space-x-2">
       <Link
-        to={`/p/${user.username}`}
+        to={`/u/${postUser.username}`}
         className="flex items-center hover:underline"
       >
         <Image
           cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-          publicId={user.photoURL}
-          alt={`${user.username} profile`}
+          publicId={postUser.photoURL}
+          alt={`${postUser.username} profile`}
           width="32"
           crop="scale"
-          className="rounded-full h-8 w-8 flex mr-3"
+          className="rounded-full h-8 w-8 flex mr-4"
         />
-        <p className="font-semibold">{user.username}</p>
-        {user.verifiedUser && (
+        <p className="font-semibold text-black-light">{postUser.username}</p>
+        {postUser.verifiedUser && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
@@ -33,14 +53,32 @@ export default function Header({ user }) {
           </svg>
         )}
       </Link>
-    </div>
+      {postUser.userId !== user.uid && (
+        <>
+          <span>•</span>
+          <button
+            type="button"
+            aria-label="Follow user"
+            className={`text-sm font-semibold mt-0.5 ${
+              isFollowingState ? 'text-black-light' : 'text-blue-medium'
+            }`}
+            onClick={handleToggleFollowUser}
+          >
+            {isFollowingState ? 'Following' : 'Follow'}
+          </button>
+        </>
+      )}
+    </header>
   );
 }
 
 Header.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    photoURL: PropTypes.string.isRequired,
-    verifiedUser: PropTypes.bool.isRequired,
+  postUser: PropTypes.shape({
+    userId: PropTypes.string,
+    username: PropTypes.string,
+    photoURL: PropTypes.string,
+    verifiedUser: PropTypes.bool,
+    docId: PropTypes.string,
+    followers: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
 };

@@ -187,6 +187,39 @@ export async function getSavedPosts(userSavedPosts) {
 }
 
 /**
+ * Function used to get a specific post by it's `postId`
+ *
+ * @param {string} postId The id of the post to be queried
+ * @param {string} loggedInUserId The user id of the current logged in user
+ *
+ * @return {Promise<{}>} A promise of type object.
+ */
+export async function getPostWithMetaByPostId(postId, loggedInUserId) {
+  const { docs } = await _DB
+    .collection('photos')
+    .where('photoId', '==', postId)
+    .limit(1)
+    .get();
+
+  const [post] = docs.map((doc) => ({ ...doc.data(), docId: doc.id }));
+
+  const user = await getUserDataByUserId(post.userId);
+
+  let userLikedPhoto = false;
+  let userSavedPhoto = false;
+
+  if (post.likes.includes(loggedInUserId)) {
+    userLikedPhoto = true;
+  }
+
+  if (post.saved.includes(loggedInUserId)) {
+    userSavedPhoto = true;
+  }
+
+  return { post, user, userLikedPhoto, userSavedPhoto };
+}
+
+/**
  * Function used to update the user `following field`
  *
  * @param {string} suggestedUserId The user id of the suggested profile

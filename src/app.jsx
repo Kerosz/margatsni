@@ -23,6 +23,7 @@ const ResetPasswordPage = lazy(() => import('./pages/account/password/reset'));
 const PrivacyAndSecurityPage = lazy(() =>
   import('./pages/account/privacy-and-security'),
 );
+const PostPage = lazy(() => import('./pages/post'));
 
 export default function App() {
   const { user } = useUserContext();
@@ -80,6 +81,8 @@ export default function App() {
           </UserRedirectRoute>
 
           <Route path={ROUTES.PROFILE} component={ProfilePage} exact />
+
+          <Route path={ROUTES.POST} component={PostPage} exact />
 
           <Route path="*" component={NotFoundPage} />
         </Switch>
