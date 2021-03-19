@@ -417,6 +417,7 @@ export async function addMessageByDocId(roomDocId, newMessage) {
     .doc(roomDocId)
     .update({
       messages: FieldValue.arrayUnion(newMessage),
+      dateUpdated: Date.now(),
     });
 }
 

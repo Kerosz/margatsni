@@ -15,10 +15,7 @@ export default function Header() {
   const [postModalStatus, setPostModalStatus] = useState(false);
 
   return (
-    <header
-      className="bg-white border-b border-gray-primary mb-7 sticky top-0 z-20"
-      style={{ height: '59px' }}
-    >
+    <header className="bg-white border-b border-gray-primary mb-7 sticky top-0 z-20 h-16">
       <div className="container px-2.5 mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
@@ -54,7 +51,7 @@ export default function Header() {
                   }}
                 >
                   <svg
-                    className="w-8 text-black-light cursor-pointer"
+                    className="w-8 text-black-light cursor-pointer active:text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -80,7 +77,7 @@ export default function Header() {
                   className="mr-4"
                 >
                   <svg
-                    className="w-8 text-black-light cursor-pointer"
+                    className="w-8 text-black-light cursor-pointer active:text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -101,7 +98,7 @@ export default function Header() {
                   className="mr-4"
                 >
                   <svg
-                    className="w-8 text-black-light cursor-pointer"
+                    className="w-8 text-black-light cursor-pointer active:text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -127,7 +124,7 @@ export default function Header() {
                   }}
                 >
                   <svg
-                    className="w-8 text-black-light cursor-pointer"
+                    className="w-8 text-black-light cursor-pointer active:text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"

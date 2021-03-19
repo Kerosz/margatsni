@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { lazy, Suspense } from 'react';
 import {
   BrowserRouter as Router,

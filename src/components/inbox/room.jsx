@@ -1,10 +1,11 @@
-// eslint-disable-next-line no-unused-vars
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
 import { formatDistanceToNow } from 'date-fns';
 
 export default function Room({ roomData }) {
   const { participants } = roomData;
+  const { pathname } = useLocation();
 
   let sortedMessages;
   if (roomData.messages.length > 0) {
@@ -14,7 +15,11 @@ export default function Room({ roomData }) {
   }
 
   return (
-    <div className="grid grid-cols-5 gap-1 px-6 bg-gray-100 py-2 my-2 items-center">
+    <div
+      className={`grid grid-cols-5 gap-1 px-6 py-2 my-1.5 items-center ${
+        pathname.includes(roomData.roomId) && 'bg-gray-100'
+      } hover:bg-gray-50 active:bg-gray-100`}
+    >
       <div className="flex items-center justify-between col-span-1">
         <Image
           cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
@@ -41,7 +46,7 @@ export default function Room({ roomData }) {
           )}
         </p>
         {sortedMessages && (
-          <p className="text-gray-base">{sortedMessages.text}</p>
+          <p className="text-gray-base truncate">{sortedMessages.text}</p>
         )}
       </div>
     </div>

@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/no-array-index-key */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
@@ -118,6 +116,7 @@ export default function AddRoom({ isOpen, onClose, userId }) {
             recieverState.map((reciever, idx) => (
               <li
                 className="p-0.5 px-3 mr-3 mb-4 bg-blue-100 text-blue-500 rounded-md text-lg border border-blue-200"
+                // eslint-disable-next-line react/no-array-index-key
                 key={idx}
               >
                 {reciever}

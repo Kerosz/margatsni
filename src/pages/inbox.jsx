@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useEffect } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 import Header from '../components/header';
@@ -28,7 +27,10 @@ export default function InboxPage() {
           <Inbox user={user} />
 
           {pathname === INBOX ? (
-            <div className="flex items-center justify-center col-span-5 flex-col">
+            <div
+              className="flex items-center justify-center col-span-5 flex-col"
+              style={{ height: 'calc(100vh - 150px)' }}
+            >
               <svg
                 className="w-28 text-gray-900 border-gray-900 rounded-full p-5"
                 xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +64,7 @@ export default function InboxPage() {
             </div>
           ) : (
             <ProtectedRoute user={user} path={`${path}/:chatId`} exact>
-              <Chat />
+              <Chat user={user} />
             </ProtectedRoute>
           )}
         </div>
