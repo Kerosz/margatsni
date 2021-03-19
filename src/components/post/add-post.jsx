@@ -2,10 +2,13 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'cloudinary-react';
 import { v4 as uuid } from 'uuid';
+import { useHistory } from 'react-router-dom';
 import { uploadUnsignedImage } from '../../services/cloudinary';
 import { createPost } from '../../services/firebase';
 
 export default function AddPost({ userData, displayModal, setDisplayStatus }) {
+  const history = useHistory();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -43,6 +46,8 @@ export default function AddPost({ userData, displayModal, setDisplayStatus }) {
       'post',
     );
 
+    const postId = uuid();
+
     const postDataObject = {
       caption: postMessage,
       comments: [],
@@ -51,7 +56,7 @@ export default function AddPost({ userData, displayModal, setDisplayStatus }) {
       sourceURL: cloudinaryResponse.secure_url,
       likes: [],
       saved: [],
-      photoId: uuid(),
+      photoId: postId,
       userId: userData.uid,
     };
 
@@ -59,6 +64,8 @@ export default function AddPost({ userData, displayModal, setDisplayStatus }) {
 
     setIsSubmitting(false);
     handleModalClose();
+
+    history.push(`/p/${postId}`);
   }
 
   return (

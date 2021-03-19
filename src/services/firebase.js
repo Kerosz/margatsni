@@ -75,6 +75,25 @@ export async function getUserDataByUserId(userId) {
 }
 
 /**
+ * Function used to get all user IDs by username
+ *
+ * @param {string[]} usernameArray An array containing all the saved posts of the current user
+ *
+ * @return {Promise<Array<{}>>} A promise of type object array.
+ */
+export async function getUserIdsByUsername(usernameArray, limitQuery = 10) {
+  const { docs } = await _DB
+    .collection('users')
+    .where('username', 'in', usernameArray)
+    .limit(limitQuery)
+    .get();
+
+  return docs
+    .map((doc) => ({ ...doc.data(), docId: doc.id }))
+    .map((user) => user.userId);
+}
+
+/**
  * Function used to get suggested user profiles for a specific user, queried by `userId`. It limits the queried results to `10` by default
  *
  * @param {string} userId The user id to be queried by
@@ -385,14 +404,40 @@ export async function addPostComments(postDocId, newPostComment) {
 }
 
 /**
+ * Function used to add a message to a chat room
+ *
+ * @param {string} roomDocId Room document id to be updated
+ * @param {string} newMessage The message to be added
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function addMessageByDocId(roomDocId, newMessage) {
+  return _DB
+    .collection('inbox')
+    .doc(roomDocId)
+    .update({
+      messages: FieldValue.arrayUnion(newMessage),
+    });
+}
+
+/**
  * Function used to create a new post data
  *
  * @param {object} postObject The post data to be added to the collection
- *
  * @return {Promise<void>} A promise of type void.
  */
 export async function createPost(postObject) {
   return _DB.collection('photos').add(postObject);
+}
+
+/**
+ * Function used to create a new post data
+ *
+ * @param {object} roomObject The post data to be added to the collection
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function createRoom(roomObject) {
+  return _DB.collection('inbox').add(roomObject);
 }
 
 /**

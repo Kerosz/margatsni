@@ -15,7 +15,10 @@ export default function Header() {
   const [postModalStatus, setPostModalStatus] = useState(false);
 
   return (
-    <header className="h-16 bg-white border-b border-gray-primary mb-8 sticky top-0 z-20">
+    <header
+      className="bg-white border-b border-gray-primary mb-7 sticky top-0 z-20"
+      style={{ height: '59px' }}
+    >
       <div className="container px-2.5 mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
@@ -149,9 +152,9 @@ export default function Header() {
                       cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
                       publicId={user.photoURL}
                       alt={`${user.displayName} profile`}
-                      width="32"
+                      width="28"
                       crop="scale"
-                      className="rounded-full h-8 w-8 flex"
+                      className="rounded-full h-7 w-7"
                     />
                   </Link>
                 </div>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export default function Modal({ children, onClose, isOpen }) {
+export default function Modal({ children, onClose, isOpen, title, maxW }) {
   return (
     <div
       className={`${
@@ -13,12 +13,12 @@ export default function Modal({ children, onClose, isOpen }) {
         onClick={onClose}
       />
       <div
-        className="absolute z-40 bg-white max-w-screen-sm w-full flex flex-col border border-gray-primary shadow-lg"
+        className={`absolute z-40 bg-white max-w-${maxW} w-full flex flex-col border border-gray-primary shadow-lg`}
         role="dialog"
         aria-modal="true"
         aria-label="Add post modal"
       >
-        <div className="p-2.5 px-3.5 border-b border-gray-primary w-full flex">
+        <div className="p-2.5 px-3.5 border-b border-gray-primary w-full flex items-center">
           <button type="button" aria-label="Close modal" onClick={onClose}>
             <svg
               className="w-7 text-black-light cursor-pointer"
@@ -35,6 +35,11 @@ export default function Modal({ children, onClose, isOpen }) {
               />
             </svg>
           </button>
+          {title && (
+            <span className="flex-grow text-center font-semibold text-lg">
+              {title}
+            </span>
+          )}
         </div>
         {children}
       </div>
@@ -42,8 +47,15 @@ export default function Modal({ children, onClose, isOpen }) {
   );
 }
 
+Modal.defaultProps = {
+  title: null,
+  maxW: `lg`,
+};
+
 Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  maxW: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl']),
 };

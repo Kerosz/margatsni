@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { lazy, Suspense } from 'react';
 import {
   BrowserRouter as Router,
@@ -53,7 +54,7 @@ export default function App() {
             <ChangePasswordPage />
           </ProtectedRoute>
 
-          <ProtectedRoute user={user} path={ROUTES.INBOX} exact>
+          <ProtectedRoute user={user} path={ROUTES.INBOX}>
             <InboxPage />
           </ProtectedRoute>
 

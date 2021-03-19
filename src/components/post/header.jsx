@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
+import DeletePost from './delete-post';
 import {
-  deletePostByDocId,
   updateUserFollowersField,
   updateUserFollowingField,
 } from '../../services/firebase';
 import { useUserContext } from '../../context/user';
 
+import useModal from '../../hooks/use-modal';
+
 export default function Header({ postUser, postDocId }) {
-  const history = useHistory();
   const { user } = useUserContext();
+  const { isOpen, onOpen, onClose } = useModal();
 
   const defaultFollowState = postUser.followers.includes(user.uid);
 
@@ -22,12 +24,6 @@ export default function Header({ postUser, postDocId }) {
 
     await updateUserFollowersField(postUser.docId, user.uid, isFollowingState);
     await updateUserFollowingField(postUser.userId, user.uid, isFollowingState);
-  }
-
-  async function handlePostDeletion() {
-    await deletePostByDocId(postDocId);
-
-    history.push(`/u/${user.displayName}`);
   }
 
   return (
@@ -83,11 +79,18 @@ export default function Header({ postUser, postDocId }) {
           aria-label="Delete post"
           className="text-red-700 text-sm font-semibold p-0.5"
           title="Delete"
-          onClick={handlePostDeletion}
+          onClick={onOpen}
         >
           Delete
         </button>
       )}
+
+      <DeletePost
+        isOpen={isOpen}
+        onClose={onClose}
+        username={user.displayName}
+        postDocId={postDocId}
+      />
     </header>
   );
 }

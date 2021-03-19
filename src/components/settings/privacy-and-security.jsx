@@ -88,16 +88,27 @@ export default function PrivacyAndSecurity({
 
   /** Handles the logic for account deletion */
   const [confirmDialogState, setConfirmDialog] = useState('');
+  const [serverError, setServerError] = useState(null);
   const isValid =
     confirmDialogState.length >= 6 && confirmDialogState.length <= 24;
+
+  function handleModalClose() {
+    onClose();
+    setConfirmDialog('');
+    setServerError(null);
+  }
 
   async function handleAccountDeletion(event) {
     event.preventDefault();
 
     if (isValid) {
-      await deleteUserAccount(confirmDialogState, userDocId);
-
-      onClose();
+      setServerError(null);
+      try {
+        await deleteUserAccount(confirmDialogState, userDocId);
+        handleModalClose();
+      } catch (error) {
+        setServerError(error.message);
+      }
     }
   }
 
@@ -218,10 +229,11 @@ export default function PrivacyAndSecurity({
         </fieldset>
       </form>
 
-      <Modal onClose={onClose} isOpen={isOpen}>
+      <Modal onClose={handleModalClose} isOpen={isOpen}>
         <form
           action="POST"
           className="flex flex-col items-center sm:px-8 px-3 py-4"
+          onSubmit={handleAccountDeletion}
         >
           <p className="text-xl mt-4 font-semibold text-black-light">
             Are you absolutely sure?
@@ -254,6 +266,11 @@ export default function PrivacyAndSecurity({
             confirm.
           </p>
 
+          {serverError && (
+            <p className="pl-1 mt-2 text-xs text-red-primary self-start">
+              {serverError}
+            </p>
+          )}
           <input
             type="password"
             name="confirmDialog"
