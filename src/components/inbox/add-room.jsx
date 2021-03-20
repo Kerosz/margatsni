@@ -112,6 +112,27 @@ export default function AddRoom({ isOpen, onClose, userId }) {
       <div className="flex flex-col px-4 mt-4 mb-1">
         <p className="mb-3 font-semibold text-lg">Users added</p>
         <ul className="flex flex-wrap">
+          {recieverState.length === 0 && (
+            <li className="w-full flex flex-col items-center my-2.5">
+              <svg
+                className="w-11 text-black-light border border-black-light rounded-full p-2"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+              <span className="text-black-light mt-2 font-semibold text-sm">
+                No Users Added
+              </span>
+            </li>
+          )}
           {recieverState &&
             recieverState.map((reciever, idx) => (
               <li

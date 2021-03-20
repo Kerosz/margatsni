@@ -3,17 +3,17 @@ import { useLocation, useRouteMatch } from 'react-router-dom';
 import Header from '../components/header';
 import Inbox from '../components/inbox';
 import Chat from '../components/inbox/chat';
+import AddRoom from '../components/inbox/add-room';
 import ProtectedRoute from '../helpers/protected-route';
+import useDisclosure from '../hooks/use-disclosure';
 import { INBOX } from '../constants/routes';
 import { useUserContext } from '../context/user';
-import AddRoom from '../components/inbox/add-room';
-import useModal from '../hooks/use-modal';
 
 export default function InboxPage() {
   const { path } = useRouteMatch();
   const { pathname } = useLocation();
   const { user } = useUserContext();
-  const { isOpen, onOpen, onClose } = useModal();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     document.title = `Inbox • Direct`;

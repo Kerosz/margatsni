@@ -556,6 +556,33 @@ export async function deletePostByDocId(postDocId) {
 }
 
 /**
+ * Function used to delete a room by it's document id
+ *
+ * @param {string} roomDocId Document id of the room that is to be deleted
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function deleteRoomByDocId(roomDocId) {
+  return _DB.collection('inbox').doc(roomDocId).delete();
+}
+
+/**
+ * Function used to remove a user from a given room
+ *
+ * @param {string} roomDocId Document id of the room that is to be deleted
+ * @param {string} userId User ID to be removed from the participants
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function deleteUserIdFromRoomParticipants(roomDocId, userId) {
+  return _DB
+    .collection('inbox')
+    .doc(roomDocId)
+    .update({
+      roomParticipants: FieldValue.arrayRemove(userId),
+      dateUpdated: Date.now(),
+    });
+}
+
+/**
  * Function used to send a passowrd reset email
  *
  * @param {string} emailAddress The email address of the user account

@@ -21,18 +21,33 @@ export default function Room({ roomData }) {
       } hover:bg-gray-50 active:bg-gray-100`}
     >
       <div className="flex items-center justify-between col-span-1">
-        <Image
-          cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-          publicId={participants[0].photoURL}
-          alt={`${participants[0].username} profile`}
-          width="56"
-          crop="scale"
-          className="rounded-full h-14 w-14 max-w-min"
-        />
+        {sortedMessages ? (
+          <Image
+            cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
+            publicId={sortedMessages.photoURL}
+            alt={`${sortedMessages.username} profile`}
+            width="56"
+            crop="scale"
+            className="rounded-full h-14 w-14 max-w-min"
+          />
+        ) : (
+          <Image
+            cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
+            publicId={participants[0].photoURL}
+            alt={`${participants[0].username} profile`}
+            width="56"
+            crop="scale"
+            className="rounded-full h-14 w-14 max-w-min"
+          />
+        )}
       </div>
       <div className="col-span-4 ml-3">
         <p className="flex items-center space-x-2 text-black-light">
-          <span>{participants[0].username}</span>
+          {sortedMessages ? (
+            <span>{sortedMessages.username}</span>
+          ) : (
+            <span>{participants[0].username}</span>
+          )}
           {sortedMessages && (
             <>
               <span className="text-gray-base">·</span>

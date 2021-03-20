@@ -3,17 +3,16 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
 import DeletePost from './delete-post';
+import useDisclosure from '../../hooks/use-disclosure';
 import {
   updateUserFollowersField,
   updateUserFollowingField,
 } from '../../services/firebase';
 import { useUserContext } from '../../context/user';
 
-import useModal from '../../hooks/use-modal';
-
 export default function Header({ postUser, postDocId }) {
   const { user } = useUserContext();
-  const { isOpen, onOpen, onClose } = useModal();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const defaultFollowState = postUser.followers.includes(user.uid);
 

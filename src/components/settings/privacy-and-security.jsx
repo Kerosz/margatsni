@@ -7,7 +7,7 @@ import {
   deleteUserAccount,
 } from '../../services/firebase';
 import useUpdateEffect from '../../hooks/use-update-effect';
-import useModal from '../../hooks/use-modal';
+import useDisclosure from '../../hooks/use-disclosure';
 
 export default function PrivacyAndSecurity({
   privateStatus,
@@ -15,7 +15,7 @@ export default function PrivacyAndSecurity({
   userDocId,
   userEmail,
 }) {
-  const { isOpen, onClose, onOpen } = useModal();
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   // Extra states needed for the firebase status in order to check against the updated state to be able to live update the page without reload
   const [firebasePrivate, setFirebasePrivate] = useState(privateStatus);

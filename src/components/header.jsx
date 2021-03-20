@@ -6,11 +6,14 @@ import { useFirebaseContext } from '../context/firebase';
 import { useUserContext } from '../context/user';
 import AddPost from './post/add-post';
 import * as ROUTES from '../constants/routes';
+import Dropdown from './dropdown';
+import useDisclosure from '../hooks/use-disclosure';
 
 export default function Header() {
   const { firebase } = useFirebaseContext();
   const { user } = useUserContext();
   const { pathname } = useLocation();
+  const { isOpen, onToggle } = useDisclosure();
 
   const [postModalStatus, setPostModalStatus] = useState(false);
 
@@ -113,33 +116,107 @@ export default function Header() {
                     />
                   </svg>
                 </Link>
-                <button
-                  type="button"
-                  title="Sign Out"
-                  aria-label="Sign Out"
-                  className="mr-6"
-                  onClick={() => firebase.auth().signOut()}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter') firebase.auth().signOut();
-                  }}
-                >
-                  <svg
-                    className="w-8 text-black-light cursor-pointer active:text-gray-500"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
-                </button>
 
-                <div
+                <Dropdown
+                  isOpen={isOpen}
+                  button={
+                    <button
+                      type="button"
+                      className="flex rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-600"
+                      id="options-menu"
+                      aria-expanded="true"
+                      aria-haspopup="true"
+                      onClick={onToggle}
+                    >
+                      <Image
+                        cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
+                        publicId={user.photoURL}
+                        alt={`${user.displayName} profile`}
+                        width="28"
+                        crop="scale"
+                        className="rounded-full h-7 w-7"
+                      />
+                    </button>
+                  }
+                >
+                  <div className="py-0.5" role="none">
+                    <div
+                      className="flex flex-col px-3 py-2 text-sm cursor-default"
+                      title={user.email}
+                      aria-label="User email address"
+                    >
+                      <span>Signed in as</span>
+                      <span className="font-semibold truncate">
+                        {user.email}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="py-0.5" role="none">
+                    <Link
+                      to={`/u/${user.displayName}`}
+                      title="User profile"
+                      aria-label="User profile"
+                      className="flex px-3 py-2 text-sm text-black-light hover:bg-gray-50 hover:text-gray-900"
+                      role="menuitem"
+                    >
+                      <svg
+                        className="w-5 mr-2.5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <span>Profile</span>
+                    </Link>
+                    <Link
+                      to={ROUTES.ACCOUNT}
+                      title="Account settings"
+                      aria-label="Account settings"
+                      className="flex px-3 py-2 text-sm text-black-light hover:bg-gray-50 hover:text-gray-900"
+                      role="menuitem"
+                    >
+                      <svg
+                        className="w-5 mr-2.5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                        />
+                      </svg>
+                      <span>Settings</span>
+                    </Link>
+                  </div>
+                  <div className="py-0.5" role="none">
+                    <button
+                      type="button"
+                      title="Sign Out"
+                      aria-label="Sign Out"
+                      className="flex px-3 py-2 text-sm text-black-light hover:bg-gray-50 hover:text-gray-900 w-full"
+                      role="menuitem"
+                      onClick={() => firebase.auth().signOut()}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') firebase.auth().signOut();
+                      }}
+                    >
+                      Log Out
+                    </button>
+                  </div>
+                </Dropdown>
+
+                {/* <div
                   className="flex items-center cursor-pointer"
                   title={`${user.displayName}'s profile`}
                   aria-label={`${user.displayName}'s profile`}
@@ -154,7 +231,7 @@ export default function Header() {
                       className="rounded-full h-7 w-7"
                     />
                   </Link>
-                </div>
+                </div> */}
               </>
             ) : pathname.includes('reset') ? null : (
               <>

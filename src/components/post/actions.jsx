@@ -53,6 +53,7 @@ export default function Actions({
           <div className="flex">
             <button
               type="button"
+              title="Like the post"
               aria-label="Like the post"
               onClick={handleToggleLikedAction}
               onKeyDown={(event) => {
