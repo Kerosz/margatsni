@@ -29,10 +29,10 @@ export default function Header({ postUser, postDocId }) {
       await createNotification({
         recieverId: postUser.userId,
         senderPhotoURL: user.photoURL,
-        senderUsername: user.username,
+        senderUsername: user.displayName,
         notificationType: 'FOLLOW_NOTIFICATION',
         message: 'started following you.',
-        targetLink: `/u/${user.username}`,
+        targetLink: `/u/${user.displayName}`,
       });
     }
   }
