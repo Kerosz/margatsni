@@ -1,4 +1,5 @@
 import app from 'firebase/app';
+import { v4 as uuid } from 'uuid';
 import { firebase, FieldValue } from '../lib/firebase';
 
 /** Initializing firestore database */
@@ -453,6 +454,72 @@ export async function createFirestoreUser(userObject) {
 }
 
 /**
+ * Function used to create a new notification in the firestore
+ *
+ * @param {string} recieverId The id of the user that will recieve the notification
+ * @param {string} senderPhotoURL Photo URL of the notification sender
+ * @param {string} senderUsername Username of the notification sender
+ * @param {'MESSAGE_NOTIFICATION'|'FOLLOW_NOTIFICATION'} [notificationType='MESSAGE_NOTIFICATION'] Type of the notification
+ * @param {string} message Message to be sent
+ * @param {string} targetLink The link that the notification will take you to
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function createNotification({
+  recieverId,
+  senderPhotoURL,
+  senderUsername,
+  notificationType = `MESSAGE_NOTIFICATION`,
+  message = `sent you a new message.`,
+  targetLink = ``,
+}) {
+  return _DB.collection('notifications').add({
+    dateCreated: Date.now(),
+    userId: recieverId,
+    type: notificationType,
+    notificationId: uuid(),
+    text: message,
+    photoURL: senderPhotoURL,
+    username: senderUsername,
+    target: targetLink,
+  });
+}
+
+/**
+ * Function used to create a notification in firestore to many users
+ *
+ * @param {string[]} recieverIdArray An array containing all user IDs to recieve notifications
+ * @param {string} senderPhotoURL Photo URL of the notification sender
+ * @param {string} senderUsername Username of the notification sender
+ * @param {'MESSAGE_NOTIFICATION'|'FOLLOW_NOTIFICATION'} [notificationType='MESSAGE_NOTIFICATION'] Type of the notification
+ * @param {string} message Message to be sent
+ * @param {string} targetLink The link that the notification will take you to
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function createNotificationToMany({
+  recieverIdArray,
+  senderPhotoURL,
+  senderUsername,
+  notificationType = `MESSAGE_NOTIFICATION`,
+  message = `sent you a new message.`,
+  targetLink = ``,
+}) {
+  return Promise.all(
+    recieverIdArray.map(async (recieverId) => {
+      await createNotification({
+        recieverId,
+        notificationType,
+        message,
+        senderPhotoURL,
+        senderUsername,
+        targetLink,
+      });
+    }),
+  );
+}
+
+/**
  * Function used to re-authentificate a user
  *
  * @param {string} userPassword The password of the current logged in user
@@ -563,6 +630,16 @@ export async function deletePostByDocId(postDocId) {
  */
 export async function deleteRoomByDocId(roomDocId) {
   return _DB.collection('inbox').doc(roomDocId).delete();
+}
+
+/**
+ * Function used to delete a notification by it's document id
+ *
+ * @param {string} notificationDocId Document id of the notification that is to be deleted
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function deleteNotification(notificationDocId) {
+  return _DB.collection('notifications').doc(notificationDocId).delete();
 }
 
 /**

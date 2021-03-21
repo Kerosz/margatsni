@@ -62,7 +62,13 @@ export default function Inbox({ user }) {
           </svg>
         </button>
 
-        <AddRoom isOpen={isOpen} onClose={onClose} userId={user.uid} />
+        <AddRoom
+          isOpen={isOpen}
+          onClose={onClose}
+          senderId={user.uid}
+          senderUsername={user.displayName}
+          senderPhotoURL={user.photoURL}
+        />
       </header>
 
       <div className="overflow-y-auto">

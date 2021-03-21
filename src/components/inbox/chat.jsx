@@ -121,6 +121,7 @@ export default function Chat({ user }) {
 
           <SendMessage
             roomDocId={chatRoom.docId}
+            roomMembers={chatRoom.participants}
             userData={user}
             scrollRef={scrollRef}
             inputRef={inputRef}
@@ -134,6 +135,7 @@ export default function Chat({ user }) {
           roomDocId={chatRoom.docId}
           roomMembers={chatRoom.participants}
           userId={user.uid}
+          userPhotoURL={user.photoURL}
           username={user.displayName}
         />
       )}

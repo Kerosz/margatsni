@@ -6,6 +6,7 @@ import { Image } from 'cloudinary-react';
 import {
   updateUserFollowersField,
   updateUserFollowingField,
+  createNotification,
 } from '../../services/firebase';
 import * as ROUTES from '../../constants/routes';
 
@@ -30,6 +31,17 @@ export default function Details({ profileData, postCount, userData }) {
       userData.userId,
       isFollowingProfile,
     );
+
+    if (!isFollowingProfile) {
+      await createNotification({
+        recieverId: profileData.userId,
+        senderPhotoURL: userData.photoURL,
+        senderUsername: userData.username,
+        notificationType: 'FOLLOW_NOTIFICATION',
+        message: 'started following you.',
+        targetLink: `/u/${userData.username}`,
+      });
+    }
   }
 
   useEffect(() => {

@@ -22,6 +22,7 @@ export default function Post({ postData }) {
       <Actions
         postDocId={postData.docId}
         postId={postData.photoId}
+        userId={postData.userId}
         totalLikes={postData.likes.length}
         likedPost={postData.userLikedPhoto}
         savedPost={postData.userSavedPhoto}

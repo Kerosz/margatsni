@@ -4,23 +4,23 @@ import Skeleton from 'react-loading-skeleton';
 import SuggestedProfile from './suggested-profile';
 import { getSuggestedProfilesByUserId } from '../../services/firebase';
 
-export default function Suggestions({ userId, userFollowing }) {
+export default function Suggestions({ userData, userFollowing }) {
   const [profiles, setProfiles] = useState(null);
 
   useEffect(() => {
     async function getSuggestedProfiles() {
       const response = await getSuggestedProfilesByUserId(
-        userId,
+        userData.userId,
         userFollowing,
       );
 
       setProfiles(response);
     }
 
-    if (userId) {
+    if (userData.userId) {
       getSuggestedProfiles();
     }
-  }, [userId, userFollowing]);
+  }, [userData.userId, userFollowing]);
 
   if (!profiles) {
     return <Skeleton count={1} height={180} />;
@@ -38,7 +38,7 @@ export default function Suggestions({ userId, userFollowing }) {
           <SuggestedProfile
             key={profile.docId}
             suggestedUser={profile}
-            currentUserId={userId}
+            currentUser={userData}
           />
         ))}
       </div>
@@ -47,11 +47,15 @@ export default function Suggestions({ userId, userFollowing }) {
 }
 
 Suggestions.defaultProps = {
-  userId: null,
+  userData: null,
   userFollowing: null,
 };
 
 Suggestions.propTypes = {
-  userId: PropTypes.string,
+  userData: PropTypes.shape({
+    userId: PropTypes.string,
+    username: PropTypes.string,
+    photoURL: PropTypes.string,
+  }),
   userFollowing: PropTypes.arrayOf(PropTypes.string),
 };

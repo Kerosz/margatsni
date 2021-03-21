@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
-import { addMessageByDocId } from '../../services/firebase';
+import {
+  addMessageByDocId,
+  createNotificationToMany,
+} from '../../services/firebase';
 
 export default function SendMessage({
   roomDocId,
+  roomMembers,
   userData,
   scrollRef,
   inputRef,
@@ -31,6 +35,19 @@ export default function SendMessage({
 
       scrollRef.current.scrollIntoView();
       setMessageValue('');
+
+      const recieverIds = roomMembers
+        .filter((m) => m.userId !== userData.uid)
+        .map((m) => m.userId);
+
+      await createNotificationToMany({
+        recieverIdArray: recieverIds,
+        senderPhotoURL: userData.photoURL,
+        senderUsername: userData.displayName,
+        notificationType: 'MESSAGE_NOTIFICATION',
+        message: 'sent you a new message.',
+        targetLink: `/u/${userData.displayName}`,
+      });
     }
   }
 
@@ -68,6 +85,15 @@ export default function SendMessage({
 
 SendMessage.propTypes = {
   roomDocId: PropTypes.string.isRequired,
+  roomMembers: PropTypes.arrayOf(
+    PropTypes.shape({
+      userId: PropTypes.string.isRequired,
+      userInfo: PropTypes.shape({
+        fullName: PropTypes.string,
+      }).isRequired,
+      verifiedUser: PropTypes.bool.isRequired,
+    }),
+  ).isRequired,
   userData: PropTypes.shape({
     uid: PropTypes.string,
     displayName: PropTypes.string,

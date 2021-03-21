@@ -5,20 +5,38 @@ import { Link } from 'react-router-dom';
 import {
   updateUserFollowingField,
   updateUserFollowersField,
+  createNotification,
 } from '../../services/firebase';
 
-export default function SuggestedProfile({ suggestedUser, currentUserId }) {
+export default function SuggestedProfile({ suggestedUser, currentUser }) {
   const [isUserFollowed, setIsUserFollowed] = useState(false);
 
   async function handleFollowUserAction() {
     setIsUserFollowed(true);
 
-    await updateUserFollowingField(suggestedUser.userId, currentUserId, false);
-    await updateUserFollowersField(suggestedUser.docId, currentUserId, false);
+    await updateUserFollowingField(
+      suggestedUser.userId,
+      currentUser.userId,
+      false,
+    );
+    await updateUserFollowersField(
+      suggestedUser.docId,
+      currentUser.userId,
+      false,
+    );
+
+    await createNotification({
+      recieverId: suggestedUser.userId,
+      senderPhotoURL: currentUser.photoURL,
+      senderUsername: currentUser.username,
+      notificationType: 'FOLLOW_NOTIFICATION',
+      message: 'started following you.',
+      targetLink: `/u/${currentUser.username}`,
+    });
   }
 
   const isSuggestedUserFollower = suggestedUser.following.includes(
-    currentUserId,
+    currentUser.userId,
   );
 
   if (isUserFollowed) return null;
@@ -81,7 +99,11 @@ export default function SuggestedProfile({ suggestedUser, currentUserId }) {
 }
 
 SuggestedProfile.propTypes = {
-  currentUserId: PropTypes.string.isRequired,
+  currentUser: PropTypes.shape({
+    userId: PropTypes.string,
+    username: PropTypes.string,
+    photoURL: PropTypes.string,
+  }).isRequired,
   suggestedUser: PropTypes.shape({
     username: PropTypes.string,
     docId: PropTypes.string,

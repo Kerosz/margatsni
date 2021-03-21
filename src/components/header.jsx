@@ -8,12 +8,13 @@ import AddPost from './post/add-post';
 import * as ROUTES from '../constants/routes';
 import Dropdown from './dropdown';
 import useDisclosure from '../hooks/use-disclosure';
+import Notification from './notification';
 
 export default function Header() {
   const { firebase } = useFirebaseContext();
   const { user } = useUserContext();
   const { pathname } = useLocation();
-  const { isOpen, onToggle } = useDisclosure();
+  const { isOpen, onClose, onToggle } = useDisclosure();
 
   const [postModalStatus, setPostModalStatus] = useState(false);
 
@@ -117,8 +118,11 @@ export default function Header() {
                   </svg>
                 </Link>
 
+                <Notification />
+
                 <Dropdown
                   isOpen={isOpen}
+                  onClose={onClose}
                   button={
                     <button
                       type="button"
@@ -127,6 +131,9 @@ export default function Header() {
                       aria-expanded="true"
                       aria-haspopup="true"
                       onClick={onToggle}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') onToggle();
+                      }}
                     >
                       <Image
                         cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}

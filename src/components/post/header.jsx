@@ -7,6 +7,7 @@ import useDisclosure from '../../hooks/use-disclosure';
 import {
   updateUserFollowersField,
   updateUserFollowingField,
+  createNotification,
 } from '../../services/firebase';
 import { useUserContext } from '../../context/user';
 
@@ -23,6 +24,17 @@ export default function Header({ postUser, postDocId }) {
 
     await updateUserFollowersField(postUser.docId, user.uid, isFollowingState);
     await updateUserFollowingField(postUser.userId, user.uid, isFollowingState);
+
+    if (!isFollowingState) {
+      await createNotification({
+        recieverId: postUser.userId,
+        senderPhotoURL: user.photoURL,
+        senderUsername: user.username,
+        notificationType: 'FOLLOW_NOTIFICATION',
+        message: 'started following you.',
+        targetLink: `/u/${user.username}`,
+      });
+    }
   }
 
   return (

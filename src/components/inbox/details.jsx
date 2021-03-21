@@ -6,6 +6,7 @@ import {
   deleteRoomByDocId,
   deleteUserIdFromRoomParticipants,
   addMessageByDocId,
+  createNotificationToMany,
 } from '../../services/firebase';
 import { INBOX } from '../../constants/routes';
 
@@ -13,6 +14,7 @@ export default function Details({
   roomOwner,
   roomDocId,
   userId,
+  userPhotoURL,
   username,
   roomMembers,
 }) {
@@ -23,6 +25,19 @@ export default function Details({
       await deleteRoomByDocId(roomDocId);
 
       history.replace(INBOX);
+
+      const recieverIds = roomMembers
+        .filter((m) => m.userId !== userId)
+        .map((m) => m.userId);
+
+      await createNotificationToMany({
+        recieverIdArray: recieverIds,
+        senderPhotoURL: userPhotoURL,
+        senderUsername: username,
+        notificationType: 'MESSAGE_NOTIFICATION',
+        message: 'deleted your chat room.',
+        targetLink: `/u/${username}`,
+      });
     }
   }
 
@@ -44,6 +59,19 @@ export default function Details({
       };
 
       await addMessageByDocId(roomDocId, messageObject);
+
+      const recieverIds = roomMembers
+        .filter((m) => m.userId !== userId)
+        .map((m) => m.userId);
+
+      await createNotificationToMany({
+        recieverIdArray: recieverIds,
+        senderPhotoURL: userPhotoURL,
+        senderUsername: username,
+        notificationType: 'MESSAGE_NOTIFICATION',
+        message: 'left the chat room.',
+        targetLink: `/u/${username}`,
+      });
     }
   }
 
@@ -129,6 +157,7 @@ Details.propTypes = {
   roomOwner: PropTypes.bool.isRequired,
   roomDocId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
+  userPhotoURL: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   roomMembers: PropTypes.arrayOf(
     PropTypes.shape({

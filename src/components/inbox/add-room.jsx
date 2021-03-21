@@ -6,9 +6,16 @@ import {
   doesUserExist,
   createRoom,
   getUserIdsByUsername,
+  createNotificationToMany,
 } from '../../services/firebase';
 
-export default function AddRoom({ isOpen, onClose, userId }) {
+export default function AddRoom({
+  isOpen,
+  onClose,
+  senderId,
+  senderUsername,
+  senderPhotoURL,
+}) {
   const [recieverState, setReciever] = useState([]);
   const [inputValueState, setInputValue] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
@@ -53,23 +60,32 @@ export default function AddRoom({ isOpen, onClose, userId }) {
     if (isValid) {
       const receiverIds = await getUserIdsByUsername(recieverState);
 
-      if (receiverIds.includes(userId)) {
+      if (receiverIds.includes(senderId)) {
         setErrorMessage('You cannot send a message to yourself!');
 
         return;
       }
 
-      const roomObject = {
+      const roomId = uuid();
+
+      await createRoom({
         dateCreated: Date.now(),
         dateUpdated: Date.now(),
         messages: [],
-        roomParticipants: [userId, ...receiverIds],
-        roomId: uuid(),
-      };
-
-      await createRoom(roomObject);
+        roomParticipants: [senderId, ...receiverIds],
+        roomId,
+      });
 
       handleModalClose();
+
+      await createNotificationToMany({
+        recieverIdArray: receiverIds,
+        senderPhotoURL,
+        senderUsername,
+        notificationType: 'MESSAGE_NOTIFICATION',
+        message: 'added you to a chat.',
+        targetLink: `/direct/inbox/${roomId}`,
+      });
     }
   }
 
@@ -152,5 +168,7 @@ export default function AddRoom({ isOpen, onClose, userId }) {
 AddRoom.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  userId: PropTypes.string.isRequired,
+  senderId: PropTypes.string.isRequired,
+  senderUsername: PropTypes.string.isRequired,
+  senderPhotoURL: PropTypes.string.isRequired,
 };

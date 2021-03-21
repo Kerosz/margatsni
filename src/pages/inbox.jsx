@@ -60,7 +60,13 @@ export default function InboxPage() {
                 Send message
               </button>
 
-              <AddRoom isOpen={isOpen} onClose={onClose} userId={user.uid} />
+              <AddRoom
+                isOpen={isOpen}
+                onClose={onClose}
+                senderId={user.uid}
+                senderUsername={user.displayName}
+                senderPhotoURL={user.photoURL}
+              />
             </div>
           ) : (
             <ProtectedRoute user={user} path={`${path}/:chatId`} exact>

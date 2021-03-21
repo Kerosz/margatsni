@@ -7,12 +7,13 @@ import {
   updatePostLikesField,
   updatePostSavedField,
   updateUserSavedPostsField,
+  createNotification,
 } from '../../services/firebase';
-// import useUpdateEffect from '../../hooks/use-update-effect';
 
 export default function Actions({
   postDocId,
   postId,
+  userId,
   totalLikes,
   likedPost,
   savedPost,
@@ -33,6 +34,17 @@ export default function Actions({
     setPostLikesCount((prevLikesCount) =>
       toggleLikedAction ? prevLikesCount - 1 : prevLikesCount + 1,
     );
+
+    if (!toggleLikedAction) {
+      await createNotification({
+        recieverId: userId,
+        senderPhotoURL: user.photoURL,
+        senderUsername: user.username,
+        notificationType: 'POST_NOTIFICATION',
+        message: 'liked your post.',
+        targetLink: `/p/${postId}`,
+      });
+    }
   }
 
   async function handleToggleSavedAction() {
@@ -179,6 +191,7 @@ Actions.defaultProps = {
 Actions.propTypes = {
   postDocId: PropTypes.string.isRequired,
   postId: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
   totalLikes: PropTypes.number.isRequired,
   likedPost: PropTypes.bool.isRequired,
   savedPost: PropTypes.bool.isRequired,

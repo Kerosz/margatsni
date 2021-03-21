@@ -19,7 +19,10 @@ export default function Sidebar() {
       aria-label="Profile information"
     >
       <User userData={{ username, userInfo, photoURL, verifiedUser }} />
-      <Suggestions userId={userId} userFollowing={following} />
+      <Suggestions
+        userData={{ username, userId, photoURL }}
+        userFollowing={following}
+      />
     </aside>
   );
 }
