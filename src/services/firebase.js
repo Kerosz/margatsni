@@ -145,13 +145,20 @@ export async function getUserPhotosByUserId(userId, limitQuery = 25) {
  *
  * @param {string} userId The user id of the current logged in user
  * @param {string[]} userFollowing An array containing all the following users of the current user
+ * @param {number} [limitQuery=20] Limit photos query.
  *
  * @return {Promise<Array<{}>>} A promise of type object array.
  */
-export async function getFollowingUserPhotosByUserId(userId, userFollowing) {
+export async function getFollowingUserPhotosByUserId(
+  userId,
+  userFollowing,
+  limitQuery = 20,
+) {
   const { docs } = await _DB
     .collection('photos')
     .where('userId', 'in', userFollowing)
+    .orderBy('dateCreated', 'desc')
+    .limit(limitQuery)
     .get();
 
   const userFollowedPhotos = docs.map((doc) => ({
@@ -237,6 +244,28 @@ export async function getPostWithMetaByPostId(postId, loggedInUserId) {
   }
 
   return { post, user, userLikedPhoto, userSavedPhoto };
+}
+
+/**
+ * Function used to get explore photos excluding loggedIn user own photos. It limits the queried results to `21` by default and sorts it by newest first
+ *
+ * @param {string} userId The user id to be excluded
+ * @param {number} [limitQuery=21] Limit photos query.
+ *
+ * @return {Promise<Array<{}>>} A promise of type object array.
+ */
+export async function getExplorePhotos(userId, limitQuery = 21) {
+  const { docs } = await _DB
+    .collection('photos')
+    .where('userId', '!=', userId)
+    .orderBy('userId')
+    .orderBy('dateCreated', 'desc')
+    .limit(limitQuery)
+    .get();
+
+  const photos = docs.map((doc) => ({ ...doc.data(), docId: doc.id }));
+
+  return photos;
 }
 
 /**

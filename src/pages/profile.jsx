@@ -38,7 +38,7 @@ export default function Profile() {
   return (
     <div className="bg-gray-background">
       <Header />
-      <div className="container mx-auto max-w-screen-lg">
+      <div className="container mx-auto max-w-screen-lg px-3">
         <UserProfile profile={user} />
       </div>
     </div>

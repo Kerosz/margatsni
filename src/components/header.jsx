@@ -19,7 +19,10 @@ export default function Header() {
   const [postModalStatus, setPostModalStatus] = useState(false);
 
   return (
-    <header className="bg-white border-b border-gray-primary mb-7 sticky top-0 z-20 h-16">
+    <header
+      className="bg-white border-b border-gray-primary mb-7 sticky top-0 z-20"
+      style={{ height: '59px' }}
+    >
       <div className="container px-2.5 mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
@@ -47,7 +50,7 @@ export default function Header() {
                   type="button"
                   title="Add Post"
                   aria-label="Add Post"
-                  className="mr-4"
+                  className="mr-3.5"
                   onClick={() => setPostModalStatus((prev) => !prev)}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter')
@@ -55,7 +58,7 @@ export default function Header() {
                   }}
                 >
                   <svg
-                    className="w-8 text-black-light cursor-pointer active:text-gray-500"
+                    className="w-7 text-black-light cursor-pointer active:text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -78,10 +81,10 @@ export default function Header() {
                   to={ROUTES.DASHBOARD}
                   title="Dashboard"
                   aria-label="Dashboard"
-                  className="mr-4"
+                  className="mr-3.5"
                 >
                   <svg
-                    className="w-8 text-black-light cursor-pointer active:text-gray-500"
+                    className="w-7 text-black-light cursor-pointer active:text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -99,10 +102,10 @@ export default function Header() {
                   to={ROUTES.INBOX}
                   title="Inbox"
                   aria-label="Inbox"
-                  className="mr-4"
+                  className="mr-3.5"
                 >
                   <svg
-                    className="w-8 text-black-light cursor-pointer active:text-gray-500"
+                    className="w-7 text-black-light cursor-pointer active:text-gray-500"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -118,6 +121,28 @@ export default function Header() {
                   </svg>
                 </Link>
 
+                <Link
+                  to={ROUTES.EXPLORE}
+                  title="Explore"
+                  aria-label="Explore page"
+                  className="mr-3.5"
+                >
+                  <svg
+                    className="w-7 text-black-light cursor-pointer active:text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"
+                    />
+                  </svg>
+                </Link>
+
                 <Notification />
 
                 <Dropdown
@@ -128,7 +153,7 @@ export default function Header() {
                       type="button"
                       className="flex rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-600"
                       id="options-menu"
-                      aria-expanded="true"
+                      aria-expanded={!!isOpen}
                       aria-haspopup="true"
                       onClick={onToggle}
                       onKeyDown={(event) => {

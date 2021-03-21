@@ -60,6 +60,8 @@ export default function Recommended({ userId, username, postId }) {
                 alt={post.caption}
                 width="630"
                 crop="scale"
+                className="object-fill"
+                style={{ height: '400px' }}
               />
 
               <Link to={`/p/${post.photoId}`}>

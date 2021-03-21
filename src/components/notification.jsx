@@ -34,7 +34,7 @@ export default function Notification() {
           type="button"
           id="notification-menu"
           className="mr-4 -ml-1 relative"
-          aria-expanded="true"
+          aria-expanded={!!isOpen}
           aria-haspopup="true"
           onClick={onToggle}
           onKeyDown={(event) => {
@@ -42,7 +42,7 @@ export default function Notification() {
           }}
         >
           <svg
-            className="w-8 text-black-light cursor-pointer active:text-gray-500"
+            className="w-7 text-black-light cursor-pointer active:text-gray-500"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

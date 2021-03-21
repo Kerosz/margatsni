@@ -13,3 +13,4 @@ export const PRIVACY_AND_SECURITY = '/accounts/privacy-and-security';
 export const POST = '/p/:postId';
 export const INBOX = '/direct/inbox';
 export const CHAT = '/direct/inbox/:chatId';
+export const EXPLORE = '/explore';

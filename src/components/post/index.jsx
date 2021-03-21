@@ -42,7 +42,7 @@ export default function Post({ postData }) {
             width="740"
             crop="scale"
             alt={caption}
-            className="object-contain"
+            className="object-cover lg:max-h-img-base max-h-img-lg"
           />
         </div>
         <div className="col-span-4 lg:col-span-3 flex flex-col lg:max-h-img-base max-h-img-lg">

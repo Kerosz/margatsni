@@ -74,6 +74,8 @@ export default function SavedCollection({ userSavedPosts }) {
             alt={photo.caption}
             width="330"
             crop="scale"
+            className="object-fill"
+            style={{ height: '400px' }}
           />
 
           <Link to={`/p/${photo.photoId}`}>

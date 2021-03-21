@@ -38,7 +38,7 @@ export default function UserProfile({ profile }) {
   }
 
   return (
-    <div className="px-3">
+    <>
       <Details profileData={profile} postCount={photoCount} userData={user} />
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
         {profile.privateProfile &&
@@ -147,7 +147,7 @@ export default function UserProfile({ profile }) {
           />
         )}
       </div>
-    </div>
+    </>
   );
 }
 
