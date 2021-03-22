@@ -14,3 +14,4 @@ export const POST = '/p/:postId';
 export const INBOX = '/direct/inbox';
 export const CHAT = '/direct/inbox/:chatId';
 export const EXPLORE = '/explore';
+export const SUGGESTIONS = '/explore/people/suggested';

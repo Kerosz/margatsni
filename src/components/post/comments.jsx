@@ -35,8 +35,8 @@ export default function Comments({ postUser, caption, postComments }) {
             className="flex items-center min-w-max self-start"
           >
             <CloudinaryImage
-              src={postUser.photoURL}
-              alt={`${postUser.username} profile`}
+              src={entry.photoURL}
+              alt={`${entry.username} profile`}
               size="32"
               type="profile"
               crop="scale"

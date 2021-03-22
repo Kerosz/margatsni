@@ -9,6 +9,7 @@ import * as ROUTES from '../constants/routes';
 import Dropdown from './dropdown';
 import useDisclosure from '../hooks/use-disclosure';
 import Notification from './notification';
+import SearchBar from './search-bar';
 
 export default function Header() {
   const { firebase } = useFirebaseContext();
@@ -18,13 +19,18 @@ export default function Header() {
 
   const [postModalStatus, setPostModalStatus] = useState(false);
 
+  function handleLogOut() {
+    firebase.auth().signOut();
+    window.location.reload();
+  }
+
   return (
     <header
       className="bg-white border-b border-gray-primary mb-7 sticky top-0 z-20"
       style={{ height: '59px' }}
     >
       <div className="container px-2.5 mx-auto max-w-screen-lg h-full">
-        <div className="flex justify-between h-full">
+        <div className="flex justify-between h-full items-center">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
             <h1 className="flex justify-center w-full">
               <Link
@@ -40,6 +46,9 @@ export default function Header() {
               </Link>
             </h1>
           </div>
+
+          {user && <SearchBar />}
+
           <nav
             aria-label="Main"
             className="text-gray-700 text-center align-items items-center flex"
@@ -238,32 +247,15 @@ export default function Header() {
                       aria-label="Sign Out"
                       className="flex px-3 py-2 text-sm text-black-light hover:bg-gray-50 hover:text-gray-900 w-full"
                       role="menuitem"
-                      onClick={() => firebase.auth().signOut()}
+                      onClick={handleLogOut}
                       onKeyDown={(event) => {
-                        if (event.key === 'Enter') firebase.auth().signOut();
+                        if (event.key === 'Enter') handleLogOut();
                       }}
                     >
                       Log Out
                     </button>
                   </div>
                 </Dropdown>
-
-                {/* <div
-                  className="flex items-center cursor-pointer"
-                  title={`${user.displayName}'s profile`}
-                  aria-label={`${user.displayName}'s profile`}
-                >
-                  <Link to={`/u/${user.displayName}`}>
-                    <Image
-                      cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-                      publicId={user.photoURL}
-                      alt={`${user.displayName} profile`}
-                      width="28"
-                      crop="scale"
-                      className="rounded-full h-7 w-7"
-                    />
-                  </Link>
-                </div> */}
               </>
             ) : pathname.includes('reset') ? null : (
               <>

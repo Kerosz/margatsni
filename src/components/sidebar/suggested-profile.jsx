@@ -8,7 +8,11 @@ import {
   createNotification,
 } from '../../services/firebase';
 
-export default function SuggestedProfile({ suggestedUser, currentUser }) {
+export default function SuggestedProfile({
+  suggestedUser,
+  currentUser,
+  secondary,
+}) {
   const [isUserFollowed, setIsUserFollowed] = useState(false);
 
   async function handleFollowUserAction() {
@@ -48,9 +52,11 @@ export default function SuggestedProfile({ suggestedUser, currentUser }) {
           <CloudinaryImage
             src={suggestedUser.photoURL}
             alt={`${suggestedUser.username} profile`}
-            size="42"
+            size={secondary ? '48' : '42'}
             type="profile"
-            className="rounded-full h-10 w-10 flex mr-3.5"
+            className={`rounded-full ${
+              secondary ? 'h-12 w-12' : 'h-10 w-10'
+            } flex mr-3.5`}
           />
         </Link>
         <div>
@@ -76,6 +82,11 @@ export default function SuggestedProfile({ suggestedUser, currentUser }) {
               </svg>
             )}
           </Link>
+          {secondary && (
+            <p className="text-sm text-gray-500">
+              {suggestedUser.userInfo.fullName}
+            </p>
+          )}
           <p className="text-xs text-gray-500">
             {isSuggestedUserFollower ? 'Follows you' : 'Suggested for you'}
           </p>
@@ -85,7 +96,11 @@ export default function SuggestedProfile({ suggestedUser, currentUser }) {
       <button
         type="button"
         aria-label={`Follow ${suggestedUser.username} profile`}
-        className="text-sm font-bold text-blue-medium py-1 px-2"
+        className={`${
+          secondary
+            ? 'text-sm text-white font-semibold bg-blue-medium py-1.5 px-2.5 rounded'
+            : 'text-xs font-bold text-blue-medium py-1 px-2'
+        }`}
         onClick={handleFollowUserAction}
         onKeyDown={(event) => {
           if (event.key === 'Enter') handleFollowUserAction();
@@ -96,6 +111,10 @@ export default function SuggestedProfile({ suggestedUser, currentUser }) {
     </div>
   );
 }
+
+SuggestedProfile.defaultProps = {
+  secondary: false,
+};
 
 SuggestedProfile.propTypes = {
   currentUser: PropTypes.shape({
@@ -110,5 +129,9 @@ SuggestedProfile.propTypes = {
     photoURL: PropTypes.string,
     following: PropTypes.arrayOf(PropTypes.string),
     verifiedUser: PropTypes.bool,
+    userInfo: PropTypes.shape({
+      fullName: PropTypes.string.isRequired,
+    }),
   }).isRequired,
+  secondary: PropTypes.bool,
 };

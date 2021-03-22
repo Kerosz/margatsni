@@ -17,7 +17,7 @@ export default function User({ userData }) {
             alt={`${userData.username} profile`}
             size="65"
             type="profile"
-            className="rounded-full h-16 w-16 flex"
+            className="rounded-full h-16 w-16 flex min-w-max"
           />
         </Link>
       </div>

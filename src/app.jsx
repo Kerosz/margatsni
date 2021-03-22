@@ -26,6 +26,7 @@ const PrivacyAndSecurityPage = lazy(() =>
 const PostPage = lazy(() => import('./pages/post'));
 const InboxPage = lazy(() => import('./pages/inbox'));
 const ExplorePage = lazy(() => import('./pages/explore'));
+const SuggestedPage = lazy(() => import('./pages/explore/suggested'));
 
 export default function App() {
   const { user } = useUserContext();
@@ -70,6 +71,10 @@ export default function App() {
 
           <ProtectedRoute user={user} path={ROUTES.EXPLORE} exact>
             <ExplorePage />
+          </ProtectedRoute>
+
+          <ProtectedRoute user={user} path={ROUTES.SUGGESTIONS} exact>
+            <SuggestedPage />
           </ProtectedRoute>
 
           <UserRedirectRoute

@@ -56,6 +56,25 @@ export async function getUserDataByUsername(username) {
 }
 
 /**
+ * Function used to query data for a specific user by a `keyword`
+ *
+ * @param {string} keyword The search term to be queried by
+ * @param {number} [limitQuery=8] Limit query results.
+ * @return {Promise<{}>} A promise of type object.
+ */
+export async function getUserDataByKeyword(keyword, limitQuery = 8) {
+  const { docs } = await _DB
+    .collection('users')
+    .orderBy('username')
+    .startAt(keyword)
+    .endAt(`${keyword}\uf8ff`)
+    .limit(limitQuery)
+    .get();
+
+  return docs.map((doc) => ({ ...doc.data(), docId: doc.id }));
+}
+
+/**
  * Function used to query data for a specific user by it's user `ID`
  *
  * @param {string} userId The user id to be queried by
@@ -79,6 +98,7 @@ export async function getUserDataByUserId(userId) {
  * Function used to get all user IDs by username
  *
  * @param {string[]} usernameArray An array containing all the saved posts of the current user
+ * @param {number} [limitQuery=10] Limit query results.
  *
  * @return {Promise<Array<{}>>} A promise of type object array.
  */
@@ -99,24 +119,26 @@ export async function getUserIdsByUsername(usernameArray, limitQuery = 10) {
  *
  * @param {string} userId The user id to be queried by
  * @param {string[]} userFollowing An array containing all the following users of the current user
- * @param {number} [limitQuery=10] Limit the suggested profiles query.
+ * @param {number} [limitQuery=5] Limit the suggested profiles query.
  *
  * @return {Promise<Array<{}>>} A promise of type object array.
  */
 export async function getSuggestedProfilesByUserId(
   userId,
   userFollowing,
-  limitQuery = 10,
+  limitQuery = 5,
 ) {
-  const { docs } = await _DB.collection('users').limit(limitQuery).get();
+  const { docs } = await _DB
+    .collection('users')
+    .where('userId', '!=', userId)
+    .limit(limitQuery)
+    .get();
 
   return docs
     .map((doc) => ({ ...doc.data(), docId: doc.id }))
     .filter(
       (profile) =>
-        profile.userId !== userId &&
-        !userFollowing.includes(profile.userId) &&
-        profile.allowSuggestions,
+        !userFollowing.includes(profile.userId) && profile.allowSuggestions,
     );
 }
 

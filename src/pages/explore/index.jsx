@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import Gallery from '../components/gallery';
-import Header from '../components/header';
-import { useUserContext } from '../context/user';
-import { getExplorePhotos } from '../services/firebase';
+import Gallery from '../../components/gallery';
+import Header from '../../components/header';
+import { useUserContext } from '../../context/user';
+import { getExplorePhotos } from '../../services/firebase';
 
 export default function Explore() {
   const { user } = useUserContext();

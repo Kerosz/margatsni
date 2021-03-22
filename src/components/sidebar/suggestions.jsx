@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
 import SuggestedProfile from './suggested-profile';
 import { getSuggestedProfilesByUserId } from '../../services/firebase';
+import { SUGGESTIONS } from '../../constants/routes';
 
 export default function Suggestions({ userData, userFollowing }) {
   const [profiles, setProfiles] = useState(null);
@@ -23,7 +25,7 @@ export default function Suggestions({ userData, userFollowing }) {
   }, [userData.userId, userFollowing]);
 
   if (!profiles) {
-    return <Skeleton count={1} height={180} />;
+    return <Skeleton count={1} height={300} className="mt-7" />;
   }
 
   return (
@@ -32,8 +34,11 @@ export default function Suggestions({ userData, userFollowing }) {
         <p className="font-semibold text-gray-500 text-sm">
           Suggestions For You
         </p>
+        <Link to={SUGGESTIONS} className="text-xs py-1 px-2 font-semibold">
+          See All
+        </Link>
       </div>
-      <div className="grid gap-5">
+      <div className="grid gap-4">
         {profiles.map((profile) => (
           <SuggestedProfile
             key={profile.docId}

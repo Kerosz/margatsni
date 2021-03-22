@@ -116,7 +116,7 @@ export default function AddPost({ userData, displayModal, setDisplayStatus }) {
             alt={`${userData.username} profile`}
             width="48"
             crop="scale"
-            className="rounded-full h-12 w-12 flex mr-5"
+            className="rounded-full h-12 w-12 flex mr-5 min-w-max"
           />
           <form
             className="w-full flex flex-col items-start"
