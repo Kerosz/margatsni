@@ -1,11 +1,18 @@
 import PropTypes from 'prop-types';
 
-export default function Modal({ children, onClose, isOpen, title, maxW }) {
+export default function Modal({
+  children,
+  onClose,
+  isOpen,
+  title,
+  maxW,
+  ...rest
+}) {
   return (
     <div
       className={`${
-        isOpen ? 'absolute' : 'hidden'
-      } flex justify-center items-center inset-0`}
+        isOpen ? 'fixed' : 'hidden'
+      } flex justify-center items-center inset-0 z-40`}
     >
       <div
         aria-hidden
@@ -16,10 +23,15 @@ export default function Modal({ children, onClose, isOpen, title, maxW }) {
         className={`absolute z-40 bg-white max-w-${maxW} w-full flex flex-col border border-gray-primary shadow-lg`}
         role="dialog"
         aria-modal="true"
-        aria-label="Add post modal"
+        {...rest}
       >
         <div className="p-2.5 px-3.5 border-b border-gray-primary w-full flex items-center">
-          <button type="button" aria-label="Close modal" onClick={onClose}>
+          <button
+            type="button"
+            aria-label="Close modal"
+            onClick={onClose}
+            className="z-10"
+          >
             <svg
               className="w-7 text-black-light cursor-pointer"
               xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +48,7 @@ export default function Modal({ children, onClose, isOpen, title, maxW }) {
             </svg>
           </button>
           {title && (
-            <span className="flex-grow text-center font-semibold text-lg">
+            <span className="flex-grow text-center font-semibold text-lg transform -translate-x-4">
               {title}
             </span>
           )}

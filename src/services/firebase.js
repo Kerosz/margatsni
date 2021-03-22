@@ -217,11 +217,11 @@ export async function getSavedPosts(userSavedPosts) {
  * Function used to get a specific post by it's `postId`
  *
  * @param {string} postId The id of the post to be queried
- * @param {string} loggedInUserId The user id of the current logged in user
+ * @param {string|null} [loggedInUserId=null] The user id of the current logged in user, defaults to `null`
  *
  * @return {Promise<{}>} A promise of type object.
  */
-export async function getPostWithMetaByPostId(postId, loggedInUserId) {
+export async function getPostWithMetaByPostId(postId, loggedInUserId = null) {
   const { docs } = await _DB
     .collection('photos')
     .where('photoId', '==', postId)
@@ -235,12 +235,14 @@ export async function getPostWithMetaByPostId(postId, loggedInUserId) {
   let userLikedPhoto = false;
   let userSavedPhoto = false;
 
-  if (post.likes.includes(loggedInUserId)) {
-    userLikedPhoto = true;
-  }
+  if (loggedInUserId) {
+    if (post.likes.includes(loggedInUserId)) {
+      userLikedPhoto = true;
+    }
 
-  if (post.saved.includes(loggedInUserId)) {
-    userSavedPhoto = true;
+    if (post.saved.includes(loggedInUserId)) {
+      userSavedPhoto = true;
+    }
   }
 
   return { post, user, userLikedPhoto, userSavedPhoto };

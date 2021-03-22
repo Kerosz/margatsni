@@ -17,7 +17,7 @@ export default function Dropdown({ isOpen, onClose, children, button, maxW }) {
       <div
         className={`origin-top-right ${
           isOpen ? 'absolute' : 'hidden'
-        } right-0 top-11 w-screen max-h-96 rounded-md shadow border border-gray-100 bg-white divide-y divide-gray-100 focus:outline-none overflow-y-auto overflow-x-hidden`}
+        } right-0 top-9 w-screen max-h-96 rounded-md shadow border border-gray-100 bg-white divide-y divide-gray-100 focus:outline-none overflow-y-auto overflow-x-hidden`}
         role="menu"
         aria-orientation="vertical"
         aria-labelledby="options-menu"

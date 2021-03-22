@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -26,24 +27,18 @@ export default function UserProfile({ profile }) {
     getProfileData();
   }, [profile.userId]);
 
-  if (!user.userId) {
-    return (
-      <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
-        <div className="container flex justify-center">
-          <Skeleton circle height={160} width={160} className="mr-3" />
-        </div>
-        <Skeleton height={180} width={400} className="col-span-2" />
-      </div>
-    );
+  let restrictProfileAccess = true;
+  if (user.following && user.userId) {
+    restrictProfileAccess =
+      !user.following.includes(profile.userId) &&
+      user.userId !== profile.userId;
   }
 
   return (
     <>
       <Details profileData={profile} postCount={photoCount} userData={user} />
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
-        {profile.privateProfile &&
-        !user.following.includes(profile.userId) &&
-        user.userId !== profile.userId ? (
+        {profile.privateProfile && restrictProfileAccess ? (
           <div className="flex flex-col items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"

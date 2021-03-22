@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Skeleton from 'react-loading-skeleton';
+import LoginPopup from '../login-popup';
 import useFirestoreUser from '../../hooks/use-firestore-user';
+import useDisclosure from '../../hooks/use-disclosure';
 import {
   updatePostLikesField,
   updatePostSavedField,
@@ -21,6 +22,7 @@ export default function Actions({
   link,
 }) {
   const { user } = useFirestoreUser();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [toggleLikedAction, setToggleLikedAction] = useState(likedPost);
   const [toggleSavedAction, setToggleSavedAction] = useState(savedPost);
@@ -35,7 +37,7 @@ export default function Actions({
       toggleLikedAction ? prevLikesCount - 1 : prevLikesCount + 1,
     );
 
-    if (!toggleLikedAction) {
+    if (!toggleLikedAction && userId !== user.userId) {
       await createNotification({
         recieverId: userId,
         senderPhotoURL: user.photoURL,
@@ -54,9 +56,23 @@ export default function Actions({
     updateUserSavedPostsField(user.docId, postId, toggleSavedAction);
   }
 
-  if (!user.userId) {
-    return <Skeleton count={1} height={35} />;
-  }
+  const likeAction = useCallback(() => {
+    const action = user.userId ? handleToggleLikedAction : onOpen;
+
+    action();
+  }, [user.userId, handleToggleLikedAction, onOpen]);
+
+  const savedAction = useCallback(() => {
+    const action = user.userId ? handleToggleSavedAction : onOpen;
+
+    action();
+  }, [user.userId, handleToggleSavedAction, onOpen]);
+
+  const commentAction = useCallback(() => {
+    const action = user.userId ? handleCommentFocus : onOpen;
+
+    action();
+  }, [user.userId, handleCommentFocus, onOpen]);
 
   return (
     <>
@@ -67,11 +83,9 @@ export default function Actions({
               type="button"
               title="Like the post"
               aria-label="Like the post"
-              onClick={handleToggleLikedAction}
+              onClick={likeAction}
               onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  handleToggleLikedAction();
-                }
+                if (event.key === 'Enter') likeAction();
               }}
             >
               <svg
@@ -116,11 +130,9 @@ export default function Actions({
               <button
                 type="button"
                 aria-label="Add a comment"
-                onClick={handleCommentFocus}
+                onClick={commentAction}
                 onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    handleCommentFocus();
-                  }
+                  if (event.key === 'Enter') commentAction();
                 }}
               >
                 <svg
@@ -144,11 +156,9 @@ export default function Actions({
           <button
             type="button"
             aria-label="Add post to saved"
-            onClick={handleToggleSavedAction}
+            onClick={savedAction}
             onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                handleToggleSavedAction();
-              }
+              if (event.key === 'Enter') savedAction();
             }}
           >
             <svg
@@ -179,6 +189,8 @@ export default function Actions({
             : `${postLikesCount} likes`}
         </p>
       </div>
+
+      <LoginPopup isOpen={isOpen} onClose={onClose} />
     </>
   );
 }

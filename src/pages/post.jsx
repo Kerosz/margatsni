@@ -14,7 +14,13 @@ export default function PostPage() {
 
   useEffect(() => {
     async function getPostData() {
-      const post = await getPostWithMetaByPostId(postId, user.uid);
+      let post;
+
+      if (user) {
+        post = await getPostWithMetaByPostId(postId, user.uid);
+      } else {
+        post = await getPostWithMetaByPostId(postId, null);
+      }
 
       if (post.user.userId) {
         setPost(post);

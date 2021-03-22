@@ -32,7 +32,7 @@ function Messages({ chatRoom, scrollRef, username }) {
                 cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
                 publicId={message.photoURL}
                 alt={`${message.username} profile`}
-                width="32"
+                width="24"
                 crop="scale"
                 className="rounded-full h-6 w-6 max-w-min"
               />

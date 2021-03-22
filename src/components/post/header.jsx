@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Image } from 'cloudinary-react';
 import DeletePost from './delete-post';
+import CloudinaryImage from '../cloudinary-image';
 import useDisclosure from '../../hooks/use-disclosure';
 import {
   updateUserFollowersField,
@@ -15,7 +15,9 @@ export default function Header({ postUser, postDocId }) {
   const { user } = useUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const defaultFollowState = postUser.followers.includes(user.uid);
+  const defaultFollowState = user
+    ? postUser.followers.includes(user.uid)
+    : null;
 
   const [isFollowingState, setIsFollowing] = useState(defaultFollowState);
 
@@ -44,11 +46,11 @@ export default function Header({ postUser, postDocId }) {
           to={`/u/${postUser.username}`}
           className="flex items-center hover:underline"
         >
-          <Image
-            cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-            publicId={postUser.photoURL}
+          <CloudinaryImage
+            src={postUser.photoURL}
             alt={`${postUser.username} profile`}
-            width="32"
+            size="32"
+            type="profile"
             crop="scale"
             className="rounded-full h-8 w-8 flex mr-4"
           />
@@ -68,7 +70,7 @@ export default function Header({ postUser, postDocId }) {
             </svg>
           )}
         </Link>
-        {postUser.userId !== user.uid && (
+        {user && postUser.userId !== user.uid && (
           <>
             <span>•</span>
             <button
@@ -84,7 +86,7 @@ export default function Header({ postUser, postDocId }) {
           </>
         )}
       </div>
-      {postUser.userId === user.uid && (
+      {user && postUser.userId === user.uid && (
         <button
           type="button"
           aria-label="Delete post"
@@ -96,12 +98,14 @@ export default function Header({ postUser, postDocId }) {
         </button>
       )}
 
-      <DeletePost
-        isOpen={isOpen}
-        onClose={onClose}
-        username={user.displayName}
-        postDocId={postDocId}
-      />
+      {user && (
+        <DeletePost
+          isOpen={isOpen}
+          onClose={onClose}
+          username={user.displayName}
+          postDocId={postDocId}
+        />
+      )}
     </header>
   );
 }

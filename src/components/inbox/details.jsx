@@ -76,7 +76,7 @@ export default function Details({
   }
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100vh - 215px)' }}>
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 210px)' }}>
       <div className="border-b border-gray-primary p-4 px-3 sm:px-6">
         {roomOwner ? (
           <button

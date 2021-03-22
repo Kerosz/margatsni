@@ -1,14 +1,15 @@
+/* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
-import { Image } from 'cloudinary-react';
 import {
   updateUserFollowersField,
   updateUserFollowingField,
   createNotification,
 } from '../../services/firebase';
 import * as ROUTES from '../../constants/routes';
+import CloudinaryImage from '../cloudinary-image';
 
 export default function Details({ profileData, postCount, userData }) {
   const [showFollowButton, setShowFollowButton] = useState(false);
@@ -58,12 +59,11 @@ export default function Details({ profileData, postCount, userData }) {
   return (
     <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
       <div className="container flex justify-center">
-        <Image
-          cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-          publicId={profileData.photoURL}
+        <CloudinaryImage
+          src={profileData.photoURL}
           alt={`${profileData.username} profile`}
-          width="160"
-          crop="scale"
+          size="165"
+          type="profile"
           className="rounded-full h-40 w-40 flex mr-3"
         />
       </div>
@@ -86,24 +86,26 @@ export default function Details({ profileData, postCount, userData }) {
               />
             </svg>
           )}
-          {showFollowButton ? (
-            <button
-              type="button"
-              aria-label={isFollowingProfile ? 'Unfollow' : 'Follow'}
-              onClick={handleToggleFollowUser}
-              className="bg-blue-medium font-bold text-sm text-white rounded w-20 h-8 mt-1 ml-6"
-            >
-              {isFollowingProfile ? 'Unfollow' : 'Follow'}
-            </button>
-          ) : (
-            <Link
-              to={ROUTES.ACCOUNT}
-              aria-label="Edit profile"
-              className="bg-gray-background text-black-light rounded border border-gray-primary text-sm font-semibold py-1.5 px-2 mt-1 ml-6"
-            >
-              Edit Profile
-            </Link>
-          )}
+          {userData.userId ? (
+            showFollowButton ? (
+              <button
+                type="button"
+                aria-label={isFollowingProfile ? 'Unfollow' : 'Follow'}
+                onClick={handleToggleFollowUser}
+                className="bg-blue-medium font-bold text-sm text-white rounded w-20 h-8 mt-1 ml-6"
+              >
+                {isFollowingProfile ? 'Unfollow' : 'Follow'}
+              </button>
+            ) : (
+              <Link
+                to={ROUTES.ACCOUNT}
+                aria-label="Edit profile"
+                className="bg-gray-background text-black-light rounded border border-gray-primary text-sm font-semibold py-1.5 px-2 mt-1 ml-6"
+              >
+                Edit Profile
+              </Link>
+            )
+          ) : null}
         </div>
         <div className="container flex mt-5">
           {!profileData.followers || !profileData.following ? (
@@ -163,6 +165,10 @@ export default function Details({ profileData, postCount, userData }) {
   );
 }
 
+Details.defaultProps = {
+  userData: null,
+};
+
 Details.propTypes = {
   profileData: PropTypes.shape({
     dateCreated: PropTypes.number.isRequired,
@@ -182,19 +188,19 @@ Details.propTypes = {
   }).isRequired,
   postCount: PropTypes.number.isRequired,
   userData: PropTypes.shape({
-    dateCreated: PropTypes.number.isRequired,
-    docId: PropTypes.string.isRequired,
-    followers: PropTypes.arrayOf(PropTypes.string).isRequired,
-    following: PropTypes.arrayOf(PropTypes.string).isRequired,
+    dateCreated: PropTypes.number,
+    docId: PropTypes.string,
+    followers: PropTypes.arrayOf(PropTypes.string),
+    following: PropTypes.arrayOf(PropTypes.string),
     userInfo: PropTypes.shape({
-      bio: PropTypes.string.isRequired,
-      fullName: PropTypes.string.isRequired,
-      phoneNumber: PropTypes.string.isRequired,
-      website: PropTypes.string.isRequired,
-    }).isRequired,
-    photoURL: PropTypes.string.isRequired,
-    userId: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    verifiedUser: PropTypes.bool.isRequired,
-  }).isRequired,
+      bio: PropTypes.string,
+      fullName: PropTypes.string,
+      phoneNumber: PropTypes.string,
+      website: PropTypes.string,
+    }),
+    photoURL: PropTypes.string,
+    userId: PropTypes.string,
+    username: PropTypes.string,
+    verifiedUser: PropTypes.bool,
+  }),
 };

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Image } from 'cloudinary-react';
+import CloudinaryImage from '../cloudinary-image';
 
 export default function Comments({ postUser, caption, postComments }) {
   return (
@@ -10,11 +10,11 @@ export default function Comments({ postUser, caption, postComments }) {
           to={`/u/${postUser.username}`}
           className="flex items-center min-w-max self-start"
         >
-          <Image
-            cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-            publicId={postUser.photoURL}
+          <CloudinaryImage
+            src={postUser.photoURL}
             alt={`${postUser.username} profile`}
-            width="32"
+            size="32"
+            type="profile"
             crop="scale"
             className="rounded-full h-8 w-8 flex mr-4"
           />
@@ -34,11 +34,11 @@ export default function Comments({ postUser, caption, postComments }) {
             to={`/u/${entry.username}`}
             className="flex items-center min-w-max self-start"
           >
-            <Image
-              cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-              publicId={entry.photoURL}
-              alt={`${entry.username} profile`}
-              width="32"
+            <CloudinaryImage
+              src={postUser.photoURL}
+              alt={`${postUser.username} profile`}
+              size="32"
+              type="profile"
               crop="scale"
               className="rounded-full h-8 w-8 flex mr-4"
             />

@@ -53,7 +53,7 @@ export default function Chat({ user }) {
   return (
     <div
       className="col-span-5 flex flex-col"
-      style={{ height: 'calc(100vh - 150px)' }}
+      style={{ height: 'calc(100vh - 145px)' }}
     >
       <header className="p-4 px-3 sm:px-6 border-b border-t border-gray-primary h-16 md:border-t-0 flex justify-between items-center">
         {openTab === 1 && (

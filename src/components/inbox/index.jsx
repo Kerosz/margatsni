@@ -31,7 +31,7 @@ export default function Inbox({ user }) {
   return (
     <div
       className="col-span-4 lg:col-span-3 flex flex-col border-r border-gray-primary"
-      style={{ height: 'calc(100vh - 150px)' }}
+      style={{ height: 'calc(100vh - 145px)' }}
     >
       <header className="p-4 px-5 flex items-center border-b border-gray-primary h-16">
         <Link

@@ -13,7 +13,7 @@ export default function Notification() {
     await deleteNotification(notificationDocId);
 
     if (notifications.length === 0) {
-      onToggle();
+      onClose();
     }
   }
 
@@ -88,7 +88,8 @@ export default function Notification() {
               >
                 <Link
                   to={notification.target}
-                  className="flex items-center w-full space-x-1 text-sm "
+                  className="flex items-center w-full space-x-1 text-sm"
+                  onClick={() => handleRemoveNotification(notification.docId)}
                 >
                   <Image
                     cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}

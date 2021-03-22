@@ -1,7 +1,7 @@
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
-import { Link } from 'react-router-dom';
-import { Image } from 'cloudinary-react';
+import CloudinaryImage from '../cloudinary-image';
 
 export default function User({ userData }) {
   if (!userData.username || !userData.userInfo.fullName || !userData.photoURL) {
@@ -12,12 +12,11 @@ export default function User({ userData }) {
     <div className="grid grid-cols-4 gap-4 mb-7 items-center pt-3">
       <div className="flex items-center justify-between col-span-1">
         <Link to={`/u/${userData.username}`}>
-          <Image
-            cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-            publicId={userData.photoURL}
+          <CloudinaryImage
+            src={userData.photoURL}
             alt={`${userData.username} profile`}
-            width="64"
-            crop="scale"
+            size="65"
+            type="profile"
             className="rounded-full h-16 w-16 flex"
           />
         </Link>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Image } from 'cloudinary-react';
+import CloudinaryImage from '../cloudinary-image';
 
 export default function Header({ user }) {
   return (
@@ -9,11 +9,11 @@ export default function Header({ user }) {
         to={`/u/${user.username}`}
         className="flex items-center hover:underline"
       >
-        <Image
-          cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-          publicId={user.photoURL}
+        <CloudinaryImage
+          src={user.photoURL}
           alt={`${user.username} profile`}
-          width="32"
+          size="32"
+          type="profile"
           crop="scale"
           className="rounded-full h-8 w-8 flex mr-3"
         />

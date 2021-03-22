@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Image } from 'cloudinary-react';
 import { Link } from 'react-router-dom';
+import CloudinaryImage from '../cloudinary-image';
 import {
   updateUserFollowingField,
   updateUserFollowersField,
@@ -45,12 +45,11 @@ export default function SuggestedProfile({ suggestedUser, currentUser }) {
     <div className="flex flex-row items-center justify-between">
       <div className="flex items-center justify-between">
         <Link to={`/u/${suggestedUser.username}`}>
-          <Image
-            cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-            publicId={suggestedUser.photoURL}
+          <CloudinaryImage
+            src={suggestedUser.photoURL}
             alt={`${suggestedUser.username} profile`}
-            width="40"
-            crop="scale"
+            size="42"
+            type="profile"
             className="rounded-full h-10 w-10 flex mr-3.5"
           />
         </Link>

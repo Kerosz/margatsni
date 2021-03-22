@@ -16,10 +16,14 @@ export default function useNotification() {
       .orderBy('dateCreated', 'desc')
       .limit(20)
       .onSnapshot((snapshot) => {
-        const data = snapshot.docs.map((doc) => ({
-          docId: doc.id,
-          ...doc.data(),
-        }));
+        const data = [];
+
+        snapshot.docs.forEach((doc) =>
+          data.push({
+            docId: doc.id,
+            ...doc.data(),
+          }),
+        );
 
         setNotification(data);
       });

@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { Image } from 'cloudinary-react';
 import { formatDistance } from 'date-fns';
 import PropTypes from 'prop-types';
 import Header from './header';
@@ -8,6 +7,7 @@ import Actions from './actions';
 import AddComment from './add-comment';
 import Recommended from './recommended';
 import useUpdateEffect from '../../hooks/use-update-effect';
+import CloudinaryImage from '../cloudinary-image';
 
 export default function Post({ postData }) {
   const {
@@ -36,12 +36,11 @@ export default function Post({ postData }) {
     <>
       <div className="bg-white border border-gray-primary rounded md:grid lg:grid-cols-8 grid-cols-9 mb-14 flex flex-col">
         <div className="bg-gray-100 col-span-5 lg:col-span-5 flex items-center">
-          <Image
-            cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-            publicId={imageSrc}
-            width="740"
-            crop="scale"
+          <CloudinaryImage
+            src={imageSrc}
             alt={caption}
+            width="740"
+            type="post"
             className="object-cover lg:max-h-img-base max-h-img-lg"
           />
         </div>

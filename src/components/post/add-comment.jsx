@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
+import { Link } from 'react-router-dom';
 import { useUserContext } from '../../context/user';
 import { addPostComments } from '../../services/firebase';
+import { LOGIN } from '../../constants/routes';
 
 export default function AddComment({
   setPostComments,
@@ -31,6 +33,17 @@ export default function AddComment({
 
       await addPostComments(postDocId, newComment);
     }
+  }
+
+  if (!user) {
+    return (
+      <div className="border-t border-gray-200 mt-2 p-4 space-x-1">
+        <Link to={LOGIN} className="text-blue-900 hover:underline">
+          Log in
+        </Link>
+        <span className="text-gray-base">to like or comment</span>
+      </div>
+    );
   }
 
   return (

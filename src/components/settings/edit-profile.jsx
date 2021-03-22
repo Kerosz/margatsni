@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
-import { Image } from 'cloudinary-react';
 import { Form, Formik, Field } from 'formik';
+import CloudinaryImage from '../cloudinary-image';
 import { uploadUnsignedImage } from '../../services/cloudinary';
 import {
   updateUserDataByUserId,
@@ -142,12 +142,11 @@ export default function EditProfile({ data }) {
                       className="rounded-full h-11 w-11 mt-1.5"
                     />
                   ) : (
-                    <Image
-                      cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-                      publicId={data.photoURL}
+                    <CloudinaryImage
+                      src={data.photoURL}
                       alt={`${data.username} profile`}
-                      width="64"
-                      crop="scale"
+                      size="100"
+                      type="profile"
                       className="rounded-full h-11 w-11 mt-1.5"
                     />
                   )}
