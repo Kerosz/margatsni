@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { useHistory, Link } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
-import { Image } from 'cloudinary-react';
+import CloudinaryImage from '../cloudinary-image';
+import useSendNotification from '../../hooks/use-send-notification';
 import {
   deleteRoomByDocId,
   deleteUserIdFromRoomParticipants,
   addMessageByDocId,
-  createNotificationToMany,
 } from '../../services/firebase';
 import { INBOX } from '../../constants/routes';
 
@@ -20,24 +20,28 @@ export default function Details({
 }) {
   const history = useHistory();
 
+  const userDataIds = roomMembers
+    .filter((m) => m.userId !== userId)
+    .map((m) => m.userId);
+
+  const notify = useSendNotification(userDataIds, true);
+
   async function handleRoomDelete() {
     if (roomOwner) {
       await deleteRoomByDocId(roomDocId);
 
       history.replace(INBOX);
 
-      const recieverIds = roomMembers
-        .filter((m) => m.userId !== userId)
-        .map((m) => m.userId);
-
-      await createNotificationToMany({
-        recieverIdArray: recieverIds,
-        senderPhotoURL: userPhotoURL,
-        senderUsername: username,
-        notificationType: 'MESSAGE_NOTIFICATION',
-        message: 'deleted your chat room.',
-        targetLink: `/u/${username}`,
-      });
+      notify(
+        {
+          senderPhotoURL: userPhotoURL,
+          senderUsername: username,
+          notificationType: 'MESSAGE_NOTIFICATION',
+          message: 'deleted your chat room.',
+          targetLink: `/u/${username}`,
+        },
+        'chatDelete',
+      );
     }
   }
 
@@ -60,18 +64,16 @@ export default function Details({
 
       await addMessageByDocId(roomDocId, messageObject);
 
-      const recieverIds = roomMembers
-        .filter((m) => m.userId !== userId)
-        .map((m) => m.userId);
-
-      await createNotificationToMany({
-        recieverIdArray: recieverIds,
-        senderPhotoURL: userPhotoURL,
-        senderUsername: username,
-        notificationType: 'MESSAGE_NOTIFICATION',
-        message: 'left the chat room.',
-        targetLink: `/u/${username}`,
-      });
+      notify(
+        {
+          senderPhotoURL: userPhotoURL,
+          senderUsername: username,
+          notificationType: 'MESSAGE_NOTIFICATION',
+          message: 'left the chat room.',
+          targetLink: `/u/${username}`,
+        },
+        'chatLeave',
+      );
     }
   }
 
@@ -109,12 +111,11 @@ export default function Details({
               className="flex justify-between items-center"
             >
               <div className="flex space-x-4 items-center">
-                <Image
-                  cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-                  publicId={member.photoURL}
+                <CloudinaryImage
+                  src={member.photoURL}
                   alt={`${member.username} profile`}
-                  width="56"
-                  crop="scale"
+                  size="90"
+                  type="profile"
                   className="rounded-full h-14 w-14 flex"
                 />
 

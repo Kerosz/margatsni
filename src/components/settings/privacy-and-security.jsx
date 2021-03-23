@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable no-unused-vars */
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import Skeleton from 'react-loading-skeleton';
+import Toast from '../toast';
 import Modal from '../modal';
+import useUpdateEffect from '../../hooks/use-update-effect';
+import useDisclosure from '../../hooks/use-disclosure';
 import {
   updateUserFieldValueByDocId,
   deleteUserAccount,
 } from '../../services/firebase';
-import useUpdateEffect from '../../hooks/use-update-effect';
-import useDisclosure from '../../hooks/use-disclosure';
 
 export default function PrivacyAndSecurity({
   privateStatus,
@@ -15,15 +16,30 @@ export default function PrivacyAndSecurity({
   userDocId,
   userEmail,
 }) {
-  const { isOpen, onClose, onOpen } = useDisclosure();
-
-  // Extra states needed for the firebase status in order to check against the updated state to be able to live update the page without reload
-  const [firebasePrivate, setFirebasePrivate] = useState(privateStatus);
-  const [firebaseSuggested, setFirebaseSuggested] = useState(suggestedStatus);
+  const {
+    isOpen: modalIsOpen,
+    onClose: modalOnClose,
+    onOpen: modalOnOpen,
+  } = useDisclosure();
+  const {
+    isOpen: toastIsOpen,
+    onClose: toastOnClose,
+    onOpen: toastOnOpen,
+  } = useDisclosure();
 
   const [privateCheckbox, setPrivateCheckbox] = useState(privateStatus);
   const [suggestionCheckbox, setSuggestionCheckbox] = useState(suggestedStatus);
-  const [sucessMessage, setSucessMessage] = useState(null);
+  const [confirmDialogState, setConfirmDialog] = useState('');
+  const [serverError, setServerError] = useState(null);
+
+  const isConfirmDialogValid =
+    confirmDialogState.length >= 6 && confirmDialogState.length <= 24;
+
+  function handleModalClose() {
+    modalOnClose();
+    setConfirmDialog('');
+    setServerError(null);
+  }
 
   /** Handle submit for private account checkbox on input change */
   useUpdateEffect(() => {
@@ -32,14 +48,10 @@ export default function PrivacyAndSecurity({
         privateProfile: privateCheckbox,
       });
 
-      setSucessMessage(
-        `Profile page was set to ${privateCheckbox ? 'private' : 'public'}!`,
-      );
-
-      setFirebasePrivate((prevState) => !prevState);
+      toastOnOpen();
     }
 
-    if (privateCheckbox !== firebasePrivate) {
+    if (privateCheckbox !== privateStatus) {
       changePrivateProfileValue();
     }
   }, [privateCheckbox]);
@@ -51,57 +63,19 @@ export default function PrivacyAndSecurity({
         allowSuggestions: suggestionCheckbox,
       });
 
-      setSucessMessage(
-        `Profile suggestions are now ${
-          suggestionCheckbox ? 'enabled' : 'disabled'
-        }`,
-      );
-
-      setFirebaseSuggested((prevState) => !prevState);
+      toastOnOpen();
     }
 
-    if (suggestionCheckbox !== firebaseSuggested) {
+    if (suggestionCheckbox !== suggestedStatus) {
       changeAllowSuggestionsValue();
     }
   }, [suggestionCheckbox]);
 
-  useUpdateEffect(() => {
-    setPrivateCheckbox(privateStatus);
-    setFirebasePrivate(privateStatus);
-  }, [privateStatus]);
-
-  useUpdateEffect(() => {
-    setSuggestionCheckbox(suggestedStatus);
-    setFirebaseSuggested(suggestedStatus);
-  }, [suggestedStatus]);
-
-  // Removes the sucess message from the page after 3s
-  // TODO: Have a diffrent component for a toast/snackbar
-  useEffect(() => {
-    let timeout;
-    if (sucessMessage) {
-      timeout = setTimeout(() => setSucessMessage(null), 3000);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [sucessMessage]);
-
   /** Handles the logic for account deletion */
-  const [confirmDialogState, setConfirmDialog] = useState('');
-  const [serverError, setServerError] = useState(null);
-  const isValid =
-    confirmDialogState.length >= 6 && confirmDialogState.length <= 24;
-
-  function handleModalClose() {
-    onClose();
-    setConfirmDialog('');
-    setServerError(null);
-  }
-
   async function handleAccountDeletion(event) {
     event.preventDefault();
 
-    if (isValid) {
+    if (isConfirmDialogValid) {
       setServerError(null);
       try {
         await deleteUserAccount(confirmDialogState, userDocId);
@@ -112,42 +86,17 @@ export default function PrivacyAndSecurity({
     }
   }
 
-  if (!userDocId) {
-    return (
-      <article className="py-8 px-16">
-        <Skeleton count={1} height={350} />
-      </article>
-    );
-  }
-
   return (
-    <article className="py-8 px-14">
+    <article>
+      <Toast isOpen={toastIsOpen} onClose={toastOnClose}>
+        <p>Settings saved</p>
+      </Toast>
+
       <form className="flex flex-col">
         <fieldset className="border-b border-gray-primary pb-6">
           <legend className="font-medium text-black-light text-2xl">
             Account Privacy
           </legend>
-          {sucessMessage && (
-            <div className="mt-2 mb-1 flex bg-gray-100 w-full p-2 px-4 rounded justify-center text-center border border-gray-200">
-              <svg
-                className="w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <p className="text-xs ml-2 text-black-light font-semibold tracking-wide">
-                {sucessMessage}
-              </p>
-            </div>
-          )}
           <div className="mt-6">
             <div className="flex items-start">
               <div className="flex items-center h-5">
@@ -158,6 +107,7 @@ export default function PrivacyAndSecurity({
                   value={privateCheckbox}
                   defaultChecked={privateCheckbox}
                   onClick={({ target }) => setPrivateCheckbox(target.checked)}
+                  className="focus:ring-blue-500 h-4 w-4 text-blue-medium border-gray-300 rounded"
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -188,6 +138,7 @@ export default function PrivacyAndSecurity({
                   onClick={({ target }) =>
                     setSuggestionCheckbox(target.checked)
                   }
+                  className="focus:ring-blue-500 h-4 w-4 text-blue-medium border-gray-300 rounded"
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -220,8 +171,8 @@ export default function PrivacyAndSecurity({
             <button
               type="button"
               aria-label="Delete account"
-              className="font-bold text-sm text-white rounded h-8 bg-red-primary px-3 mt-4"
-              onClick={onOpen}
+              className="font-semibold text-sm bg-white text-red-primary border border-red-primary rounded h-8 px-3 mt-4"
+              onClick={modalOnOpen}
             >
               Delete account
             </button>
@@ -229,7 +180,7 @@ export default function PrivacyAndSecurity({
         </fieldset>
       </form>
 
-      <Modal onClose={handleModalClose} isOpen={isOpen}>
+      <Modal onClose={handleModalClose} isOpen={modalIsOpen}>
         <form
           action="POST"
           className="flex flex-col items-center sm:px-8 px-3 py-4"
@@ -282,9 +233,9 @@ export default function PrivacyAndSecurity({
             type="submit"
             aria-label="Confirm deletion of account"
             className={`font-bold text-sm text-white rounded h-8 bg-red-primary px-3 mt-4 w-full ${
-              !isValid && 'opacity-50 cursor-not-allowed'
+              !isConfirmDialogValid && 'opacity-50 cursor-not-allowed'
             }`}
-            disabled={!isValid}
+            disabled={!isConfirmDialogValid}
             onClick={handleAccountDeletion}
           >
             I understand, delete my account

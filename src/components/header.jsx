@@ -1,15 +1,15 @@
 /* eslint-disable no-nested-ternary */
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Image } from 'cloudinary-react';
-import { useFirebaseContext } from '../context/firebase';
-import { useUserContext } from '../context/user';
+import CloudinaryImage from './cloudinary-image';
 import AddPost from './post/add-post';
-import * as ROUTES from '../constants/routes';
 import Dropdown from './dropdown';
-import useDisclosure from '../hooks/use-disclosure';
 import Notification from './notification';
 import SearchBar from './search-bar';
+import useDisclosure from '../hooks/use-disclosure';
+import { useFirebaseContext } from '../context/firebase';
+import { useUserContext } from '../context/user';
+import * as ROUTES from '../constants/routes';
 
 export default function Header() {
   const { firebase } = useFirebaseContext();
@@ -169,12 +169,11 @@ export default function Header() {
                         if (event.key === 'Enter') onToggle();
                       }}
                     >
-                      <Image
-                        cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-                        publicId={user.photoURL}
+                      <CloudinaryImage
+                        src={user.photoURL}
                         alt={`${user.displayName} profile`}
-                        width="28"
-                        crop="scale"
+                        size="80"
+                        type="profile"
                         className="rounded-full h-7 w-7"
                       />
                     </button>

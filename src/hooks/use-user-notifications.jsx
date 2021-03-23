@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useFirebaseContext } from '../context/firebase';
 import { useUserContext } from '../context/user';
 
-export default function useNotification() {
+export default function useUserNotifications() {
   const { user } = useUserContext();
   const { firebase } = useFirebaseContext();
 
@@ -29,7 +29,7 @@ export default function useNotification() {
       });
 
     return () => unsubscribe();
-  }, [user.uid]);
+  }, [user]);
 
   return { notifications: notificationState };
 }

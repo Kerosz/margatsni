@@ -1,19 +1,21 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import DeletePost from './delete-post';
 import CloudinaryImage from '../cloudinary-image';
 import useDisclosure from '../../hooks/use-disclosure';
+import useSendNotification from '../../hooks/use-send-notification';
 import {
   updateUserFollowersField,
   updateUserFollowingField,
-  createNotification,
 } from '../../services/firebase';
 import { useUserContext } from '../../context/user';
 
 export default function Header({ postUser, postDocId }) {
   const { user } = useUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const notify = useSendNotification(postUser.userId);
 
   const defaultFollowState = user
     ? postUser.followers.includes(user.uid)
@@ -28,14 +30,17 @@ export default function Header({ postUser, postDocId }) {
     await updateUserFollowingField(postUser.userId, user.uid, isFollowingState);
 
     if (!isFollowingState) {
-      await createNotification({
-        recieverId: postUser.userId,
-        senderPhotoURL: user.photoURL,
-        senderUsername: user.displayName,
-        notificationType: 'FOLLOW_NOTIFICATION',
-        message: 'started following you.',
-        targetLink: `/u/${user.displayName}`,
-      });
+      notify(
+        {
+          recieverId: postUser.userId,
+          senderPhotoURL: user.photoURL,
+          senderUsername: user.displayName,
+          notificationType: 'FOLLOW_NOTIFICATION',
+          message: 'started following you.',
+          targetLink: `/u/${user.displayName}`,
+        },
+        'follow',
+      );
     }
   }
 

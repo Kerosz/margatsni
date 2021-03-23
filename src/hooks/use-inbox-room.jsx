@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { useEffect, useState } from 'react';
 import { useFirebaseContext } from '../context/firebase';
 import { getUserDataByUserId } from '../services/firebase';
@@ -10,7 +11,6 @@ import { getUserDataByUserId } from '../services/firebase';
  * @param {string} userId The user ID to be queried by
  * @param {boolean} includeSender Value to specify if the sender profile will be returned along with the reciever profiles. Defaults to `false`
  * @param {"rooms"|"chat"} queryType The type of query you are performing
- * @param {any} dependency Re-call the hook whenever dependecy changes
  *
  * @returns {Array | null} An array of data or `null`
  */
@@ -20,46 +20,63 @@ export default function useInboxRoom(
   userId,
   includeSender = false,
   queryType = 'rooms',
-  dependency = null,
 ) {
   const { firebase } = useFirebaseContext();
   const [roomState, setRoom] = useState(null);
   const [roomWithUserState, setRoomWithUser] = useState(null);
 
-  useEffect(() => {
-    const collectionRef = firebase.firestore().collection('inbox');
-    let unsubscribe;
+  const collectionRef = firebase.firestore().collection('inbox');
 
-    if (queryType === 'rooms') {
-      unsubscribe = collectionRef
+  useEffect(() => {
+    function getInboxData() {
+      return collectionRef
         .where(docField, queryOperator, userId)
         .orderBy('dateUpdated', 'desc')
         .onSnapshot((snapshot) => {
-          const rooms = snapshot.docs.map((doc) => ({
-            docId: doc.id,
-            ...doc.data(),
-          }));
+          const data = [];
 
-          setRoom(rooms);
+          snapshot.docs.forEach((doc) =>
+            data.push({
+              docId: doc.id,
+              ...doc.data(),
+            }),
+          );
+
+          setRoom(data);
+        });
+    }
+    if (queryType === 'rooms') {
+      const unsubscribe = getInboxData();
+
+      return () => unsubscribe();
+    }
+  }, []);
+
+  useEffect(() => {
+    function getChatRoomData() {
+      return collectionRef
+        .where(docField, queryOperator, userId)
+        .limit(1)
+        .onSnapshot((snapshot) => {
+          const data = [];
+
+          snapshot.docs.forEach((doc) =>
+            data.push({
+              docId: doc.id,
+              ...doc.data(),
+            }),
+          );
+
+          setRoom(data);
         });
     }
 
     if (queryType === 'chat') {
-      unsubscribe = collectionRef
-        .where(docField, queryOperator, userId)
-        .limit(1)
-        .onSnapshot((snapshot) => {
-          const rooms = snapshot.docs.map((doc) => ({
-            docId: doc.id,
-            ...doc.data(),
-          }));
+      const unsubscribe = getChatRoomData();
 
-          setRoom(rooms);
-        });
+      return () => unsubscribe();
     }
-
-    return () => unsubscribe();
-  }, [dependency]);
+  }, [userId]);
 
   useEffect(() => {
     async function getRoomDataWithUser() {

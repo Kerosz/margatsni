@@ -48,6 +48,14 @@ export default function SignUp() {
             privateProfile: false,
             savedPosts: [],
             allowSuggestions: true,
+            notification: {
+              chatAdd: 'on',
+              chatDelete: 'on',
+              chatLeave: 'on',
+              follow: 'on',
+              like: 'on',
+              message: 'off',
+            },
           }).then(() => {
             history.push(ROUTES.DASHBOARD);
 
@@ -98,9 +106,12 @@ export default function SignUp() {
             }}
             validationSchema={UserSignUpSchema}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
-              await handleFirebaseSignUp(values);
-              setSubmitting(false);
-              resetForm();
+              try {
+                await handleFirebaseSignUp(values);
+              } finally {
+                setSubmitting(false);
+                resetForm();
+              }
             }}
           >
             {({ isSubmitting, isValid, errors, touched }) => (
@@ -110,7 +121,7 @@ export default function SignUp() {
                   name="username"
                   aria-label="Enter your username"
                   placeholder="Username"
-                  className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                  className="text-sm focus:ring-gray-700 focus:border-gray-400 text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
                 />
                 {errors.username && touched.username && (
                   <p className="mb-3 pl-1 text-xs text-red-primary">
@@ -122,7 +133,7 @@ export default function SignUp() {
                   name="fullName"
                   aria-label="Enter your full name"
                   placeholder="Full Name"
-                  className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                  className="text-sm focus:ring-gray-700 focus:border-gray-400 text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
                 />
                 {errors.fullName && touched.fullName && (
                   <p className="mb-3 pl-1 text-xs text-red-primary">
@@ -134,7 +145,7 @@ export default function SignUp() {
                   name="email"
                   aria-label="Enter your email address"
                   placeholder="Email address"
-                  className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                  className="text-sm focus:ring-gray-700 focus:border-gray-400 text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
                 />
                 {errors.email && touched.email && (
                   <p className="mb-3 pl-1 text-xs text-red-primary">
@@ -146,7 +157,7 @@ export default function SignUp() {
                   name="password"
                   aria-label="Enter your password"
                   placeholder="Password"
-                  className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                  className="text-sm focus:ring-gray-700 focus:border-gray-400 text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
                 />
                 {errors.password && touched.password && (
                   <p className="mb-3 pl-1 text-xs text-red-primary">

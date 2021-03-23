@@ -9,6 +9,7 @@ export const EDIT_PROFILE = '/accounts/edit';
 export const PASSWORD = '/accounts/password/';
 export const RESET_PASSWORD = '/accounts/password/reset';
 export const CHANGE_PASSWORD = '/accounts/password/change';
+export const NOTIFICATIONS = '/accounts/notifications';
 export const PRIVACY_AND_SECURITY = '/accounts/privacy-and-security';
 export const POST = '/p/:postId';
 export const INBOX = '/direct/inbox';

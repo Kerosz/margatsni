@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
-import { Image } from 'cloudinary-react';
-import useDisclosure from '../hooks/use-disclosure';
-import useNotification from '../hooks/use-notification';
 import Dropdown from './dropdown';
+import CloudinaryImage from './cloudinary-image';
+import useDisclosure from '../hooks/use-disclosure';
+import useUserNotifications from '../hooks/use-user-notifications';
 import { deleteNotification } from '../services/firebase';
 
 export default function Notification() {
   const { isOpen, onClose, onToggle } = useDisclosure();
-  const { notifications } = useNotification();
+  const { notifications } = useUserNotifications();
 
   async function handleRemoveNotification(notificationDocId) {
     await deleteNotification(notificationDocId);
@@ -91,12 +91,11 @@ export default function Notification() {
                   className="flex items-center w-full space-x-1 text-sm"
                   onClick={() => handleRemoveNotification(notification.docId)}
                 >
-                  <Image
-                    cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-                    publicId={notification.photoURL}
+                  <CloudinaryImage
+                    src={notification.photoURL}
                     alt={`${notification.username} profile`}
-                    width="40"
-                    crop="scale"
+                    size="50"
+                    type="profile"
                     className="rounded-full h-9 w-9 mr-2"
                   />
                   <span className="font-semibold">{notification.username}</span>

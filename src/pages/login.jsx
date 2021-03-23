@@ -51,9 +51,12 @@ export default function Login() {
             initialValues={{ email: '', password: '' }}
             validationSchema={UserLoginSchema}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
-              await handleFirebaseLogin(values);
-              setSubmitting(false);
-              resetForm();
+              try {
+                await handleFirebaseLogin(values);
+              } finally {
+                setSubmitting(false);
+                resetForm();
+              }
             }}
           >
             {({ isSubmitting, isValid, errors, touched }) => (
@@ -63,7 +66,7 @@ export default function Login() {
                   name="email"
                   aria-label="Enter your email address"
                   placeholder="Email address"
-                  className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                  className="text-sm focus:ring-gray-700 focus:border-gray-400 text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
                 />
                 {errors.email && touched.email && (
                   <p className="mb-3 pl-1 text-xs text-red-primary">
@@ -75,7 +78,7 @@ export default function Login() {
                   name="password"
                   aria-label="Enter your password"
                   placeholder="Password"
-                  className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                  className="text-sm focus:ring-gray-700 focus:border-gray-400 text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
                 />
                 {errors.password && touched.password && (
                   <p className="mb-3 pl-1 text-xs text-red-primary">

@@ -45,7 +45,7 @@ export default function SearchBar() {
       <input
         type="text"
         placeholder="Search"
-        className="w-full px-2 pl-7 py-1 bg-gray-50 border border-gray-primary rounded text-sm"
+        className="w-full px-2 pl-7 py-1 focus:ring-gray-700 focus:border-gray-400 bg-gray-50 border border-gray-primary rounded text-sm"
         value={searchTermState}
         onChange={({ target }) => setSearchTerm(target.value)}
       />

@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom';
 import {
   updateUserFollowersField,
   updateUserFollowingField,
-  createNotification,
 } from '../../services/firebase';
 import * as ROUTES from '../../constants/routes';
 import CloudinaryImage from '../cloudinary-image';
+import useSendNotification from '../../hooks/use-send-notification';
 
 export default function Details({ profileData, postCount, userData }) {
+  const notify = useSendNotification(profileData.userId);
+
   const [showFollowButton, setShowFollowButton] = useState(false);
   const [isFollowingProfile, setIsFollowingProfile] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
@@ -34,14 +36,17 @@ export default function Details({ profileData, postCount, userData }) {
     );
 
     if (!isFollowingProfile) {
-      await createNotification({
-        recieverId: profileData.userId,
-        senderPhotoURL: userData.photoURL,
-        senderUsername: userData.username,
-        notificationType: 'FOLLOW_NOTIFICATION',
-        message: 'started following you.',
-        targetLink: `/u/${userData.username}`,
-      });
+      notify(
+        {
+          recieverId: profileData.userId,
+          senderPhotoURL: userData.photoURL,
+          senderUsername: userData.username,
+          notificationType: 'FOLLOW_NOTIFICATION',
+          message: 'started following you.',
+          targetLink: `/u/${userData.username}`,
+        },
+        'follow',
+      );
     }
   }
 

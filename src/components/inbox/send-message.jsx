@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
-import {
-  addMessageByDocId,
-  createNotificationToMany,
-} from '../../services/firebase';
+import useSendNotification from '../../hooks/use-send-notification';
+import { addMessageByDocId } from '../../services/firebase';
 
 export default function SendMessage({
   roomDocId,
@@ -14,8 +12,13 @@ export default function SendMessage({
   inputRef,
 }) {
   const [messageValue, setMessageValue] = useState('');
-
   const isValid = messageValue.length >= 1;
+
+  const userDataIds = roomMembers
+    .filter((m) => m.userId !== userData.uid)
+    .map((m) => m.userId);
+
+  const notify = useSendNotification(userDataIds, true);
 
   async function handleSendingMessage(event) {
     event.preventDefault();
@@ -36,18 +39,16 @@ export default function SendMessage({
       scrollRef.current.scrollIntoView();
       setMessageValue('');
 
-      const recieverIds = roomMembers
-        .filter((m) => m.userId !== userData.uid)
-        .map((m) => m.userId);
-
-      await createNotificationToMany({
-        recieverIdArray: recieverIds,
-        senderPhotoURL: userData.photoURL,
-        senderUsername: userData.displayName,
-        notificationType: 'MESSAGE_NOTIFICATION',
-        message: 'sent you a new message.',
-        targetLink: `/u/${userData.displayName}`,
-      });
+      notify(
+        {
+          senderPhotoURL: userData.photoURL,
+          senderUsername: userData.displayName,
+          notificationType: 'MESSAGE_NOTIFICATION',
+          message: 'sent you a new message.',
+          targetLink: `/u/${userData.displayName}`,
+        },
+        'message',
+      );
     }
   }
 

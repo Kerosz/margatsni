@@ -192,7 +192,7 @@ export default function EditProfile({ data }) {
                   id="fullName"
                   name="fullName"
                   placeholder="Name"
-                  className="rounded border border-gray-primary px-2.5 py-1 focus:border-gray-400"
+                  className="rounded focus:ring-gray-700 border border-gray-primary px-2.5 py-1 focus:border-gray-400"
                 />
                 {errors.fullName && touched.fullName && (
                   <p className="mb-0.5 mt-1pl-1 text-xs text-red-primary">
@@ -221,7 +221,7 @@ export default function EditProfile({ data }) {
                   id="username"
                   name="username"
                   placeholder="Username"
-                  className="rounded border border-gray-primary px-2.5 py-1 focus:border-gray-400"
+                  className="rounded focus:ring-gray-700 border border-gray-primary px-2.5 py-1 focus:border-gray-400"
                 />
                 {errors.username && touched.username && (
                   <p className="mb-0.5 mt-1 pl-1 text-xs text-red-primary">
@@ -250,7 +250,7 @@ export default function EditProfile({ data }) {
                   id="website"
                   name="website"
                   placeholder="Website"
-                  className="rounded border border-gray-primary px-2.5 py-1 focus:border-gray-400"
+                  className="rounded focus:ring-gray-700 border border-gray-primary px-2.5 py-1 focus:border-gray-400"
                 />
                 {errors.website && touched.website && (
                   <p className="mb-0.5 mt-1 pl-1 text-xs text-red-primary">
@@ -275,7 +275,7 @@ export default function EditProfile({ data }) {
                   id="bio"
                   name="bio"
                   rows={2}
-                  className="rounded border border-gray-primary px-2.5 py-1 focus:border-gray-400"
+                  className="rounded focus:ring-gray-700 border border-gray-primary px-2.5 py-1 focus:border-gray-400"
                 />
                 {errors.bio && touched.bio && (
                   <p className="mb-0.5 mt-1 pl-1 text-xs text-red-primary">
@@ -315,7 +315,7 @@ export default function EditProfile({ data }) {
                   name="email"
                   disabled
                   placeholder="Email address"
-                  className="rounded border border-gray-primary px-2.5 py-1 focus:border-gray-400 bg-gray-100 text-gray-400 cursor-not-allowed select-none"
+                  className="rounded focus:ring-gray-700 border border-gray-primary px-2.5 py-1 focus:border-gray-400 bg-gray-100 text-gray-400 cursor-not-allowed select-none"
                 />
                 {errors.email && touched.email && (
                   <p className="mb-0.5 mt-1 pl-1 text-xs text-red-primary">
@@ -340,7 +340,7 @@ export default function EditProfile({ data }) {
                   id="phone"
                   name="phone"
                   placeholder="Phone Number"
-                  className="rounded border border-gray-primary px-2.5 py-1 focus:border-gray-400"
+                  className="rounded focus:ring-gray-700 border border-gray-primary px-2.5 py-1 focus:border-gray-400"
                 />
                 {errors.phone && touched.phone && (
                   <p className="mb-0.5 mt-1 pl-1 text-xs text-red-primary">

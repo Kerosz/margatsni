@@ -1,9 +1,22 @@
+/* eslint-disable camelcase */
 import app from 'firebase/app';
 import { v4 as uuid } from 'uuid';
 import { firebase, FieldValue } from '../lib/firebase';
 
 /** Initializing firestore database */
 const _DB = firebase.firestore();
+
+// eslint-disable-next-line no-unused-vars
+async function __UNSAFE__updateFirestoreUsers(updateObject) {
+  return _DB
+    .collection('users')
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        doc.ref.update(updateObject);
+      });
+    });
+}
 
 /**
  * Function used to check if a username already exists in database. Returns `1 | 0`
@@ -366,6 +379,23 @@ export async function updateUserSavedPostsField(
         ? FieldValue.arrayRemove(postId)
         : FieldValue.arrayUnion(postId),
     });
+}
+
+/**
+ * Function used to update the user `savedPosts field`
+ *
+ * @param {string} userDocId The user document id
+ * @param {object} notificationObject Object data to be updated with
+ *
+ * @return {Promise<void>} A promise of type void.
+ */
+export async function updateUserNotificationField(
+  userDocId,
+  notificationObject,
+) {
+  return _DB.collection('users').doc(userDocId).update({
+    notification: notificationObject,
+  });
 }
 
 /**

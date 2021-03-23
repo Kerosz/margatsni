@@ -18,7 +18,6 @@ export default function Chat({ user }) {
     chatId,
     true,
     'chat',
-    chatId,
   );
 
   const [openTab, setOpenTab] = useState(1);

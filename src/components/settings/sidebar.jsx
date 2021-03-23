@@ -23,6 +23,7 @@ export default function Sidebar({ activePanel }) {
       >
         Edit Profile
       </Link>
+
       <Link
         to={ROUTES.CHANGE_PASSWORD}
         aria-label="Change password page"
@@ -34,6 +35,19 @@ export default function Sidebar({ activePanel }) {
       >
         Change Password
       </Link>
+
+      <Link
+        to={ROUTES.NOTIFICATIONS}
+        aria-label="Notifications page"
+        className={`pl-8 py-4 text-black-light border-l-2 border-transparent ${
+          getCurrentPath('notifications') && activeClass
+        } w-full text-left outline-none focus-within:outline-none ${
+          !getCurrentPath('notifications') && hoverClass
+        }`}
+      >
+        Notifications
+      </Link>
+
       <Link
         to={ROUTES.PRIVACY_AND_SECURITY}
         aria-label="Privacy and security page"

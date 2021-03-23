@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import LoginPopup from '../login-popup';
 import useFirestoreUser from '../../hooks/use-firestore-user';
 import useDisclosure from '../../hooks/use-disclosure';
+import useSendNotification from '../../hooks/use-send-notification';
 import {
   updatePostLikesField,
   updatePostSavedField,
   updateUserSavedPostsField,
-  createNotification,
 } from '../../services/firebase';
 
 export default function Actions({
@@ -24,6 +24,8 @@ export default function Actions({
   const { user } = useFirestoreUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const notify = useSendNotification(userId);
+
   const [toggleLikedAction, setToggleLikedAction] = useState(likedPost);
   const [toggleSavedAction, setToggleSavedAction] = useState(savedPost);
   const [postLikesCount, setPostLikesCount] = useState(totalLikes);
@@ -38,14 +40,17 @@ export default function Actions({
     );
 
     if (!toggleLikedAction && userId !== user.userId) {
-      await createNotification({
-        recieverId: userId,
-        senderPhotoURL: user.photoURL,
-        senderUsername: user.username,
-        notificationType: 'POST_NOTIFICATION',
-        message: 'liked your post.',
-        targetLink: `/p/${postId}`,
-      });
+      notify(
+        {
+          recieverId: userId,
+          senderPhotoURL: user.photoURL,
+          senderUsername: user.username,
+          notificationType: 'POST_NOTIFICATION',
+          message: 'liked your post.',
+          targetLink: `/p/${postId}`,
+        },
+        'like',
+      );
     }
   }
 

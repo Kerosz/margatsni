@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
-import { Image } from 'cloudinary-react';
 import { Field, Formik, Form } from 'formik';
 import { Link } from 'react-router-dom';
+import CloudinaryImage from '../cloudinary-image';
 import { updateUserPassword } from '../../services/firebase';
 import { ChangePasswordSchema } from '../../helpers/validations';
 import { RESET_PASSWORD } from '../../constants/routes';
@@ -69,12 +69,11 @@ export default function ChangePassword({ username, photo }) {
           <Form className="flex flex-col">
             <div className="grid gap-8 grid-cols-4">
               <aside className="flex justify-end text-right">
-                <Image
-                  cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-                  publicId={photo}
+                <CloudinaryImage
+                  src={photo}
                   alt={`${username} profile`}
-                  width="64"
-                  crop="scale"
+                  size="100"
+                  type="profile"
                   className="rounded-full h-11 w-11 mt-1.5"
                 />
               </aside>
@@ -97,7 +96,7 @@ export default function ChangePassword({ username, photo }) {
                   type="password"
                   id="oldPassword"
                   name="oldPassword"
-                  className="rounded border border-gray-primary px-2.5 py-2 focus:border-gray-400 bg-gray-100 max-w-md focus:outline-none focus-within:outline-none"
+                  className="rounded focus:ring-gray-600 border border-gray-primary px-2.5 py-2 focus:border-gray-400 bg-gray-100 max-w-md focus:outline-none focus-within:outline-none"
                 />
                 {errors.oldPassword && touched.oldPassword && (
                   <p className="mb-1 mt-1 pl-1 text-xs text-red-primary">
@@ -121,7 +120,7 @@ export default function ChangePassword({ username, photo }) {
                   type="password"
                   id="password"
                   name="password"
-                  className="rounded border border-gray-primary px-2.5 py-2 focus:border-gray-400 bg-gray-100 max-w-md focus:outline-none focus-within:outline-none"
+                  className="rounded focus:ring-gray-600 border border-gray-primary px-2.5 py-2 focus:border-gray-400 bg-gray-100 max-w-md focus:outline-none focus-within:outline-none"
                 />
                 {errors.password && touched.password && (
                   <p className="mb-1 mt-1 pl-1 text-xs text-red-primary">
@@ -145,7 +144,7 @@ export default function ChangePassword({ username, photo }) {
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
-                  className="rounded border border-gray-primary px-2.5 py-2 focus:border-gray-400 bg-gray-100 max-w-md focus:outline-none focus-within:outline-none"
+                  className="rounded focus:ring-gray-600 border border-gray-primary px-2.5 py-2 focus:border-gray-400 bg-gray-100 max-w-md focus:outline-none focus-within:outline-none"
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
                   <p className="mb-1 mt-1 pl-1 text-xs text-red-primary">

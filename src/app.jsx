@@ -20,6 +20,7 @@ const ChangePasswordPage = lazy(() =>
   import('./pages/account/password/change'),
 );
 const ResetPasswordPage = lazy(() => import('./pages/account/password/reset'));
+const NotificationsPage = lazy(() => import('./pages/account/notifications'));
 const PrivacyAndSecurityPage = lazy(() =>
   import('./pages/account/privacy-and-security'),
 );
@@ -64,6 +65,10 @@ export default function App() {
             component={ResetPasswordPage}
             exact
           />
+
+          <ProtectedRoute user={user} path={ROUTES.NOTIFICATIONS} exact>
+            <NotificationsPage />
+          </ProtectedRoute>
 
           <ProtectedRoute user={user} path={ROUTES.PRIVACY_AND_SECURITY} exact>
             <PrivacyAndSecurityPage />

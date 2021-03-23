@@ -106,7 +106,7 @@ export default function ResetPasswordPage() {
                     name="email"
                     disabled={isUser}
                     placeholder="Email address"
-                    className={`rounded border border-gray-primary px-2.5 py-1.5 focus:border-gray-400 bg-gray-50 w-full max-w-md focus:outline-none focus-within:outline-none mt-4 ${
+                    className={`rounded focus:ring-gray-700 border border-gray-primary px-2.5 py-1.5 focus:border-gray-400 bg-gray-50 w-full max-w-md focus:outline-none focus-within:outline-none mt-4 ${
                       isUser &&
                       'bg-gray-100 text-gray-400 cursor-not-allowed select-none'
                     }`}

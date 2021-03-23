@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import CloudinaryImage from '../cloudinary-image';
+import useSendNotification from '../../hooks/use-send-notification';
 import {
   updateUserFollowingField,
   updateUserFollowersField,
-  createNotification,
 } from '../../services/firebase';
 
 export default function SuggestedProfile({
@@ -13,6 +13,8 @@ export default function SuggestedProfile({
   currentUser,
   secondary,
 }) {
+  const notify = useSendNotification(suggestedUser.userId);
+
   const [isUserFollowed, setIsUserFollowed] = useState(false);
 
   async function handleFollowUserAction() {
@@ -29,14 +31,17 @@ export default function SuggestedProfile({
       false,
     );
 
-    await createNotification({
-      recieverId: suggestedUser.userId,
-      senderPhotoURL: currentUser.photoURL,
-      senderUsername: currentUser.username,
-      notificationType: 'FOLLOW_NOTIFICATION',
-      message: 'started following you.',
-      targetLink: `/u/${currentUser.username}`,
-    });
+    notify(
+      {
+        recieverId: suggestedUser.userId,
+        senderPhotoURL: currentUser.photoURL,
+        senderUsername: currentUser.username,
+        notificationType: 'FOLLOW_NOTIFICATION',
+        message: 'started following you.',
+        targetLink: `/u/${currentUser.username}`,
+      },
+      'follow',
+    );
   }
 
   const isSuggestedUserFollower = suggestedUser.following.includes(

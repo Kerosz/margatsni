@@ -6,7 +6,8 @@ import {
   doesUserExist,
   createRoom,
   getUserIdsByUsername,
-  createNotificationToMany,
+  getUserDataByUserId,
+  createNotification,
 } from '../../services/firebase';
 
 export default function AddRoom({
@@ -58,9 +59,9 @@ export default function AddRoom({
 
   async function handleOpenNewRoom() {
     if (isValid) {
-      const receiverIds = await getUserIdsByUsername(recieverState);
+      const userDataIds = await getUserIdsByUsername(recieverState);
 
-      if (receiverIds.includes(senderId)) {
+      if (userDataIds.includes(senderId)) {
         setErrorMessage('You cannot send a message to yourself!');
 
         return;
@@ -72,19 +73,33 @@ export default function AddRoom({
         dateCreated: Date.now(),
         dateUpdated: Date.now(),
         messages: [],
-        roomParticipants: [senderId, ...receiverIds],
+        roomParticipants: [senderId, ...userDataIds],
         roomId,
       });
 
       handleModalClose();
 
-      await createNotificationToMany({
-        recieverIdArray: receiverIds,
-        senderPhotoURL,
-        senderUsername,
-        notificationType: 'MESSAGE_NOTIFICATION',
-        message: 'added you to a chat.',
-        targetLink: `/direct/inbox/${roomId}`,
+      Promise.all(
+        userDataIds.map(async (userId) => {
+          const user = await getUserDataByUserId(userId);
+
+          return user;
+        }),
+      ).then((recieverData) => {
+        recieverData.forEach((reciever) => {
+          if (reciever.notification.chatAdd === 'off') return;
+
+          const notificationObject = {
+            recieverId: reciever.userId,
+            senderPhotoURL,
+            senderUsername,
+            notificationType: 'MESSAGE_NOTIFICATION',
+            message: 'added you to a chat.',
+            targetLink: `/direct/inbox/${roomId}`,
+          };
+
+          createNotification(notificationObject).then((result) => result);
+        });
       });
     }
   }

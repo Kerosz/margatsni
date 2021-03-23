@@ -3,35 +3,33 @@ import { useLocation } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import Header from '../../components/header';
 import Sidebar from '../../components/settings/sidebar';
-import PrivacyAndSecurity from '../../components/settings/privacy-and-security';
+import Notifications from '../../components/settings/notifications';
 import useUserSettings from '../../hooks/use-user-settings';
 
-export default function PrivacyAndSecurityPage() {
-  const { settings } = useUserSettings();
+export default function NotificationsPage() {
   const { pathname } = useLocation();
+  const { settings } = useUserSettings();
 
   useEffect(() => {
-    document.title = `Privacy And Security - Instagram`;
+    document.title = `Notifications - Instagram`;
   }, []);
 
   return (
     <div className="bg-gray-background">
       <Header />
-      <div className="container mx-auto max-w-screen-lg px-2.5">
+      <div className="container mx-auto max-w-screen-lg px-2.5 mb-6">
         <div className="bg-white border border-gray-primary grid grid-cols-4 gap-0 rounded">
           <div className="border-r border-gray-primary">
             <Sidebar activePanel={pathname} />
           </div>
-          <div className="col-span-3 py-8 px-16">
+          <div className="col-span-3 sm:px-14 py-6 px-7">
             {settings ? (
-              <PrivacyAndSecurity
-                privateStatus={settings.privateProfile}
-                suggestedStatus={settings.allowSuggestions}
+              <Notifications
+                notificationData={settings.notification}
                 userDocId={settings.docId}
-                userEmail={settings.emailAddress}
               />
             ) : (
-              <Skeleton count={1} height={350} />
+              <Skeleton count={6} height={155} className="mb-5" />
             )}
           </div>
         </div>
