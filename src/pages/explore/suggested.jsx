@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import BottomNavigation from '../../components/bottom-navigation';
 import Header from '../../components/header';
 import SuggestedProfile from '../../components/sidebar/suggested-profile';
 import useFirestoreUser from '../../hooks/use-firestore-user';
@@ -55,6 +56,7 @@ export default function Suggested() {
           <Skeleton count={1} height={480} />
         )}
       </div>
+      <BottomNavigation />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { ResetPasswordSchema } from '../../../helpers/validations';
 import * as ROUTES from '../../../constants/routes';
 import { useUserContext } from '../../../context/user';
 import { passwordResetByEmail } from '../../../services/firebase';
+import BottomNavigation from '../../../components/bottom-navigation';
 
 export default function ResetPasswordPage() {
   const { user } = useUserContext();
@@ -159,6 +160,7 @@ export default function ResetPasswordPage() {
           )}
         </div>
       </div>
+      <BottomNavigation />
     </div>
   );
 }

@@ -62,42 +62,44 @@ export default function Details({ profileData, postCount, userData }) {
   }, [userData, profileData]);
 
   return (
-    <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
-      <div className="container flex justify-center">
+    <div className="grid sm:grid-cols-3 grid-cols-4 gap-4 justify-between mx-auto max-w-screen-lg">
+      <div className="container flex justify-center col-span-2 sm:col-auto">
         <CloudinaryImage
           src={profileData.photoURL}
           alt={`${profileData.username} profile`}
           size="165"
           type="profile"
-          className="rounded-full h-40 w-40 flex mr-3"
+          className="rounded-full w-32 h-32 sm:h-40 sm:w-40 min-w-max mr-3"
         />
       </div>
       <div className="flex items-center justify-center flex-col col-span-2">
-        <div className="container flex items-center">
-          <p className="mr-1.5 text-3xl text-gray-800 font-light">
-            {profileData.username}
-          </p>
-          {profileData.verifiedUser && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-6 mt-2 opacity-90 text-blue-medium mr-1"
-            >
-              <path
-                fillRule="evenodd"
-                d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
-            </svg>
-          )}
+        <div className="container flex sm:items-center sm:flex-row flex-col items-start">
+          <div className="flex">
+            <p className="mr-1.5 text-3xl text-gray-800 font-light">
+              {profileData.username}
+            </p>
+            {profileData.verifiedUser && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-6 mt-2 opacity-90 text-blue-medium mr-1"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            )}
+          </div>
           {userData.userId ? (
             showFollowButton ? (
               <button
                 type="button"
                 aria-label={isFollowingProfile ? 'Unfollow' : 'Follow'}
                 onClick={handleToggleFollowUser}
-                className="bg-blue-medium font-bold text-sm text-white rounded w-20 h-8 mt-1 ml-6"
+                className="bg-blue-medium font-bold text-sm py-1.5 px-3 text-white rounded sm:mt-1 sm:ml-6 mt-3 w-full sm:w-max text-center"
               >
                 {isFollowingProfile ? 'Unfollow' : 'Follow'}
               </button>
@@ -105,25 +107,25 @@ export default function Details({ profileData, postCount, userData }) {
               <Link
                 to={ROUTES.ACCOUNT}
                 aria-label="Edit profile"
-                className="bg-gray-background text-black-light rounded border border-gray-primary text-sm font-semibold py-1.5 px-2 mt-1 ml-6"
+                className="bg-gray-background text-black-light rounded border border-gray-primary text-sm font-semibold py-1.5 px-2 sm:mt-1 sm:ml-6 mt-3 w-full sm:w-max text-center"
               >
                 Edit Profile
               </Link>
             )
           ) : null}
         </div>
-        <div className="container flex mt-5">
+        <div className="container flex mt-5 sm:space-x-8 sm:flex-row flex-col space-y-1">
           {!profileData.followers || !profileData.following ? (
             <Skeleton count={1} width={670} height={25} />
           ) : (
             <>
-              <p className="mr-11 text-lg">
+              <p className="text-lg">
                 <span className="font-bold text-gray-800 mr-0.5">
                   {postCount}
                 </span>{' '}
                 {postCount === 1 ? 'post' : 'posts'}
               </p>
-              <p className="mr-11 text-lg">
+              <p className="text-lg">
                 <span className="font-bold text-gray-800 mr-0.5">
                   {followerCount}
                 </span>{' '}

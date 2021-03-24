@@ -27,7 +27,7 @@ export default function Timeline() {
   }
 
   return (
-    <main className="container col-span-2">
+    <main className="container lg:col-span-2 max-w-max mb-6 sm:mb-0">
       {photos.map((photo) => (
         <Post key={photo.photoId} postData={photo} />
       ))}

@@ -4,6 +4,7 @@ import { getUserDataByUsername } from '../services/firebase';
 import * as ROUTES from '../constants/routes';
 import Header from '../components/header';
 import UserProfile from '../components/profile';
+import BottomNavigation from '../components/bottom-navigation';
 
 export default function Profile() {
   const history = useHistory();
@@ -37,6 +38,7 @@ export default function Profile() {
       <div className="container mx-auto max-w-screen-lg px-3">
         <UserProfile profile={user} />
       </div>
+      <BottomNavigation />
     </div>
   );
 }

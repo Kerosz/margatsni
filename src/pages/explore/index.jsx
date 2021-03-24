@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import BottomNavigation from '../../components/bottom-navigation';
 import Gallery from '../../components/gallery';
 import Header from '../../components/header';
 import { useUserContext } from '../../context/user';
@@ -33,6 +34,7 @@ export default function Explore() {
           <Gallery photos={photosState} loggedInUser={user} withSvg />
         </ul>
       </div>
+      <BottomNavigation />
     </div>
   );
 }

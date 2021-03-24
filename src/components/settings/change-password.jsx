@@ -36,7 +36,7 @@ export default function ChangePassword({ username, photo }) {
 
   if (!username || !photo) {
     return (
-      <article className="py-8 px-16">
+      <article className="py-8 sm:px-16 px-3">
         <Skeleton count={1} height={250} />
       </article>
     );
@@ -64,8 +64,8 @@ export default function ChangePassword({ username, photo }) {
       >
         {({ isSubmitting, isValid, errors, touched }) => (
           <Form className="flex flex-col">
-            <div className="grid gap-8 grid-cols-4">
-              <aside className="flex justify-end text-right">
+            <div className="grid sm:gap-8 gap-4 sm:grid-cols-4 grid-cols-5">
+              <aside className="flex justify-end text-right sm:col-auto col-span-2">
                 <CloudinaryImage
                   src={photo}
                   alt={`${username} profile`}
@@ -79,8 +79,8 @@ export default function ChangePassword({ username, photo }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-11">
-              <aside className="flex justify-end text-right">
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-11">
+              <aside className="flex sm:justify-end text-right">
                 <label
                   htmlFor="oldPassword"
                   className="font-semibold text-black-light pt-0.5"
@@ -88,7 +88,7 @@ export default function ChangePassword({ username, photo }) {
                   Old Password
                 </label>
               </aside>
-              <div className="col-span-3 flex flex-col pl-1">
+              <div className="col-span-3 flex flex-col sm:pl-1">
                 <Field
                   type="password"
                   id="oldPassword"
@@ -103,8 +103,8 @@ export default function ChangePassword({ username, photo }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-5">
-              <aside className="flex justify-end text-right">
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-5">
+              <aside className="flex sm:justify-end text-right">
                 <label
                   htmlFor="password"
                   className="font-semibold text-black-light pt-0.5"
@@ -112,7 +112,7 @@ export default function ChangePassword({ username, photo }) {
                   New Password
                 </label>
               </aside>
-              <div className="col-span-3 flex flex-col pl-1">
+              <div className="col-span-3 flex flex-col sm:pl-1">
                 <Field
                   type="password"
                   id="password"
@@ -127,8 +127,8 @@ export default function ChangePassword({ username, photo }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-5">
-              <aside className="flex justify-end text-right">
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-5">
+              <aside className="flex sm:justify-end text-right">
                 <label
                   htmlFor="confirmPassword"
                   className="font-semibold text-black-light pt-0.5"
@@ -136,7 +136,7 @@ export default function ChangePassword({ username, photo }) {
                   Confirm New Password
                 </label>
               </aside>
-              <div className="col-span-3 flex flex-col pl-1">
+              <div className="col-span-3 flex flex-col sm:pl-1">
                 <Field
                   type="password"
                   id="confirmPassword"
@@ -156,14 +156,14 @@ export default function ChangePassword({ username, photo }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-7">
-              <aside className="flex justify-end text-right" aria-hidden />
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-7">
+              <aside className="flex sm:justify-end text-right" aria-hidden />
               <div className="col-span-2 flex flex-col pl-1">
                 <button
                   type="submit"
                   aria-label="Login to your account"
                   disabled={!isValid || isSubmitting}
-                  className={`bg-blue-medium text-white text-sm max-w-max px-4 rounded h-8 mt-1 font-semibold ${
+                  className={`bg-blue-medium text-white text-sm max-w-max px-4 rounded py-1.5 mt-1 font-semibold ${
                     (!isValid || isSubmitting) &&
                     'opacity-50 cursor-not-allowed'
                   }`}

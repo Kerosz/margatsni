@@ -33,7 +33,7 @@ export default function Notification() {
         <button
           type="button"
           id="notification-menu"
-          className="mr-4 -ml-1 relative"
+          className="sm:mr-4 mr-2 -ml-1 relative"
           aria-expanded={!!isOpen}
           aria-haspopup="true"
           onClick={onToggle}

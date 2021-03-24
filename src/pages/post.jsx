@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { useParams } from 'react-router-dom';
+import BottomNavigation from '../components/bottom-navigation';
 import Header from '../components/header';
 import Post from '../components/post';
 import { useUserContext } from '../context/user';
@@ -44,6 +45,7 @@ export default function PostPage() {
           <Skeleton count={1} height={550} />
         )}
       </div>
+      <BottomNavigation />
     </div>
   );
 }

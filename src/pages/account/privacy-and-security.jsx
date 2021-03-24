@@ -5,6 +5,7 @@ import Header from '../../components/header';
 import Sidebar from '../../components/settings/sidebar';
 import PrivacyAndSecurity from '../../components/settings/privacy-and-security';
 import useUserSettings from '../../hooks/use-user-settings';
+import BottomNavigation from '../../components/bottom-navigation';
 
 export default function PrivacyAndSecurityPage() {
   const { settings } = useUserSettings();
@@ -17,12 +18,12 @@ export default function PrivacyAndSecurityPage() {
   return (
     <div className="bg-gray-background">
       <Header />
-      <div className="container mx-auto max-w-screen-lg px-2.5 mb-6">
+      <div className="container mx-auto max-w-screen-lg px-2.5 sm:mb-6 mb-16">
         <div className="bg-white border border-gray-primary grid grid-cols-4 gap-0 rounded">
           <div className="border-r border-gray-primary">
             <Sidebar activePanel={pathname} />
           </div>
-          <div className="col-span-3 py-8 px-16">
+          <div className="col-span-3 py-8 sm:px-16 px-3">
             {settings ? (
               <PrivacyAndSecurity
                 privateStatus={settings.privateProfile}
@@ -36,6 +37,7 @@ export default function PrivacyAndSecurityPage() {
           </div>
         </div>
       </div>
+      <BottomNavigation />
     </div>
   );
 }

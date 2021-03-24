@@ -4,6 +4,7 @@ import Header from '../../../components/header';
 import Sidebar from '../../../components/settings/sidebar';
 import ChangePassword from '../../../components/settings/change-password';
 import useFirestoreUser from '../../../hooks/use-firestore-user';
+import BottomNavigation from '../../../components/bottom-navigation';
 
 export default function ChangePasswordPage() {
   const { user } = useFirestoreUser();
@@ -16,7 +17,7 @@ export default function ChangePasswordPage() {
   return (
     <div className="bg-gray-background">
       <Header />
-      <div className="container mx-auto max-w-screen-lg px-2.5 mb-6">
+      <div className="container mx-auto max-w-screen-lg px-2.5 sm:mb-6 mb-16">
         <div className="bg-white border border-gray-primary grid grid-cols-4 gap-0 rounded">
           <div className="border-r border-gray-primary">
             <Sidebar activePanel={pathname} />
@@ -26,6 +27,7 @@ export default function ChangePasswordPage() {
           </div>
         </div>
       </div>
+      <BottomNavigation />
     </div>
   );
 }

@@ -102,7 +102,7 @@ export default function EditProfile({ data }) {
 
   if (!data.userId) {
     return (
-      <article className="py-8 px-16">
+      <article className="py-8 sm:px-16 px-3">
         <Skeleton count={1} height={400} />
       </article>
     );
@@ -132,8 +132,8 @@ export default function EditProfile({ data }) {
       >
         {({ isSubmitting, isValid, errors, touched }) => (
           <Form className="flex flex-col">
-            <div className="grid gap-8 grid-cols-4">
-              <aside className="flex justify-end text-right">
+            <div className="grid sm:gap-8 gap-4 sm:grid-cols-4 grid-cols-5">
+              <aside className="flex justify-end text-right sm:col-auto col-span-2">
                 <label htmlFor="fileUpload" className="relative cursor-pointer">
                   {previewImage ? (
                     <img
@@ -177,8 +177,9 @@ export default function EditProfile({ data }) {
                 )}
               </div>
             </div>
-            <div className="grid gap-8 grid-cols-4 mt-4">
-              <aside className="flex justify-end ">
+
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-4">
+              <aside className="flex sm:justify-end text-right">
                 <label
                   htmlFor="fullName"
                   className="font-semibold text-black-light pt-0.5"
@@ -186,7 +187,7 @@ export default function EditProfile({ data }) {
                   Name
                 </label>
               </aside>
-              <div className="col-span-2 flex flex-col pl-1">
+              <div className="col-span-2 flex flex-col sm:pl-1">
                 <Field
                   type="text"
                   id="fullName"
@@ -206,8 +207,8 @@ export default function EditProfile({ data }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-6">
-              <aside className="flex justify-end text-right">
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-6">
+              <aside className="flex sm:justify-end text-right">
                 <label
                   htmlFor="username"
                   className="font-semibold text-black-light pt-0.5"
@@ -215,7 +216,7 @@ export default function EditProfile({ data }) {
                   Username
                 </label>
               </aside>
-              <div className="col-span-2 flex flex-col pl-1">
+              <div className="col-span-2 flex flex-col sm:pl-1">
                 <Field
                   type="text"
                   id="username"
@@ -235,8 +236,8 @@ export default function EditProfile({ data }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-6">
-              <aside className="flex justify-end text-right">
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-6">
+              <aside className="flex sm:justify-end text-right">
                 <label
                   htmlFor="website"
                   className="font-semibold text-black-light pt-0.5"
@@ -244,7 +245,7 @@ export default function EditProfile({ data }) {
                   Website
                 </label>
               </aside>
-              <div className="col-span-2 flex flex-col pl-1">
+              <div className="col-span-2 flex flex-col sm:pl-1">
                 <Field
                   type="url"
                   id="website"
@@ -260,8 +261,8 @@ export default function EditProfile({ data }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-6">
-              <aside className="flex justify-end text-right">
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-6">
+              <aside className="flex sm:justify-end text-right">
                 <label
                   htmlFor="bio"
                   className="font-semibold text-black-light pt-0.5"
@@ -269,7 +270,7 @@ export default function EditProfile({ data }) {
                   Bio
                 </label>
               </aside>
-              <div className="col-span-2 flex flex-col pl-1">
+              <div className="col-span-2 flex flex-col sm:pl-1">
                 <Field
                   as="textarea"
                   id="bio"
@@ -285,8 +286,8 @@ export default function EditProfile({ data }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-9">
-              <aside className="flex justify-end text-right" aria-hidden />
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-9">
+              <aside className="flex sm:justify-end text-right" aria-hidden />
               <div className="col-span-2 flex flex-col pl-1">
                 <p className="text-sm text-gray-base font-semibold">
                   Personal Information
@@ -299,8 +300,8 @@ export default function EditProfile({ data }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-6">
-              <aside className="flex justify-end text-right">
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-6">
+              <aside className="flex sm:justify-end text-right">
                 <label
                   htmlFor="email"
                   className="font-semibold text-black-light pt-0.5"
@@ -308,7 +309,7 @@ export default function EditProfile({ data }) {
                   Email
                 </label>
               </aside>
-              <div className="col-span-2 flex flex-col pl-1">
+              <div className="col-span-2 flex flex-col sm:pl-1">
                 <Field
                   type="email"
                   id="email"
@@ -325,8 +326,8 @@ export default function EditProfile({ data }) {
               </div>
             </div>
 
-            <div className="grid gap-8 grid-cols-4 mt-6">
-              <aside className="flex justify-end text-right">
+            <div className="sm:grid flex flex-col sm:gap-8 sm:px-0 px-3 gap-3 sm:grid-cols-4 mt-6">
+              <aside className="flex sm:justify-end text-right">
                 <label
                   htmlFor="phone"
                   className="font-semibold text-black-light pt-0.5"
@@ -334,7 +335,7 @@ export default function EditProfile({ data }) {
                   Phone Number
                 </label>
               </aside>
-              <div className="col-span-2 flex flex-col pl-1">
+              <div className="col-span-2 flex flex-col sm:pl-1">
                 <Field
                   type="tel"
                   id="phone"

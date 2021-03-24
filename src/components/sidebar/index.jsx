@@ -15,7 +15,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className="p-4 pt-0 sticky top-24 h-fit"
+      className="hidden lg:block p-4 pt-0 sticky top-24 h-fit"
       aria-label="Profile information"
     >
       <User userData={{ username, userInfo, photoURL, verifiedUser }} />

@@ -35,19 +35,19 @@ export default function Header() {
             <h1 className="flex justify-center w-full">
               <Link
                 to={ROUTES.DASHBOARD}
-                aria-label="Instagram branding"
-                title="Instagram branding"
+                aria-label="Margatsni branding"
+                title="Margatsni branding"
               >
                 <img
                   src="/images/logo.png"
-                  alt="Instagram branding"
+                  alt="Margatsni branding"
                   className="mt-2 w-28"
                 />
               </Link>
             </h1>
           </div>
 
-          {user && <SearchBar />}
+          {user && <SearchBar className="hidden sm:block" />}
 
           <nav
             aria-label="Main"
@@ -59,7 +59,7 @@ export default function Header() {
                   type="button"
                   title="Add Post"
                   aria-label="Add Post"
-                  className="mr-3.5"
+                  className="sm:mr-3.5 mr-2"
                   onClick={() => setPostModalStatus((prev) => !prev)}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter')
@@ -90,7 +90,7 @@ export default function Header() {
                   to={ROUTES.DASHBOARD}
                   title="Dashboard"
                   aria-label="Dashboard"
-                  className="mr-3.5"
+                  className="mr-3.5 hidden sm:block"
                 >
                   <svg
                     className="w-7 text-black-light cursor-pointer active:text-gray-500"
@@ -111,7 +111,7 @@ export default function Header() {
                   to={ROUTES.INBOX}
                   title="Inbox"
                   aria-label="Inbox"
-                  className="mr-3.5"
+                  className="sm:mr-3.5 mr-2.5"
                 >
                   <svg
                     className="w-7 text-black-light cursor-pointer active:text-gray-500"
@@ -134,7 +134,7 @@ export default function Header() {
                   to={ROUTES.EXPLORE}
                   title="Explore"
                   aria-label="Explore page"
-                  className="mr-3.5"
+                  className="mr-3.5 hidden sm:block"
                 >
                   <svg
                     className="w-7 text-black-light cursor-pointer active:text-gray-500"
@@ -154,13 +154,39 @@ export default function Header() {
 
                 <Notification />
 
+                <button
+                  type="button"
+                  title="Sign Out"
+                  aria-label="Sign Out"
+                  className="sm:hidden"
+                  onClick={handleLogOut}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') handleLogOut();
+                  }}
+                >
+                  <svg
+                    className="w-7 text-black-light cursor-pointer active:text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                </button>
+
                 <Dropdown
                   isOpen={isOpen}
                   onClose={onClose}
                   button={
                     <button
                       type="button"
-                      className="flex rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-600"
+                      className="rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gray-600 hidden sm:flex"
                       id="options-menu"
                       aria-expanded={!!isOpen}
                       aria-haspopup="true"

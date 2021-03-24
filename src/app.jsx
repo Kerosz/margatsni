@@ -9,6 +9,7 @@ import { useUserContext } from './context/user';
 import ProtectedRoute from './helpers/protected-route';
 import UserRedirectRoute from './helpers/user-redirect-route';
 import * as ROUTES from './constants/routes';
+import Header from './components/header';
 
 const DashboardPage = lazy(() => import('./pages/dashboard'));
 const LoginPage = lazy(() => import('./pages/login'));
@@ -34,7 +35,7 @@ export default function App() {
 
   return (
     <Router>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<Header />}>
         <Switch>
           <ProtectedRoute user={user} path={ROUTES.DASHBOARD} exact>
             <DashboardPage />

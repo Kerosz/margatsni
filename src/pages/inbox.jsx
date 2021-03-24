@@ -8,6 +8,7 @@ import ProtectedRoute from '../helpers/protected-route';
 import useDisclosure from '../hooks/use-disclosure';
 import { INBOX } from '../constants/routes';
 import { useUserContext } from '../context/user';
+import BottomNavigation from '../components/bottom-navigation';
 
 export default function InboxPage() {
   const { path } = useRouteMatch();
@@ -48,7 +49,7 @@ export default function InboxPage() {
                 />
               </svg>
               <div className="text-2xl font-light mt-3">Your Messages</div>
-              <p className="font-semibold text-black-light mt-1">
+              <p className="font-semibold text-black-light mt-1 text-center px-3">
                 Send private photos and messages to a friend or group.
               </p>
               <button
@@ -75,6 +76,7 @@ export default function InboxPage() {
           )}
         </div>
       </div>
+      <BottomNavigation />
     </div>
   );
 }

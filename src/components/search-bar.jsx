@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import useDebounce from '../hooks/use-debounce';
 import CloudinaryImage from './cloudinary-image';
 import { getUserDataByKeyword } from '../services/firebase';
 
-export default function SearchBar() {
+export default function SearchBar({ className, isBottom }) {
   const [resultState, setResult] = useState(null);
   const [searchTermState, setSearchTerm] = useState('');
 
@@ -27,7 +28,10 @@ export default function SearchBar() {
   }, [debouncedSearchTerm]);
 
   return (
-    <div className="w-full relative" style={{ maxWidth: '225px' }}>
+    <div
+      className={`w-full relative ${className}`}
+      style={{ maxWidth: '225px' }}
+    >
       <svg
         className="w-3 text-gray-400 absolute top-2.5 left-2.5"
         xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +56,9 @@ export default function SearchBar() {
 
       {resultState && (
         <ul
-          className="absolute bg-white w-full py-3 max-w-sm top-8 shadow-md rounded border border-gray-100"
+          className={`absolute bg-white w-full py-3 max-w-sm ${
+            isBottom ? 'bottom-9' : 'top-8'
+          } shadow-md rounded border border-gray-100`}
           style={{ minWidth: '300px' }}
         >
           {resultState.length === 0 && (
@@ -118,3 +124,13 @@ export default function SearchBar() {
     </div>
   );
 }
+
+SearchBar.defaultProps = {
+  className: null,
+  isBottom: false,
+};
+
+SearchBar.propTypes = {
+  className: PropTypes.string,
+  isBottom: PropTypes.bool,
+};
