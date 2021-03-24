@@ -13,7 +13,7 @@
 
 The application was built with the purpose of using some technologies I have not used before, including fireabase/firestore, firebase/auth and @tailwindcss.
 
-Demo live at:
+Demo live at: [margatsni.vercel.app](https://margatsni.vercel.app/)
 
 ## Features
 
