@@ -16,7 +16,6 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@welldone-software/why-did-you-render": "^6.1.0",
     "cloudinary-react": "^1.7.0",
     "date-fns": "^2.18.0",
     "firebase": "^8.2.9",
@@ -31,6 +30,7 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.2.1",
     "autoprefixer": "^10.2.4",
     "eslint": "^7.21.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -43,8 +43,7 @@
     "postcss": "^8.2.7",
     "postcss-cli": "^8.3.1",
     "prettier": "^2.2.1",
-    "tailwindcss": "^2.0.3",
-    "@tailwindcss/forms": "^0.2.1"
+    "tailwindcss": "^2.0.3"
   },
   "eslintConfig": {
     "extends": [
