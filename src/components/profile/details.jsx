@@ -114,7 +114,7 @@ export default function Details({ profileData, postCount, userData }) {
             )
           ) : null}
         </div>
-        <div className="container flex mt-5 sm:space-x-8 sm:flex-row flex-col space-y-1">
+        <div className="container flex mt-5 sm:space-x-8 sm:flex-row flex-col space-y-1 sm:space-y-0">
           {!profileData.followers || !profileData.following ? (
             <Skeleton count={1} width={670} height={25} />
           ) : (
