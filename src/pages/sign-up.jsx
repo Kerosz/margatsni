@@ -29,6 +29,9 @@ export default function SignUp() {
               'https://res.cloudinary.com/kerosz/image/upload/v1615369912/instagram/avatars/default-avatar_wfrmaq.jpg',
           });
 
+          // TODO: Uncomment this when you go to production
+          // user.sendEmailVerification();
+
           createFirestoreUser({
             userId: user.uid,
             username: username.toLowerCase(),

@@ -1,37 +1,51 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
 import Details from './details';
-import PhotoCollection from './photo-collection';
-import { getUserPhotosByUserId } from '../../services/firebase';
-import useFirestoreUser from '../../hooks/use-firestore-user';
 import SavedCollection from './saved-collection';
+import PhotoCollection from './photo-collection';
+import useFirestoreUser from '../../hooks/use-firestore-user';
+import { getUserPhotosByUserId } from '../../services/firebase';
 
 export default function UserProfile({ profile }) {
   const { user } = useFirestoreUser();
 
   const [photos, setPhotos] = useState(null);
-  const [photoCount, setPhotoCount] = useState(0);
+  const [photoCount, setPhotoCount] = useState(null);
   const [openTab, setOpenTab] = useState(1);
 
   useEffect(() => {
     async function getProfileData() {
       const userPhotos = await getUserPhotosByUserId(profile.userId);
 
-      setPhotos(userPhotos);
-      setPhotoCount(userPhotos.length);
+      if (userPhotos) {
+        setPhotos(userPhotos);
+        setPhotoCount(userPhotos.length);
+      }
     }
 
-    getProfileData();
-  }, [profile.userId]);
+    if (profile) {
+      getProfileData();
+    }
+  }, [profile]);
 
   let restrictProfileAccess = true;
-  if (user.following && user.userId) {
+  if (user.following && user.userId && profile) {
     restrictProfileAccess =
       !user.following.includes(profile.userId) &&
       user.userId !== profile.userId;
+  }
+
+  if (photoCount === null || !profile) {
+    return (
+      <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
+        <div className="container flex justify-center">
+          <Skeleton circle height={160} width={160} className="mr-3" />
+        </div>
+        <Skeleton height={180} width={400} className="col-span-2" />
+      </div>
+    );
   }
 
   return (
@@ -146,6 +160,10 @@ export default function UserProfile({ profile }) {
   );
 }
 
+UserProfile.defaultProps = {
+  profile: null,
+};
+
 UserProfile.propTypes = {
   profile: PropTypes.shape({
     dateCreated: PropTypes.number.isRequired,
@@ -163,5 +181,5 @@ UserProfile.propTypes = {
     username: PropTypes.string.isRequired,
     allowSuggestions: PropTypes.bool.isRequired,
     privateProfile: PropTypes.bool.isRequired,
-  }).isRequired,
+  }),
 };

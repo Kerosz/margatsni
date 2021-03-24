@@ -57,7 +57,7 @@ function DeletePost({ isOpen, onClose, postDocId, username }) {
         <input
           type="text"
           name="confirmDialog"
-          className="rounded border border-gray-primary px-2.5 py-1.5 text-lg focus:border-gray-400 bg-gray-50 mt-3 w-full focus:outline-none"
+          className="rounded border focus:ring-gray-600 border-gray-primary px-2.5 py-1.5 text-lg focus:border-gray-400 bg-gray-50 mt-3 w-full focus:outline-none"
           value={confirmDialogState}
           onChange={({ target }) => setConfirmDialog(target.value)}
         />

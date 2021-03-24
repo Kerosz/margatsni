@@ -57,7 +57,7 @@ export default function AddComment({
           type="text"
           aria-label="Add a new comment"
           autoComplete="off"
-          className="text-sm text-gray-base w-full mr-3 py-5 px-4 mb-0.5"
+          className="text-sm text-gray-base border-none focus:ring-0 w-full mr-3 py-5 px-4"
           name="add-comment"
           placeholder="Add a comment..."
           value={newCommentValue}

@@ -225,7 +225,7 @@ export default function PrivacyAndSecurity({
           <input
             type="password"
             name="confirmDialog"
-            className="rounded border border-gray-primary px-2.5 py-1.5 text-lg focus:border-gray-400 bg-gray-50 mt-3 w-full focus:outline-none"
+            className="rounded focus:ring-gray-600 border border-gray-primary px-2.5 py-1.5 text-lg focus:border-gray-400 bg-gray-50 mt-3 w-full focus:outline-none"
             value={confirmDialogState}
             onChange={({ target }) => setConfirmDialog(target.value)}
           />

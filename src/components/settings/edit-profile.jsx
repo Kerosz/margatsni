@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import Skeleton from 'react-loading-skeleton';
 import { Form, Formik, Field } from 'formik';
+import Skeleton from 'react-loading-skeleton';
 import CloudinaryImage from '../cloudinary-image';
+import Toast from '../toast';
+import useDisclosure from '../../hooks/use-disclosure';
 import { uploadUnsignedImage } from '../../services/cloudinary';
 import {
   updateUserDataByUserId,
@@ -13,20 +15,11 @@ import { EditProfileSchema } from '../../helpers/validations';
 
 export default function EditProfile({ data }) {
   const { firebase } = useFirebaseContext();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [uploadedImage, setUploadedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [serverError, setServerError] = useState(null);
-  const [sucessMessage, setSucessMessage] = useState(null);
-
-  useEffect(() => {
-    let timeout;
-    if (sucessMessage) {
-      timeout = setTimeout(() => setSucessMessage(null), 3000);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [sucessMessage]);
 
   async function handleEditProfileFormData(values) {
     /**
@@ -35,6 +28,9 @@ export default function EditProfile({ data }) {
      */
     if (values.username) {
       const user = firebase.auth().currentUser;
+
+      // Reseting toast in case timeout did not expire (default: 3s)
+      onClose();
 
       let cloudinaryResponse;
       if (uploadedImage) {
@@ -83,7 +79,7 @@ export default function EditProfile({ data }) {
 
       await updateUserDataByUserId(data.docId, profileDataObject);
 
-      setSucessMessage('Profile updated sucesfully');
+      onOpen();
       setPreviewImage(null);
       setUploadedImage(null);
     }
@@ -114,6 +110,10 @@ export default function EditProfile({ data }) {
 
   return (
     <article className="py-8">
+      <Toast isOpen={isOpen} onClose={onClose}>
+        <p>Profile updated sucesfully</p>
+      </Toast>
+
       <Formik
         initialValues={{
           username: data.username,
@@ -358,30 +358,6 @@ export default function EditProfile({ data }) {
             <div className="grid gap-8 grid-cols-4 mt-6">
               <aside className="flex justify-end" aria-hidden />
               <div className="col-span-2 flex flex-col pl-1">
-                {sucessMessage && (
-                  <div
-                    className="mb-3 flex bg-gray-100 w-full p-2 px-4 rounded justify-center text-center border border-gray-200"
-                    aria-label="Success message"
-                  >
-                    <svg
-                      className="w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <p className="text-xs ml-2 text-black-light font-semibold tracking-wide">
-                      {sucessMessage}
-                    </p>
-                  </div>
-                )}
                 <button
                   type="submit"
                   aria-label="Edit profile details"

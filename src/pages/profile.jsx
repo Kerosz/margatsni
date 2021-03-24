@@ -31,10 +31,6 @@ export default function Profile() {
     }
   }, [user]);
 
-  if (!user) {
-    return <Header />;
-  }
-
   return (
     <div className="bg-gray-background">
       <Header />

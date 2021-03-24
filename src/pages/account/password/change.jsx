@@ -16,7 +16,7 @@ export default function ChangePasswordPage() {
   return (
     <div className="bg-gray-background">
       <Header />
-      <div className="container mx-auto max-w-screen-lg px-2.5">
+      <div className="container mx-auto max-w-screen-lg px-2.5 mb-6">
         <div className="bg-white border border-gray-primary grid grid-cols-4 gap-0 rounded">
           <div className="border-r border-gray-primary">
             <Sidebar activePanel={pathname} />

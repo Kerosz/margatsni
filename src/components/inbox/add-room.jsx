@@ -121,7 +121,7 @@ export default function AddRoom({
         <input
           type="text"
           name="reciever"
-          className="w-full p-2 px-3 border border-transparent focus:border-gray-base"
+          className="w-full focus:ring-gray-500 p-2 px-3 border border-transparent focus:border-gray-base"
           placeholder="Search"
           value={inputValueState}
           onChange={({ target }) => setInputValue(target.value)}

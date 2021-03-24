@@ -14,7 +14,7 @@ import useSendNotification from '../../hooks/use-send-notification';
 export default function Details({ profileData, postCount, userData }) {
   const notify = useSendNotification(profileData.userId);
 
-  const [showFollowButton, setShowFollowButton] = useState(false);
+  const [showFollowButton, setShowFollowButton] = useState(null);
   const [isFollowingProfile, setIsFollowingProfile] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
 

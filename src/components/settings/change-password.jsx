@@ -1,26 +1,19 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Skeleton from 'react-loading-skeleton';
+import { useState } from 'react';
 import { Field, Formik, Form } from 'formik';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Skeleton from 'react-loading-skeleton';
+import Toast from '../toast';
 import CloudinaryImage from '../cloudinary-image';
+import useDisclosure from '../../hooks/use-disclosure';
 import { updateUserPassword } from '../../services/firebase';
 import { ChangePasswordSchema } from '../../helpers/validations';
 import { RESET_PASSWORD } from '../../constants/routes';
 
 export default function ChangePassword({ username, photo }) {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
   const [serverError, setServerError] = useState(null);
-  // TODO: Implement a toast or an alert for when sucessfully changed instead of a state
-  const [sucessMessage, setSucessMessage] = useState(null);
-
-  useEffect(() => {
-    let timeout;
-    if (sucessMessage) {
-      timeout = setTimeout(() => setSucessMessage(null), 3500);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [sucessMessage]);
 
   async function handleChangePasswordFormData(values) {
     // need to reset the server error in case of user alerady recieved an error
@@ -31,7 +24,7 @@ export default function ChangePassword({ username, photo }) {
         try {
           await updateUserPassword(values.oldPassword, values.password);
 
-          setSucessMessage('The password has been updated sucessfully!');
+          onOpen();
         } catch (error) {
           setServerError(error.message);
         }
@@ -51,6 +44,10 @@ export default function ChangePassword({ username, photo }) {
 
   return (
     <article className="py-8">
+      <Toast isOpen={isOpen} onClose={onClose}>
+        <p>Password has been updated sucessfully!</p>
+      </Toast>
+
       <Formik
         initialValues={{
           oldPassword: '',
@@ -155,27 +152,6 @@ export default function ChangePassword({ username, photo }) {
                   <p className="mt-3 pl-1 text-xs text-red-primary">
                     {serverError}
                   </p>
-                )}
-                {sucessMessage && (
-                  <div className="mt-5 flex" aria-label="Success message">
-                    <svg
-                      className="w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <p className="text-xs ml-2 text-black-light font-semibold tracking-wide">
-                      {sucessMessage}
-                    </p>
-                  </div>
                 )}
               </div>
             </div>

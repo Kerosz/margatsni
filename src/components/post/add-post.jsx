@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Image } from 'cloudinary-react';
 import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
+import CloudinaryImage from '../cloudinary-image';
 import { uploadUnsignedImage } from '../../services/cloudinary';
 import { createPost } from '../../services/firebase';
 
@@ -110,12 +110,11 @@ export default function AddPost({ userData, displayModal, setDisplayStatus }) {
           </button>
         </div>
         <div className="flex p-2 px-3.5">
-          <Image
-            cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
-            publicId={userData.photoURL}
+          <CloudinaryImage
+            src={userData.photoURL}
             alt={`${userData.username} profile`}
-            width="48"
-            crop="scale"
+            size="80"
+            type="profile"
             className="rounded-full h-12 w-12 flex mr-5 min-w-max"
           />
           <form
@@ -126,7 +125,7 @@ export default function AddPost({ userData, displayModal, setDisplayStatus }) {
               name="message"
               rows={3}
               placeholder="What's happening?"
-              className="w-full focus:outline-none pb-3 mt-2 text-lg overflow-y-hidden resize-none"
+              className="w-full focus:outline-none border-none focus:ring-0 pb-3 mt-2 text-lg overflow-y-hidden resize-none"
               onChange={({ target }) => setPostMessage(target.value)}
               value={postMessage}
             />

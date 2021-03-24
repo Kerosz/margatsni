@@ -28,7 +28,7 @@ export default function Gallery({ photos, withSvg, loggedInUser }) {
       {photos.map((photo) => (
         <li
           key={photo.docId}
-          className="relative group flex items-center bg-gray-100"
+          className="relative group flex items-center bg-gray-100 mb-3.5 sm:mb-0"
         >
           <CloudinaryImage
             src={photo.imageSrc}
