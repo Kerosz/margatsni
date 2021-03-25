@@ -5,7 +5,9 @@ export default function Modal({
   onClose,
   isOpen,
   title,
+  showHeader,
   maxW,
+  className,
   ...rest
 }) {
   return (
@@ -20,12 +22,16 @@ export default function Modal({
         onClick={onClose}
       />
       <div
-        className={`absolute z-40 bg-white max-w-${maxW} w-full flex flex-col border border-gray-primary shadow-lg`}
+        className={`absolute z-40 bg-white max-w-${maxW} w-full flex flex-col border border-gray-primary shadow-lg ${className}`}
         role="dialog"
         aria-modal="true"
         {...rest}
       >
-        <div className="p-2.5 px-3.5 border-b border-gray-primary w-full flex items-center">
+        <div
+          className={`${
+            showHeader ? 'flex' : 'hidden'
+          } p-2.5 px-3.5 border-b border-gray-primary w-full items-center`}
+        >
           <button
             type="button"
             aria-label="Close modal"
@@ -54,6 +60,16 @@ export default function Modal({
           )}
         </div>
         {children}
+        {!showHeader && (
+          <button
+            type="button"
+            aria-label="Close modal"
+            onClick={onClose}
+            className="text-sm text-black-light text-center py-2.5 w-full px-2"
+          >
+            Cancel
+          </button>
+        )}
       </div>
     </div>
   );
@@ -61,7 +77,9 @@ export default function Modal({
 
 Modal.defaultProps = {
   title: null,
+  showHeader: true,
   maxW: `lg`,
+  className: null,
 };
 
 Modal.propTypes = {
@@ -69,5 +87,7 @@ Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   title: PropTypes.string,
+  showHeader: PropTypes.bool,
+  className: PropTypes.string,
   maxW: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl']),
 };

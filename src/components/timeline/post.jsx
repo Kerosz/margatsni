@@ -23,6 +23,7 @@ export default function Post({ postData }) {
         postDocId={postData.docId}
         postId={postData.photoId}
         userId={postData.userId}
+        userFollowers={postData.user.followers}
         totalLikes={postData.likes.length}
         likedPost={postData.userLikedPhoto}
         savedPost={postData.userSavedPhoto}
@@ -56,6 +57,7 @@ Post.propTypes = {
       username: PropTypes.string.isRequired,
       photoURL: PropTypes.string.isRequired,
       verifiedUser: PropTypes.bool.isRequired,
+      followers: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
   }).isRequired,
 };

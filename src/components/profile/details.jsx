@@ -1,28 +1,37 @@
-/* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import Skeleton from 'react-loading-skeleton';
-import { Link } from 'react-router-dom';
+import CloudinaryImage from '../cloudinary-image';
+import Modal from '../modal';
+import useSendNotification from '../../hooks/use-send-notification';
+import useDisclosure from '../../hooks/use-disclosure';
 import {
   updateUserFollowersField,
   updateUserFollowingField,
+  createRoom,
 } from '../../services/firebase';
 import * as ROUTES from '../../constants/routes';
-import CloudinaryImage from '../cloudinary-image';
-import useSendNotification from '../../hooks/use-send-notification';
 
 export default function Details({ profileData, postCount, userData }) {
+  const history = useHistory();
   const notify = useSendNotification(profileData.userId);
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const [showFollowButton, setShowFollowButton] = useState(null);
   const [isFollowingProfile, setIsFollowingProfile] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
+  const [submittingMessage, setSubmittingMessage] = useState(false);
 
   async function handleToggleFollowUser() {
     setIsFollowingProfile((prevFollowingState) => !prevFollowingState);
     setFollowerCount((prevFollowerCount) =>
       isFollowingProfile ? prevFollowerCount - 1 : prevFollowerCount + 1,
     );
+
+    onClose();
 
     await updateUserFollowersField(
       profileData.docId,
@@ -50,6 +59,35 @@ export default function Details({ profileData, postCount, userData }) {
     }
   }
 
+  async function handleSendMessage() {
+    setSubmittingMessage(true);
+    const roomId = uuid();
+
+    await createRoom({
+      dateCreated: Date.now(),
+      dateUpdated: Date.now(),
+      messages: [],
+      roomParticipants: [userData.userId, profileData.userId],
+      roomId,
+    });
+
+    history.push(`/direct/inbox/${roomId}`);
+
+    notify(
+      {
+        recieverId: profileData.userId,
+        senderPhotoURL: userData.photoURL,
+        senderUsername: userData.username,
+        notificationType: 'MESSAGE_NOTIFICATION',
+        message: 'added you to a chat.',
+        targetLink: `/direct/inbox/${roomId}`,
+      },
+      'chatAdd',
+    );
+
+    setSubmittingMessage(false);
+  }
+
   useEffect(() => {
     if (userData.username) {
       const isFollowing = profileData.followers.includes(userData.userId);
@@ -74,7 +112,7 @@ export default function Details({ profileData, postCount, userData }) {
       </div>
       <div className="flex items-center justify-center flex-col col-span-2">
         <div className="container flex sm:items-center sm:flex-row flex-col items-start">
-          <div className="flex">
+          <div className="flex sm:mr-4">
             <p className="mr-1.5 text-3xl text-gray-800 font-light">
               {profileData.username}
             </p>
@@ -94,24 +132,105 @@ export default function Details({ profileData, postCount, userData }) {
             )}
           </div>
           {userData.userId ? (
-            showFollowButton ? (
-              <button
-                type="button"
-                aria-label={isFollowingProfile ? 'Unfollow' : 'Follow'}
-                onClick={handleToggleFollowUser}
-                className="bg-blue-medium font-bold text-sm py-1.5 px-3 text-white rounded sm:mt-1 sm:ml-6 mt-3 w-full sm:w-max text-center"
+            <>
+              <div className="flex">
+                {isFollowingProfile && showFollowButton && (
+                  <button
+                    type="button"
+                    aria-label={`Message ${profileData.username}`}
+                    onClick={handleSendMessage}
+                    disabled={submittingMessage}
+                    className={`bg-gray-background text-black-light rounded border border-gray-primary text-sm font-semibold py-1.5 sm:mr-2.5 px-2.5 sm:mt-1 mt-3 w-full sm:w-max text-center mr-2 ${
+                      submittingMessage && 'opacity-50 cursor-not-allowed'
+                    }`}
+                  >
+                    {submittingMessage ? 'Sending...' : 'Message'}
+                  </button>
+                )}
+                {isFollowingProfile && showFollowButton && (
+                  <button
+                    type="button"
+                    aria-label="Unfollow"
+                    onClick={onOpen}
+                    className="bg-gray-background text-black-light rounded border border-gray-primary text-sm font-semibold py-2 sm:pl-3.5 sm:pr-3 pl-2 pr-1.5 sm:mt-1 mt-3 w-full sm:w-max flex justify-center"
+                  >
+                    <svg
+                      className="w-4 text-black-light"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <svg
+                      className="w-3.5 text-green-600 -ml-0.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              {!isFollowingProfile && showFollowButton && (
+                <button
+                  type="button"
+                  aria-label="Follow"
+                  onClick={handleToggleFollowUser}
+                  className="bg-blue-medium font-bold text-sm py-1.5 px-3 text-white rounded sm:mt-1 mt-3 w-full sm:w-max text-center"
+                >
+                  Follow
+                </button>
+              )}
+              {!showFollowButton && (
+                <Link
+                  to={ROUTES.ACCOUNT}
+                  aria-label="Edit profile"
+                  className="bg-gray-background text-black-light rounded border border-gray-primary text-sm font-semibold py-1.5 px-2 sm:mt-1 mt-3 w-full sm:w-max text-center"
+                >
+                  Edit Profile
+                </Link>
+              )}
+              <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                maxW="sm"
+                showHeader={false}
+                className="rounded-xl"
               >
-                {isFollowingProfile ? 'Unfollow' : 'Follow'}
-              </button>
-            ) : (
-              <Link
-                to={ROUTES.ACCOUNT}
-                aria-label="Edit profile"
-                className="bg-gray-background text-black-light rounded border border-gray-primary text-sm font-semibold py-1.5 px-2 sm:mt-1 sm:ml-6 mt-3 w-full sm:w-max text-center"
-              >
-                Edit Profile
-              </Link>
-            )
+                <div className="flex flex-col items-center pt-5">
+                  <CloudinaryImage
+                    src={profileData.photoURL}
+                    alt={`${profileData.username} profile`}
+                    size="125"
+                    type="profile"
+                    className="rounded-full w-24 h-24 min-w-max"
+                  />
+                  <p className="text-black-light text-sm mt-6">
+                    Unfollow @{profileData.username}?
+                  </p>
+                  <button
+                    type="button"
+                    aria-label="Unfollow"
+                    onClick={handleToggleFollowUser}
+                    className="text-red-primary border-t border-b border-gray-primary w-full mt-6 py-2.5 px-2 font-bold text-sm"
+                  >
+                    Unfollow
+                  </button>
+                </div>
+              </Modal>
+            </>
           ) : null}
         </div>
         <div className="container flex mt-5 sm:space-x-8 sm:flex-row flex-col space-y-1 sm:space-y-0">

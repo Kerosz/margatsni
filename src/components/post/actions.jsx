@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import LoginPopup from '../login-popup';
 import useFirestoreUser from '../../hooks/use-firestore-user';
@@ -9,12 +10,14 @@ import {
   updatePostLikesField,
   updatePostSavedField,
   updateUserSavedPostsField,
+  createRoom,
 } from '../../services/firebase';
 
 export default function Actions({
   postDocId,
   postId,
   userId,
+  userFollowers,
   totalLikes,
   likedPost,
   savedPost,
@@ -24,7 +27,9 @@ export default function Actions({
   const { user } = useFirestoreUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const history = useHistory();
   const notify = useSendNotification(userId);
+  const isFollowing = userFollowers.includes(user.userId);
 
   const [toggleLikedAction, setToggleLikedAction] = useState(likedPost);
   const [toggleSavedAction, setToggleSavedAction] = useState(savedPost);
@@ -59,6 +64,32 @@ export default function Actions({
 
     updatePostSavedField(postDocId, user.userId, toggleSavedAction);
     updateUserSavedPostsField(user.docId, postId, toggleSavedAction);
+  }
+
+  async function handleSendMessage() {
+    const roomId = uuid();
+
+    await createRoom({
+      dateCreated: Date.now(),
+      dateUpdated: Date.now(),
+      messages: [],
+      roomParticipants: [user.userId, userId],
+      roomId,
+    });
+
+    history.push(`/direct/inbox/${roomId}`);
+
+    notify(
+      {
+        recieverId: userId,
+        senderPhotoURL: user.photoURL,
+        senderUsername: user.username,
+        notificationType: 'MESSAGE_NOTIFICATION',
+        message: 'added you to a chat.',
+        targetLink: `/direct/inbox/${roomId}`,
+      },
+      'chatAdd',
+    );
   }
 
   const likeAction = useCallback(() => {
@@ -116,7 +147,7 @@ export default function Actions({
             {link ? (
               <Link to={`/p/${postId}`}>
                 <svg
-                  className="w-9 text-black-light select-none cursor-pointer"
+                  className="w-9 mr-4 text-black-light select-none cursor-pointer"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -141,7 +172,7 @@ export default function Actions({
                 }}
               >
                 <svg
-                  className="w-9 text-black-light select-none cursor-pointer"
+                  className="w-9 mr-4 text-black-light select-none cursor-pointer"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -153,6 +184,32 @@ export default function Actions({
                     strokeLinejoin="round"
                     strokeWidth={1}
                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  />
+                </svg>
+              </button>
+            )}
+            {isFollowing && (
+              <button
+                type="button"
+                aria-label="Send new message"
+                onClick={handleSendMessage}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') handleSendMessage();
+                }}
+              >
+                <svg
+                  className="w-9 text-black-light select-none cursor-pointer"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  transform="rotate(58 5 0)"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                   />
                 </svg>
               </button>
@@ -209,6 +266,7 @@ Actions.propTypes = {
   postDocId: PropTypes.string.isRequired,
   postId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
+  userFollowers: PropTypes.arrayOf(PropTypes.string).isRequired,
   totalLikes: PropTypes.number.isRequired,
   likedPost: PropTypes.bool.isRequired,
   savedPost: PropTypes.bool.isRequired,

@@ -55,6 +55,7 @@ export default function Post({ postData }) {
             postDocId={docId}
             postId={photoId}
             userId={postData.user.userId}
+            userFollowers={postData.user.followers}
             totalLikes={likes.length}
             likedPost={postData.userLikedPhoto}
             savedPost={postData.userSavedPhoto}
