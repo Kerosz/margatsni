@@ -214,14 +214,7 @@ export async function getFollowingUserPhotosByUserId(
         userSavedPhoto = true;
       }
 
-      const {
-        username,
-        photoURL,
-        verifiedUser,
-        docId,
-      } = await getUserDataByUserId(photo.userId);
-
-      const user = { username, photoURL, verifiedUser, docId };
+      const user = await getUserDataByUserId(photo.userId);
 
       return { user, ...photo, userLikedPhoto, userSavedPhoto };
     }),

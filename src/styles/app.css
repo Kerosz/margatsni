@@ -910,6 +910,10 @@ select {
   border-radius: 0.375rem;
 }
 
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
 .rounded-2xl {
   border-radius: 1rem;
 }
@@ -1121,6 +1125,10 @@ select {
 
 .h-16 {
   height: 4rem;
+}
+
+.h-24 {
+  height: 6rem;
 }
 
 .h-32 {
@@ -1412,8 +1420,16 @@ select {
   margin-left: 0.875rem;
 }
 
+.-ml-0 {
+  margin-left: 0px;
+}
+
 .-ml-1 {
   margin-left: -0.25rem;
+}
+
+.-ml-0\.5 {
+  margin-left: -0.125rem;
 }
 
 .max-h-80 {
@@ -1681,6 +1697,10 @@ select {
   padding-top: 0.25rem;
 }
 
+.pr-1 {
+  padding-right: 0.25rem;
+}
+
 .pl-1 {
   padding-left: 0.25rem;
 }
@@ -1695,6 +1715,10 @@ select {
 
 .pb-2 {
   padding-bottom: 0.5rem;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
 }
 
 .pt-3 {
@@ -1747,6 +1771,10 @@ select {
 
 .pt-0\.5 {
   padding-top: 0.125rem;
+}
+
+.pr-1\.5 {
+  padding-right: 0.375rem;
 }
 
 .fixed {
@@ -1988,6 +2016,11 @@ select {
   color: rgba(237, 73, 86, var(--tw-text-opacity));
 }
 
+.text-green-600 {
+  --tw-text-opacity: 1;
+  color: rgba(5, 150, 105, var(--tw-text-opacity));
+}
+
 .text-blue-500 {
   --tw-text-opacity: 1;
   color: rgba(59, 130, 246, var(--tw-text-opacity));
@@ -2128,6 +2161,10 @@ select {
 
 .w-32 {
   width: 8rem;
+}
+
+.w-3\.5 {
+  width: 0.875rem;
 }
 
 .w-6\/12 {
@@ -2277,6 +2314,12 @@ select {
 }
 
 @media (min-width: 640px) {
+  .sm\:space-y-0 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0px * var(--tw-space-y-reverse));
+  }
+
   .sm\:space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
     margin-right: calc(2rem * var(--tw-space-x-reverse));
@@ -2323,6 +2366,10 @@ select {
     margin-top: 0.25rem;
   }
 
+  .sm\:mr-2 {
+    margin-right: 0.5rem;
+  }
+
   .sm\:mr-3 {
     margin-right: 0.75rem;
   }
@@ -2335,16 +2382,16 @@ select {
     margin-bottom: 1.5rem;
   }
 
-  .sm\:ml-6 {
-    margin-left: 1.5rem;
-  }
-
   .sm\:ml-7 {
     margin-left: 1.75rem;
   }
 
   .sm\:mt-8 {
     margin-top: 2rem;
+  }
+
+  .sm\:mr-2\.5 {
+    margin-right: 0.625rem;
   }
 
   .sm\:mr-3\.5 {
@@ -2389,12 +2436,24 @@ select {
     padding-left: 0.25rem;
   }
 
+  .sm\:pr-3 {
+    padding-right: 0.75rem;
+  }
+
+  .sm\:pl-3 {
+    padding-left: 0.75rem;
+  }
+
   .sm\:pr-4 {
     padding-right: 1rem;
   }
 
   .sm\:pl-8 {
     padding-left: 2rem;
+  }
+
+  .sm\:pl-3\.5 {
+    padding-left: 0.875rem;
   }
 
   .sm\:w-40 {

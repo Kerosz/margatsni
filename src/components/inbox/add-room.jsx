@@ -8,6 +8,7 @@ import {
   getUserIdsByUsername,
   getUserDataByUserId,
   createNotification,
+  getUserDataByUsername,
 } from '../../services/firebase';
 
 export default function AddRoom({
@@ -40,14 +41,30 @@ export default function AddRoom({
       return;
     }
 
+    if (inputValueState === senderUsername) {
+      setErrorMessage('You cannot send a message to yourself!');
+      setInputValue('');
+
+      return;
+    }
+
     if (inputValueState.length >= 3) {
       const isUsernameValid = await doesUserExist(inputValueState);
 
       if (isUsernameValid) {
-        setReciever((prevRecieverState) => [
-          ...prevRecieverState,
-          inputValueState,
-        ]);
+        const { followers } = await getUserDataByUsername(inputValueState);
+        const isFollowing = followers.includes(senderId);
+
+        if (isFollowing) {
+          setReciever((prevRecieverState) => [
+            ...prevRecieverState,
+            inputValueState,
+          ]);
+        } else {
+          setErrorMessage(
+            'You cannot send a message to a user you are not following!',
+          );
+        }
       } else {
         setErrorMessage('Username does not exist!');
       }
@@ -60,12 +77,6 @@ export default function AddRoom({
   async function handleOpenNewRoom() {
     if (isValid) {
       const userDataIds = await getUserIdsByUsername(recieverState);
-
-      if (userDataIds.includes(senderId)) {
-        setErrorMessage('You cannot send a message to yourself!');
-
-        return;
-      }
 
       const roomId = uuid();
 
@@ -110,6 +121,7 @@ export default function AddRoom({
       onClose={handleModalClose}
       title="New Message"
       maxW="md"
+      className="rounded-xl"
     >
       {errorMessage && (
         <p className="mb-1 mt-2 text-xs text-center text-red-primary">
