@@ -13,7 +13,9 @@
 
 The application was built with the purpose of using some technologies I have not used before, including fireabase/firestore, firebase/auth and @tailwindcss.
 
-Demo live at: [margatsni.vercel.app](https://margatsni.vercel.app/)
+Demo live at: [margatsni.chirila.dev](https://margatsni.chirila.dev)
+
+Read more about it [on this blog](https://www.chirila.dev/writing/margatsni).
 
 ## Features
 
@@ -21,11 +23,22 @@ Demo live at: [margatsni.vercel.app](https://margatsni.vercel.app/)
 - Forgot password
 - Reset password
 - Email verification
-- Profile page ( for logged in users and non-logged in users with restrictions )
-- Post page ( for logged in users and non-logged in users with restrictions)
-- Inbox ( direct messages/multi-user-chat-room/chat-details)
+- Profile page
+  - public for everyone with restrictions
+  - no restrictions for logged in users
+- Post page
+  - public for everyone with restrictions
+  - no restrictions for logged in users
+- Inbox
+  - Direct message
+  - Multi-user Chat Rooms
+  - Chat details
 - Live notifications
-- Settings ( edit-profile/change-password/notification-settings/privacy-and-security)
+- Settings
+  - Edit profile
+  - Change password
+  - Notification settings
+  - Privacy and security
 - Timeline
 - Suggestions
 - Search
@@ -54,7 +67,7 @@ instagram/
 ├── constants      # Constant app data
 ├── context        # Global state layer
 ├── helpers        # Utility functions
-├── hooks          # React custom hooks
+├── hooks          # React custom functions
 ├── lib            # External helpers
 ├── services       # External services / network calls
 ├── styles         # General app styles
@@ -63,6 +76,6 @@ instagram/
 
 ## Acknowledgments
 
-This project is mimicking the famous [Instabram by Facebook](https://www.instagram.com/) web application with no intent of realeasing or advertising the use of the content in this repo. Being just a demo app!!!
+This project is mimicking the famous [Instagram by Facebook](https://www.instagram.com/) web application with no intent of realeasing or advertising the use of the content in this repo. Being just a demo app!!!
 
 Project was built on top of [@karlhadwen](https://github.com/karlhadwen)'s base instagram build, with addition of new features and code changes.
