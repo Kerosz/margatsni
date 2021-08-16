@@ -15,6 +15,8 @@ export default function ChangePassword({ username, photo }) {
 
   const [serverError, setServerError] = useState(null);
 
+  const isDemoAccount = username === 'demo';
+
   async function handleChangePasswordFormData(values) {
     // need to reset the server error in case of user alerady recieved an error
     setServerError(null);
@@ -22,6 +24,11 @@ export default function ChangePassword({ username, photo }) {
     if (values.oldPassword) {
       if (values.oldPassword !== values.password) {
         try {
+          if (isDemoAccount) {
+            setServerError('Cannot change passowrd for demo account!');
+            return;
+          }
+
           await updateUserPassword(values.oldPassword, values.password);
 
           onOpen();

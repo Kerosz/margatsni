@@ -23,6 +23,17 @@ export default function Login() {
     }
   };
 
+  const handleDemoLogin = async (_, setSubmitting) => {
+    const demoAccountValues = {
+      email: 'demo@margatsni.com',
+      password: 'margatsni',
+    };
+
+    setSubmitting(true);
+    await handleFirebaseLogin(demoAccountValues);
+    setSubmitting(false);
+  };
+
   useEffect(() => {
     document.title = `Login - Instagram`;
   }, []);
@@ -59,7 +70,7 @@ export default function Login() {
               }
             }}
           >
-            {({ isSubmitting, isValid, errors, touched }) => (
+            {({ isSubmitting, isValid, errors, touched, setSubmitting }) => (
               <Form className="w-full">
                 <Field
                   type="text"
@@ -95,6 +106,17 @@ export default function Login() {
                   }`}
                 >
                   {isSubmitting ? 'Logging in...' : 'Log In'}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(event) => handleDemoLogin(event, setSubmitting)}
+                  aria-label="Login using the demo account"
+                  className={`bg-gray-100 text-gray-700  w-full rounded h-8 mt-2 font-semibold border border-gray-primary ${
+                    isSubmitting && 'opacity-50 cursor-not-allowed'
+                  }`}
+                >
+                  {isSubmitting ? 'Logging in...' : 'Login as Demo'}
                 </button>
               </Form>
             )}

@@ -21,6 +21,8 @@ export default function EditProfile({ data }) {
   const [previewImage, setPreviewImage] = useState(null);
   const [serverError, setServerError] = useState(null);
 
+  const isDemoAccount = data.emailAddress === 'demo@margatsni.com';
+
   async function handleEditProfileFormData(values) {
     /**
      * Check to see if any of the values are truthy.
@@ -221,8 +223,12 @@ export default function EditProfile({ data }) {
                   type="text"
                   id="username"
                   name="username"
+                  disabled={isDemoAccount}
                   placeholder="Username"
-                  className="rounded focus:ring-gray-700 border border-gray-primary px-2.5 py-1 focus:border-gray-400"
+                  className={`rounded focus:ring-gray-700 border border-gray-primary px-2.5 py-1 focus:border-gray-400 ${
+                    isDemoAccount &&
+                    'cursor-not-allowed select-none bg-gray-100 text-gray-400'
+                  }`}
                 />
                 {errors.username && touched.username && (
                   <p className="mb-0.5 mt-1 pl-1 text-xs text-red-primary">

@@ -34,11 +34,34 @@ export default function PrivacyAndSecurity({
 
   const isConfirmDialogValid =
     confirmDialogState.length >= 6 && confirmDialogState.length <= 24;
+  const isDemoAccount = userEmail === 'demo@margatsni.com';
 
   function handleModalClose() {
     modalOnClose();
     setConfirmDialog('');
     setServerError(null);
+  }
+
+  /** Handles the logic for account deletion */
+  async function handleAccountDeletion(event) {
+    event.preventDefault();
+
+    if (isConfirmDialogValid) {
+      setServerError(null);
+
+      if (isDemoAccount) {
+        setServerError('Cannot delete demo account!');
+        setConfirmDialog('');
+        return;
+      }
+
+      try {
+        await deleteUserAccount(confirmDialogState, userDocId);
+        handleModalClose();
+      } catch (error) {
+        setServerError(error.message);
+      }
+    }
   }
 
   /** Handle submit for private account checkbox on input change */
@@ -70,21 +93,6 @@ export default function PrivacyAndSecurity({
       changeAllowSuggestionsValue();
     }
   }, [suggestionCheckbox]);
-
-  /** Handles the logic for account deletion */
-  async function handleAccountDeletion(event) {
-    event.preventDefault();
-
-    if (isConfirmDialogValid) {
-      setServerError(null);
-      try {
-        await deleteUserAccount(confirmDialogState, userDocId);
-        handleModalClose();
-      } catch (error) {
-        setServerError(error.message);
-      }
-    }
-  }
 
   return (
     <article>
